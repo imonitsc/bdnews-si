@@ -249,3 +249,11 @@
     top: 80px;
   }
 }
+
+/* Logo in the header: SVG wordmark, text follows the header colour. */
+.bdn-logo { letter-spacing: 0; line-height: 0; }
+.bdn-logo svg { display: block; width: auto; }
+.logo.bdn-logo svg { height: 18px; }
+.logo-mobile.bdn-logo svg { height: 16px; }
+:root:not([data-theme="light"]) .bdn-logo { color: #fff; }
+:root[data-theme="light"] .bdn-logo { color: #000; }

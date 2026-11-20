@@ -192,6 +192,7 @@ import {
 } from '@/services/checkout-return-state';
 import { resolveCheckoutContext, type CheckoutContext } from '../../shared/checkout-attribution';
 import { mountTerminalBar } from '@/app/terminal-bar';
+import { HEADER_LOGO_SVG, LOGO_MARK_SVG } from '@/config/brand-logo';
 import { BRAND } from '@/config/brand';
 import { BANGLADESH_NEWS_PANEL_KEY } from '@/config/bangladesh-news';
 
@@ -1348,7 +1349,7 @@ export class PanelLayoutManager implements AppModule {
               <span class="variant-label">Good News</span>
             </a>`;
       })()}</div>
-          <span class="logo">${BRAND.logoText}</span><span class="logo-mobile">${BRAND.shortName}</span><span class="version">v${__APP_VERSION__}</span>${BETA_MODE ? '<span class="beta-badge">BETA</span>' : ''}
+          <span class="logo bdn-logo" role="img" aria-label="${BRAND.name}">${HEADER_LOGO_SVG}</span><span class="logo-mobile bdn-logo" role="img" aria-label="${BRAND.name}">${LOGO_MARK_SVG}</span><span class="version">v${__APP_VERSION__}</span>${BETA_MODE ? '<span class="beta-badge">BETA</span>' : ''}
           <a href="${BRAND.upstreamRepoUrl}" target="_blank" rel="noopener" class="credit-link" title="This site is based on ${BRAND.upstreamName} (AGPL-3.0)">
             <span class="credit-text">Based on ${BRAND.upstreamName}</span>
           </a>

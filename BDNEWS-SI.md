@@ -42,3 +42,7 @@ running on a schedule. See `SELF_HOSTING.md` for the data seeders and optional A
 ## Terminal look (2026-11-20)
 - `src/styles/terminal-theme.css` (imported unlayered from `base-layer.css`): black and amber terminal palette, square panels, amber title bars. Dark theme only.
 - `src/app/terminal-bar.ts`, mounted from `panel-layout.ts`: command prompt (`BD`, `TV`, `MKT`, `MAP`, … then Enter; `/` focuses it), function keys that jump to panels, scrolling market ticker from the loaded quotes, and Dhaka/London/New York clocks.
+
+## Logo (2026-11-20)
+- New "BD." wordmark (Inter Display, SIL OFL) in `brand/`; header uses `src/config/brand-logo.ts`.
+- Replaced the favicons, app icons and `og-image.png` in `public/favico/` with the new mark.

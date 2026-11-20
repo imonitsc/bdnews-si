@@ -71,6 +71,9 @@ const HOST_ORIGINS = Object.freeze({
   "www.dse.com.bd": "BD",
   "www.bb.org.bd": "BD",
   "tcb.gov.bd": "BD",
+  // Fallback FX reference rates (international service).
+  "open.er-api.com": null,
+  "www.exchangerate-api.com": null,
   // bdnews SI: Bangladeshi news outlets
   "banglatribune.com": "BD",
   "dhakapost.com": "BD",

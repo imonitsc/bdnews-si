@@ -70,3 +70,15 @@ running on a schedule. See `SELF_HOSTING.md` for the data seeders and optional A
 - OSINT panels promoted next to the Bangladesh panels at priority 1: UCDP Conflict Events, UNHCR Displacement, Internet Disruptions (added to this edition), Fires, Telegram Intel, X News Accounts, Airline Intelligence.
 - Free panel cap raised from 40 to 120 (`BRAND.freeMaxPanels`); there is no paid tier here. A one-time migration (`bdsi-osint-panels-v1`) re-enables these panels for existing visitors.
 - Bangladesh map defaults: ships (AIS), aircraft emergencies, protests, fires, UCDP events, displacement on; Canada alerts, nuclear sites, sanctions and economic overlays off.
+
+## Phase 0 credibility pass (2026-11-21)
+Guided by `CLAUDE.md` (now in the repo root).
+- **Licence register** `docs/THIRD_PARTY.md`: data sources, services, tiles, fonts and direct npm dependencies with Green/Amber/Red verdicts. Red sources are off by default: ACLED credentials reach the seed job only if the repo variable `LICENSED_ACLED` is `true`; `seed-military-flights` (adsb.fi, OpenSky) runs only if `LICENSED_ADSBFI` and `LICENSED_OPENSKY` are `true`.
+- **Branding**: an i18next post-processor (`src/config/brand-rebrand.ts`) renames World Monitor / WorldMonitor / WM in every language; hard-coded strings fixed directly. Upstream credit stays on About and in source headers.
+- **Bangladesh News** no longer stays empty when its panel mounts after the news loads.
+- **DSE / Taka / Bazaar**: 25 s request timeout; amber STALE badge when data is cached or a refresh fails.
+- **Internet Disruptions** uses IODA (Georgia Tech, no key) when there is no Cloudflare token (`scripts/lib/ioda-outages.mjs`); rows show "N SIGNALS" and the source.
+- **Seed TTL floor**: `SEED_MIN_TTL_SECONDS=21600` in the seed workflow keeps data for 6 h, because upstream TTLs (30 min–2 h) expired between 3-hourly runs.
+- **AI Insights** lists Bangladesh (when in the news) and its neighbours first among focal points.
+- **Map layers**: Bangladesh preset first; global layers under an "Advanced / Global" heading.
+- **Command line** (`src/config/terminal-commands.ts`): typed registry of every CLAUDE.md §6 command, `HELP` / `HELP <FUNC>`, closest-match suggestions, autocomplete, F1–F10 keys; unbuilt commands say "planned, phase N".

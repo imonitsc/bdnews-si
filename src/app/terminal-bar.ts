@@ -177,9 +177,33 @@ export function mountTerminalBar(ctx: AppContext): void {
   bar.append(form, keys, ticker, clocks);
   header.after(bar);
 
+  // The Markets panel only loads quotes once it is on screen. Until it does,
+  // the ticker fetches the default symbols itself.
+  let ownQuotes: MarketData[] = [];
+  let fetching = false;
+  const fetchOwnQuotes = async () => {
+    if (fetching || (ctx.latestMarkets?.length ?? 0) > 0) return;
+    fetching = true;
+    try {
+      const [{ fetchMultipleStocks }, { MARKET_SYMBOLS }] = await Promise.all([
+        import('@/services/market'),
+        import('@/config/markets'),
+      ]);
+      const result = await fetchMultipleStocks(MARKET_SYMBOLS);
+      if (result.data.length > 0) ownQuotes = result.data;
+    } catch {
+      // Ticker keeps its waiting state; the next refresh retries.
+    } finally {
+      fetching = false;
+    }
+  };
+  const firstFetch = window.setTimeout(() => void fetchOwnQuotes(), 4000);
+  const quoteTimer = window.setInterval(() => void fetchOwnQuotes(), 5 * 60_000);
+
   const tick = () => {
     for (const c of clockNodes) c.value.textContent = clockText(c.tz);
-    renderTicker(track, ctx.latestMarkets ?? []);
+    const live = ctx.latestMarkets ?? [];
+    renderTicker(track, live.length > 0 ? live : ownQuotes);
   };
   tick();
   const timer = window.setInterval(tick, 1000);
@@ -196,6 +220,8 @@ export function mountTerminalBar(ctx: AppContext): void {
   document.addEventListener('keydown', onKey);
   cleanup = () => {
     window.clearInterval(timer);
+    window.clearInterval(quoteTimer);
+    window.clearTimeout(firstFetch);
     document.removeEventListener('keydown', onKey);
   };
 }

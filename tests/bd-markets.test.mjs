@@ -1,7 +1,7 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import { deflateRawSync } from 'node:zlib';
-import { findLatestTcbFile, parseBbRates, parseTcbRows, shapeDse } from '../api/bd-markets.js';
+import { buildResponse, findLatestTcbFile, parseBbRates, parseTcbRows, shapeDse, shapeOpenErRates } from '../api/bd-markets.js';
 import { readFirstSheetRows } from '../api/_xlsx-lite.js';
 
 // Minimal ZIP writer for test fixtures (deflate entries, central directory, EOCD).
@@ -104,5 +104,26 @@ describe('BD markets endpoint parsers', () => {
     assert.equal(out.session.isOpen, false);
     assert.deepEqual(out.gainers[0], { code: 'MATINSPINN', ltp: 137.8, percent: 11.04 });
     assert.throws(() => shapeDse({}), /unexpected shape/);
+  });
+
+  it('converts fallback USD-based rates into Taka per unit and marks them unofficial', () => {
+    const out = shapeOpenErRates({ result: 'success', time_last_update_unix: 1795132800, rates: { USD: 1, BDT: 122, EUR: 0.9, INR: 90 } });
+    assert.equal(out.official, false);
+    assert.equal(out.rates.find((r) => r.code === 'USD').mid, 122);
+    assert.ok(Math.abs(out.rates.find((r) => r.code === 'EUR').mid - 135.5556) < 1e-3);
+    assert.throws(() => shapeOpenErRates({ result: 'error' }), /unexpected shape/);
+  });
+
+  it('answers 502 with per-part errors when every source fails', async () => {
+    const realFetch = globalThis.fetch;
+    globalThis.fetch = async () => { throw new TypeError('fetch failed', { cause: new Error('ECONNRESET') }); };
+    try {
+      const { status, body, cacheControl } = await buildResponse('/api/bd-markets?part=dse');
+      assert.equal(status, 502);
+      assert.match(body.dse.error, /ECONNRESET/);
+      assert.match(cacheControl, /s-maxage=60/);
+    } finally {
+      globalThis.fetch = realFetch;
+    }
   });
 });

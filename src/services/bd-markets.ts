@@ -15,7 +15,7 @@ export interface BdDse extends PartMeta {
 }
 
 export interface BdRate { code: string; bid: number; ask: number; mid: number }
-export interface BdFx extends PartMeta { base: 'BDT'; asOf: string | null; rates: BdRate[] }
+export interface BdFx extends PartMeta { base: 'BDT'; asOf: string | null; rates: BdRate[]; official?: boolean }
 
 export interface BdBazaarItem {
   name: string;

@@ -5,10 +5,11 @@
 //   - Dhaka Stock Exchange: https://www.dse.com.bd/api/live/snapshot (JSON used by dse.com.bd)
 //   - Bangladesh Bank:      https://www.bb.org.bd/en/index.php/econdata/exchangerate (HTML table)
 //   - TCB:                  https://tcb.gov.bd/pages/daily-rmps → latest daily .xlsx
-import { jsonResponse } from './_json-response.js';
 import { readFirstSheetRows } from './_xlsx-lite.js';
 
-export const config = { runtime: 'edge' };
+// Node.js runtime: some Bangladeshi government hosts fail from the Edge runtime's fetch,
+// and Node reports the underlying network error.
+export const config = { maxDuration: 30 };
 
 const UA = 'Mozilla/5.0 (compatible; BDSituationIntelligence/1.0; +https://www.bdnews.si/about.html)';
 const TTL = { dse: 60_000, fx: 30 * 60_000, bazaar: 60 * 60_000 };
@@ -102,7 +103,46 @@ export function parseBbRates(html) {
   return { rates, asOf };
 }
 
+// Fallback when Bangladesh Bank's site refuses cloud requests: daily reference rates from
+// ExchangeRate-API's open endpoint (attribution required: https://www.exchangerate-api.com).
+const FALLBACK_CODES = ['USD', 'EUR', 'GBP', 'INR', 'CNY', 'JPY', 'SGD', 'AUD', 'CAD', 'SAR', 'AED', 'MYR'];
+export function shapeOpenErRates(json) {
+  const r = json?.rates;
+  if (json?.result !== 'success' || !r || !(r.BDT > 0)) throw new Error('fx fallback: unexpected shape');
+  const rates = FALLBACK_CODES.filter((c) => r[c] > 0).map((code) => {
+    const mid = r.BDT / r[code];
+    return { code, bid: mid, ask: mid, mid };
+  });
+  const t = json.time_last_update_unix ? new Date(json.time_last_update_unix * 1000) : null;
+  return {
+    base: 'BDT',
+    asOf: t ? t.toISOString().slice(0, 10) : null,
+    rates,
+    official: false,
+    source: 'Rates by Exchange Rate API (market reference)',
+    sourceUrl: 'https://www.exchangerate-api.com',
+  };
+}
+
+async function loadFxFallback() {
+  const res = await fetchWithTimeout('https://open.er-api.com/v6/latest/USD', { headers: { accept: 'application/json' } });
+  if (!res.ok) throw new Error(`fx fallback: HTTP ${res.status}`);
+  return shapeOpenErRates(await res.json());
+}
+
 async function loadFx() {
+  try {
+    return { ...(await loadFxBangladeshBank()), official: true };
+  } catch (official) {
+    try {
+      return { ...(await loadFxFallback()), officialError: String(official?.message || official).slice(0, 160) };
+    } catch {
+      throw official;
+    }
+  }
+}
+
+async function loadFxBangladeshBank() {
   const res = await fetchWithTimeout('https://www.bb.org.bd/en/index.php/econdata/exchangerate', { headers: { accept: 'text/html' } });
   if (!res.ok) throw new Error(`fx: HTTP ${res.status}`);
   const html = await res.text();
@@ -244,8 +284,8 @@ async function getPart(part) {
   }
 }
 
-export default async function handler(req) {
-  const url = new URL(req.url);
+export async function buildResponse(requestUrl) {
+  const url = new URL(requestUrl, 'https://www.bdnews.si');
   const only = url.searchParams.get('part');
   const parts = only && only in LOADERS ? [only] : Object.keys(LOADERS);
   const results = await Promise.all(parts.map((p) => getPart(p)));
@@ -253,7 +293,17 @@ export default async function handler(req) {
   parts.forEach((p, i) => { body[p] = results[i]; });
   const anyOk = results.some((r) => !r.error);
   const maxAge = parts.length === 1 && parts[0] !== 'dse' ? 600 : 60;
-  return jsonResponse(body, anyOk ? 200 : 502, {
-    'Cache-Control': `public, s-maxage=${maxAge}, stale-while-revalidate=${maxAge * 5}, stale-if-error=86400`,
-  });
+  return {
+    status: anyOk ? 200 : 502,
+    body,
+    cacheControl: `public, s-maxage=${maxAge}, stale-while-revalidate=${maxAge * 5}, stale-if-error=86400`,
+  };
+}
+
+export default async function handler(req, res) {
+  const { status, body, cacheControl } = await buildResponse(req.url || '/api/bd-markets');
+  res.setHeader('Cache-Control', cacheControl);
+  res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  res.statusCode = status;
+  res.end(JSON.stringify(body));
 }

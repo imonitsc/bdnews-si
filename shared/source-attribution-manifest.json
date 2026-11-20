@@ -10832,6 +10832,20 @@
       ]
     },
     {
+      "host": "open.er-api.com",
+      "provider": "open.er-api.com",
+      "kind": "structured",
+      "observed": true,
+      "license": "Provider terms for this upstream API/dataset; verify before redistribution",
+      "attribution": "Credit open.er-api.com and link to the original upstream API/dataset.",
+      "status": "terms-review",
+      "references": [
+        {
+          "path": "api/bd-markets.js"
+        }
+      ]
+    },
+    {
       "host": "open.iub.gov.lv",
       "provider": "open.iub.gov.lv",
       "kind": "structured",
@@ -16899,6 +16913,20 @@
       ]
     },
     {
+      "host": "www.bdnews.si",
+      "provider": "www.bdnews.si",
+      "kind": "structured",
+      "observed": true,
+      "license": "Provider terms for this upstream API/dataset; verify before redistribution",
+      "attribution": "Credit www.bdnews.si and link to the original upstream API/dataset.",
+      "status": "terms-review",
+      "references": [
+        {
+          "path": "api/bd-markets.js"
+        }
+      ]
+    },
+    {
       "host": "www.bgs.ac.uk",
       "provider": "British Geological Survey World Mineral Statistics",
       "kind": "structured",
@@ -18298,6 +18326,20 @@
       "references": [
         {
           "path": "shared/news-catalog.json"
+        }
+      ]
+    },
+    {
+      "host": "www.exchangerate-api.com",
+      "provider": "www.exchangerate-api.com",
+      "kind": "structured",
+      "observed": true,
+      "license": "Provider terms for this upstream API/dataset; verify before redistribution",
+      "attribution": "Credit www.exchangerate-api.com and link to the original upstream API/dataset.",
+      "status": "terms-review",
+      "references": [
+        {
+          "path": "api/bd-markets.js"
         }
       ]
     },

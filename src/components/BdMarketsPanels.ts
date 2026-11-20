@@ -119,10 +119,10 @@ export class DseBdPanel extends BdMarketsPanel {
   }
 }
 
-const FX_ORDER = ['USD', 'EUR', 'GBP', 'INR', 'CNH', 'JPY', 'SGD', 'AUD', 'CAD', 'SEK', 'LKR'];
+const FX_ORDER = ['USD', 'EUR', 'GBP', 'SAR', 'AED', 'INR', 'MYR', 'SGD', 'CNH', 'CNY', 'JPY', 'AUD', 'CAD', 'SEK', 'LKR'];
 const FX_NAMES: Record<string, string> = {
   USD: 'US dollar', EUR: 'Euro', GBP: 'British pound', INR: 'Indian rupee', CNH: 'Chinese yuan (offshore)',
-  JPY: 'Japanese yen', SGD: 'Singapore dollar', AUD: 'Australian dollar', CAD: 'Canadian dollar', SEK: 'Swedish krona', LKR: 'Sri Lankan rupee',
+  JPY: 'Japanese yen', CNY: 'Chinese yuan', SAR: 'Saudi riyal', AED: 'UAE dirham', MYR: 'Malaysian ringgit', SGD: 'Singapore dollar', AUD: 'Australian dollar', CAD: 'Canadian dollar', SEK: 'Swedish krona', LKR: 'Sri Lankan rupee',
 };
 
 export class TakaRatesPanel extends BdMarketsPanel {
@@ -140,13 +140,14 @@ export class TakaRatesPanel extends BdMarketsPanel {
     const sorted = [...f.rates].sort((a, b) => (FX_ORDER.indexOf(a.code) + 99 * +(FX_ORDER.indexOf(a.code) < 0)) - (FX_ORDER.indexOf(b.code) + 99 * +(FX_ORDER.indexOf(b.code) < 0)));
     const rows = sorted.map((r) => `
       <tr><td><b>${escapeHtml(r.code)}</b> <span class="bdm-muted">${escapeHtml(FX_NAMES[r.code] ?? '')}</span></td>
-      <td class="r">${fmt(r.mid, 4)}</td><td class="r bdm-muted">${fmt(r.bid, 4)}</td><td class="r bdm-muted">${fmt(r.ask, 4)}</td></tr>`).join('');
+      <td class="r">${fmt(r.mid, 4)}</td>${f.official === false ? '' : `<td class="r bdm-muted">${fmt(r.bid, 4)}</td><td class="r bdm-muted">${fmt(r.ask, 4)}</td>`}</tr>`).join('');
     const asOf = f.asOf ? new Date(`${f.asOf}T00:00:00Z`).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }) : '';
     this.setTrustedContent(trustedHtml(`
       <div class="bdm">
         ${usd ? `<div class="bdm-hero"><span class="bdm-muted">1 USD =</span> <b>৳ ${fmt(usd.mid, 2)}</b> <span class="bdm-muted">BDT</span></div>` : ''}
-        <table class="wm-table bdm-table"><thead><tr><th>Currency (1 unit in BDT)</th><th class="r">Rate</th><th class="r">Bid</th><th class="r">Ask</th></tr></thead><tbody>${rows}</tbody></table>
-        ${sourceLine(f, asOf ? `rates effective ${asOf}` : '')}
+        ${f.official === false ? '<div class="bdm-note">Bangladesh Bank\'s site is not reachable from our server right now, so these are daily market reference rates, not the official BB rates.</div>' : ''}
+        <table class="wm-table bdm-table"><thead><tr><th>Currency (1 unit in BDT)</th><th class="r">Rate</th>${f.official === false ? '' : '<th class="r">Bid</th><th class="r">Ask</th>'}</tr></thead><tbody>${rows}</tbody></table>
+        ${sourceLine(f, asOf ? `${f.official === false ? 'updated' : 'rates effective'} ${asOf}` : '')}
       </div>`, 'BD markets panel: numbers formatted locally, strings escaped'));
     this._hasData = true;
   }

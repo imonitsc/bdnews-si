@@ -339,3 +339,4 @@ body, body *:not(svg):not(svg *) { font-family: var(--font-mono); }
 .bdm-src a { color: var(--bdn-amber, #ffa31a); }
 .bdm-stale { color: var(--bdn-down, #ff4040); }
 :root[data-theme="light"] .bdm-idx-v, :root[data-theme="light"] .bdm-stats b, :root[data-theme="light"] .bdm-table b, :root[data-theme="light"] .bdm-hero b { color: #000; }
+.bdm-note { font-size: 11px; color: var(--bdn-amber, #ffa31a); border-left: 2px solid var(--bdn-amber, #ffa31a); padding: 2px 6px; }

@@ -40,3 +40,16 @@ describe('sector research', () => {
     assert.ok(!rmg.news.test('Cricket team wins series'));
   });
 });
+
+import { distanceKm, SITES } from '../src/terminal/screens/power.ts';
+
+describe('power screen', () => {
+  it('measures great-circle distance', () => {
+    const d = distanceKm({ lat: 23.81, lon: 90.41 }, { lat: 22.36, lon: 91.78 }); // Dhaka → Chattogram ≈ 210 km
+    assert.ok(d > 200 && d < 225, String(d));
+    assert.equal(distanceKm({ lat: 1, lon: 1 }, { lat: 1, lon: 1 }), 0);
+  });
+  it('keeps every reference site inside Bangladesh or its coast', () => {
+    for (const s of SITES) assert.ok(s.lat > 20.5 && s.lat < 26.7 && s.lon > 88 && s.lon < 92.7, s.name);
+  });
+});

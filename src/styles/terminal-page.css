@@ -215,3 +215,7 @@ button { font: inherit; }
 .tp-alert-code { width: 90px; }
 .tp-alert-price { width: 80px; }
 @media (max-width: 1100px) { .tp-scrn { grid-template-columns: minmax(0, 1fr); } }
+
+/* ECO */
+.tp-short { max-height: 260px; }
+.tp-nc { margin: 0; padding-left: 16px; font-size: 12px; display: flex; flex-direction: column; gap: 3px; }

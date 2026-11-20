@@ -2,9 +2,10 @@
 //   GET /api/bd-stock?list=1     → { codes: [...], sessionDate }
 //   GET /api/bd-stock?screen=1   → { rows: [{ code, ltp, ycp, open, high, low, volume, valueMn, trades, percent, category, board, sector, assetType }], session }
 //   GET /api/bd-stock?code=GP    → { quote, company, disclosures, history, session }
+//   GET /api/bd-stock?indices=1  → { days: [{ date, dsex, dses, ds30, trades, volume, turnoverMn }] } oldest first
 // Data comes from dse.com.bd's public pages only (robots.txt disallows /api);
 // see api/_dse-pages.js. Daily closes are archived by scripts/seed-bd-dse-closes.mjs.
-import { fetchDsePage, parseHome, parseCompany, parseTodayDisclosures } from './_dse-pages.js';
+import { fetchDsePage, parseHome, parseCompany, parseTodayDisclosures, parseRecentMarket } from './_dse-pages.js';
 import { redisPipeline } from './_upstash-json.js';
 
 export const config = { maxDuration: 30 };
@@ -72,6 +73,17 @@ export default async function handler(req, res) {
     if (url.searchParams.has('list')) {
       const h = await home();
       return send(res, 200, { codes: h.rows.map((r) => r.code), sessionDate: h.session?.sessionDate ?? null }, 600);
+    }
+    if (url.searchParams.has('indices')) {
+      // Archived daily table (scripts/bdsi-archive-dse.mjs), topped up with the live page.
+      const [arch, live] = await Promise.all([
+        redisPipeline([['GET', 'bdsi:dse:indices']], 4_000, true).then((r) => { try { return JSON.parse(r?.[0]?.result || '[]'); } catch { return []; } }).catch(() => []),
+        cached('recent', 30 * 60_000, async () => ({ rows: parseRecentMarket(await fetchDsePage('/recent-market-information')) })).catch(() => ({ rows: [] })),
+      ]);
+      const byDate = new Map((Array.isArray(arch) ? arch : []).map((r) => [r.date, r]));
+      for (const r of live.rows) byDate.set(r.date, r);
+      const days = [...byDate.values()].sort((a, b) => (a.date < b.date ? -1 : 1));
+      return send(res, 200, { days, source: 'Dhaka Stock Exchange (recent market information)' }, 1800);
     }
     if (url.searchParams.has('screen')) {
       const h = await home();

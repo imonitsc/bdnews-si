@@ -15701,6 +15701,20 @@
       ]
     },
     {
+      "host": "vpxwqmjqhuimflccwxqq.supabase.co",
+      "provider": "vpxwqmjqhuimflccwxqq.supabase.co",
+      "kind": "structured",
+      "observed": true,
+      "license": "Excluded: first-party, control-plane, UI, or rendering transport",
+      "attribution": "Excluded from the external-provider count: not an ingested upstream dataset.",
+      "status": "excluded",
+      "references": [
+        {
+          "path": "src/config/auth.ts"
+        }
+      ]
+    },
+    {
       "host": "vrt.be",
       "provider": "vrt.be",
       "kind": "feed",

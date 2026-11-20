@@ -1294,6 +1294,9 @@ const DYNAMIC_HOSTS = [
 ];
 
 const EXCLUDED_HOSTS = new Set([
+  // BD Situation Intelligence: sign-in service (Supabase Auth) and the AGPL licence link, not data sources.
+  'vpxwqmjqhuimflccwxqq.supabase.co',
+  'www.gnu.org',
   'creativecommons.org',
   'www.nationalarchives.gov.uk',
   'test',

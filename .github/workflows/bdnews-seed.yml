@@ -25,6 +25,10 @@ jobs:
       UPSTASH_REDIS_REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL || secrets.UPSTASH_REDIS_KV_REST_API_URL }}
       UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN || secrets.UPSTASH_REDIS_KV_REST_API_TOKEN }}
       SEED_TIMEOUT: '300'
+      # Upstream TTLs assume 5–30 min crons; this job runs every 3 h and takes
+      # about an hour, so keep seeded data for at least 6 h (scripts/_seed-utils.mjs
+      # floorSeedTtl). Freshness badges still use each seeder's own staleness limit.
+      SEED_MIN_TTL_SECONDS: '21600'
       NASA_FIRMS_API_KEY: ${{ secrets.NASA_FIRMS_API_KEY }}
       FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
       EIA_API_KEY: ${{ secrets.EIA_API_KEY }}

@@ -619,7 +619,26 @@ function startLockHeartbeat(domain, runId, ttlMs) {
   return heartbeat;
 }
 
+/**
+ * BDSI: data TTL floor for low-frequency seed schedules.
+ *
+ * Upstream seeders size their TTLs for Railway crons that run every 5–30 minutes.
+ * bdnews.si seeds from GitHub Actions every 3 hours (a run takes about an hour),
+ * so a 30-minute or 2-hour TTL leaves the panel empty for most of each gap.
+ * Setting SEED_MIN_TTL_SECONDS raises every data TTL written through these
+ * helpers to at least that value. Unset (the upstream default) changes nothing.
+ * TTL 0/absent (no expiry) is left alone. Lock and staging keys do not use this.
+ * Freshness is still judged from seed-meta fetchedAt, so old data shows as stale.
+ */
+export function floorSeedTtl(ttlSeconds, env = process.env) {
+  const floor = Math.trunc(Number(env?.SEED_MIN_TTL_SECONDS));
+  const ttl = Number(ttlSeconds);
+  if (!Number.isFinite(floor) || floor <= 0 || !Number.isFinite(ttl) || ttl <= 0) return ttlSeconds;
+  return Math.max(Math.trunc(ttl), floor);
+}
+
 export async function atomicPublish(canonicalKey, data, validateFn, ttlSeconds, options = {}) {
+  ttlSeconds = floorSeedTtl(ttlSeconds);
   const { url, token } = getRedisCredentials();
 
   if (validateFn) {
@@ -1237,6 +1256,7 @@ export function shouldEnvelopeKey(key) {
 }
 
 export async function writeExtraKey(key, data, ttl, envelopeMeta, options = {}) {
+  ttl = floorSeedTtl(ttl);
   const { url, token } = getRedisCredentials();
   const payload = serializeExtraKeyValue(key, data, envelopeMeta);
   // options.lockFence (runSeed only): write only while the run still holds
@@ -1397,7 +1417,7 @@ export async function writeExtraKeyWithMetaAtomically({
   fetchedAt = Date.now(),
 }) {
   const { url, token } = getRedisCredentials();
-  const dataTtl = Number(ttlSeconds);
+  const dataTtl = Number(floorSeedTtl(ttlSeconds));
   const metaTtl = Number(resolveSeedMetaTtl(metaTtlSeconds, dataTtl));
   if (!key || !Number.isInteger(dataTtl) || dataTtl <= 0) {
     throw new Error('Atomic extra-key publish requires a key and a positive integer TTL');
@@ -1498,7 +1518,7 @@ export async function extendExistingTtlDetailed(keys, ttlSeconds = 600, options 
   try {
     // EXPIRE only refreshes TTL when key already exists (returns 0 on missing keys — no-op).
     // Check each result: keys that returned 0 are missing/expired and cannot be extended.
-    const pipeline = requestedKeys.map(k => ['EXPIRE', k, ttlSeconds]);
+    const pipeline = requestedKeys.map(k => ['EXPIRE', k, floorSeedTtl(ttlSeconds)]);
     // Retry the pipeline call on transient Redis failures. A successful response
     // with some EXPIRE no-ops is a real missing-key condition, NOT a transient
     // error, so we only retry HTTP/network failures and return false for no-ops.

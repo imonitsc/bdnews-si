@@ -191,6 +191,7 @@ import {
   settleCheckoutReturnFocus,
 } from '@/services/checkout-return-state';
 import { resolveCheckoutContext, type CheckoutContext } from '../../shared/checkout-attribution';
+import { mountTerminalBar } from '@/app/terminal-bar';
 import { BRAND } from '@/config/brand';
 import { BANGLADESH_NEWS_PANEL_KEY } from '@/config/bangladesh-news';
 
@@ -1534,6 +1535,7 @@ export class PanelLayoutManager implements AppModule {
         </span>
       </footer>
     `, "legacy direct innerHTML migration"));
+    mountTerminalBar(this.ctx); // bdnews SI terminal strip
     // Move the same links so navigation, analytics and focus targets stay shared.
     this.variantPlacementCleanup?.();
     const switcher = this.ctx.container.querySelector('.variant-switcher');

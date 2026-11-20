@@ -1,0 +1,243 @@
+/* bdnews SI terminal theme.
+   Unlayered, so it wins over main.css (which sits in @layer base).
+   Applies to the dark theme only; the light theme is left as upstream ships it. */
+
+:root:not([data-theme="light"]) {
+  --bdn-amber: #ffa31a;
+  --bdn-amber-soft: #ffc266;
+  --bdn-amber-dim: #b8873d;
+  --bdn-amber-deep: #2a1a00;
+  --bdn-cyan: #4fd1ff;
+  --bdn-up: #19e07a;
+  --bdn-down: #ff4040;
+
+  --bg: #000;
+  --bg-secondary: #000;
+  --surface: #000;
+  --surface-hover: #120c00;
+  --surface-active: #1d1300;
+  --panel-bg: #000;
+  --input-bg: #0b0700;
+
+  --border: #3a2a10;
+  --border-strong: #6b4a14;
+  --border-subtle: #1c1408;
+  --panel-border: #3a2a10;
+
+  --text: #f0e6d2;
+  --text-secondary: var(--bdn-amber-soft);
+  --text-dim: var(--bdn-amber-dim);
+  --text-muted: #a88a58;
+  --text-faint: #9a7f55;
+  --accent: var(--bdn-amber);
+
+  --overlay-subtle: rgba(255, 163, 26, 0.04);
+  --overlay-light: rgba(255, 163, 26, 0.07);
+  --overlay-medium: rgba(255, 163, 26, 0.12);
+
+  --scrollbar-thumb: #4a3510;
+  --scrollbar-thumb-hover: #7a5618;
+
+  --green: var(--bdn-up);
+  --red: var(--bdn-down);
+  --semantic-positive: var(--bdn-up);
+  --status-live: var(--bdn-up);
+
+  --font-body-base: var(--font-mono);
+}
+
+:root:not([data-theme="light"]) body {
+  background: #000;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Square, hard-edged terminal geometry. */
+:root:not([data-theme="light"]) .panel,
+:root:not([data-theme="light"]) .panel button,
+:root:not([data-theme="light"]) .header button,
+:root:not([data-theme="light"]) .header select,
+:root:not([data-theme="light"]) .map-section,
+:root:not([data-theme="light"]) input {
+  border-radius: 0 !important;
+}
+
+/* Header: black with an amber rule. */
+:root:not([data-theme="light"]) .header {
+  background: #000;
+  border-bottom: 2px solid var(--bdn-amber);
+}
+:root:not([data-theme="light"]) .header .logo,
+:root:not([data-theme="light"]) .header .logo-text,
+:root:not([data-theme="light"]) .header-left a[href="/"] {
+  color: var(--bdn-amber);
+  letter-spacing: 0.12em;
+}
+
+/* Panels: amber title bars like terminal windows. */
+:root:not([data-theme="light"]) .panel {
+  border: 1px solid var(--border);
+  background: #000;
+}
+:root:not([data-theme="light"]) .panel-header,
+:root:not([data-theme="light"]) .map-section > .panel-header {
+  background: var(--bdn-amber-deep);
+  border-bottom: 1px solid var(--bdn-amber);
+  padding: 4px 8px;
+  min-height: 26px;
+}
+:root:not([data-theme="light"]) .panel-title {
+  color: var(--bdn-amber);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+:root:not([data-theme="light"]) .panel:hover {
+  border-color: var(--border-strong);
+}
+
+/* Headlines in bright text, cyan on hover, like terminal news links. */
+:root:not([data-theme="light"]) .panel a:hover,
+:root:not([data-theme="light"]) .item-title:hover,
+:root:not([data-theme="light"]) .news-item a:hover {
+  color: var(--bdn-cyan);
+}
+
+/* Jump highlight when a command opens a panel. */
+@keyframes bdn-flash {
+  0% { box-shadow: 0 0 0 2px var(--bdn-amber), 0 0 24px rgba(255, 163, 26, 0.6); }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+.bdn-flash { animation: bdn-flash 1.4s ease-out; }
+
+/* ---- Terminal command strip ---- */
+.bdn-terminal-bar {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  height: 30px;
+  flex-shrink: 0;
+  background: #000;
+  border-bottom: 1px solid var(--border, #333);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--bdn-amber, #ffa31a);
+  overflow: hidden;
+  position: relative;
+  z-index: 590;
+}
+
+.bdn-cmd {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 8px;
+  border-right: 1px solid var(--border, #333);
+  flex-shrink: 0;
+}
+.bdn-cmd-prompt { color: var(--bdn-amber, #ffa31a); font-weight: 700; letter-spacing: 0.06em; cursor: text; }
+.bdn-cmd-input {
+  width: 110px;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+  font: inherit;
+  text-transform: uppercase;
+  caret-color: var(--bdn-amber, #ffa31a);
+}
+.bdn-cmd-input::placeholder { color: var(--bdn-amber-dim, #8a6a3a); }
+.bdn-cmd:focus-within { box-shadow: inset 0 -2px 0 var(--bdn-amber, #ffa31a); }
+.bdn-go {
+  background: #0a8f3c;
+  color: #fff;
+  border: none;
+  font: inherit;
+  font-weight: 700;
+  padding: 2px 8px;
+  cursor: pointer;
+}
+.bdn-go:hover { background: #12b24c; }
+.bdn-cmd-status { color: var(--bdn-down, #ff4040); font-size: 11px; white-space: nowrap; }
+.bdn-cmd-status:empty { display: none; }
+
+.bdn-fkeys {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 0 6px;
+  border-right: 1px solid var(--border, #333);
+  flex-shrink: 1;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.bdn-fkeys::-webkit-scrollbar { display: none; }
+.bdn-fkey {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 20px;
+  padding: 0 6px;
+  background: #ffbf00;
+  color: #000;
+  border: none;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.bdn-fkey:hover, .bdn-fkey:focus-visible { background: #fff; outline: none; }
+.bdn-fkey-n { color: #7a1d00; }
+
+.bdn-ticker {
+  flex: 1 1 auto;
+  min-width: 120px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  mask-image: linear-gradient(90deg, transparent, #000 24px, #000 calc(100% - 24px), transparent);
+}
+.bdn-ticker-track {
+  display: inline-flex;
+  white-space: nowrap;
+  will-change: transform;
+}
+.bdn-ticker-track.bdn-scroll { animation: bdn-marquee var(--bdn-ticker-duration, 60s) linear infinite; }
+.bdn-ticker:hover .bdn-ticker-track { animation-play-state: paused; }
+@keyframes bdn-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.bdn-tick { display: inline-flex; gap: 6px; padding: 0 14px; border-right: 1px solid #1f1608; }
+.bdn-tick-sym { color: var(--bdn-amber, #ffa31a); font-weight: 700; }
+.bdn-tick-px { color: #fff; }
+.bdn-tick-chg.up { color: var(--bdn-up, #19e07a); }
+.bdn-tick-chg.down { color: var(--bdn-down, #ff4040); }
+.bdn-tick-wait { color: var(--bdn-amber-dim, #8a6a3a); }
+
+.bdn-clocks {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 10px;
+  border-left: 1px solid var(--border, #333);
+  flex-shrink: 0;
+}
+.bdn-clock { display: inline-flex; gap: 5px; }
+.bdn-clock-l { color: var(--bdn-amber-dim, #b8873d); }
+.bdn-clock-v { color: #fff; }
+
+@media (prefers-reduced-motion: reduce) {
+  .bdn-ticker-track.bdn-scroll { animation: none; }
+  .bdn-flash { animation: none; outline: 2px solid var(--bdn-amber, #ffa31a); }
+}
+
+/* Small screens: keep the prompt and ticker, drop keys and extra clocks. */
+@media (max-width: 1100px) {
+  .bdn-clock:not(:first-child) { display: none; }
+}
+@media (max-width: 768px) {
+  .bdn-fkeys { display: none; }
+  .bdn-cmd-input { width: 70px; }
+}
+
+/* Light theme: plainer strip that still reads. */
+:root[data-theme="light"] .bdn-terminal-bar { background: #111; }

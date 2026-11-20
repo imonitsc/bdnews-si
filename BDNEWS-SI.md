@@ -38,3 +38,7 @@ running on a schedule. See `SELF_HOSTING.md` for the data seeders and optional A
 - Bangladesh News panel (`bangladesh`, right after Live News): stories from Bangladeshi outlets and
   stories about Bangladesh, gathered from every loaded news category (`src/config/bangladesh-news.ts`,
   `src/app/data-loader.ts`, `src/app/panel-layout.ts`).
+
+## Terminal look (2026-11-20)
+- `src/styles/terminal-theme.css` (imported unlayered from `base-layer.css`): black and amber terminal palette, square panels, amber title bars. Dark theme only.
+- `src/app/terminal-bar.ts`, mounted from `panel-layout.ts`: command prompt (`BD`, `TV`, `MKT`, `MAP`, … then Enter; `/` focuses it), function keys that jump to panels, scrolling market ticker from the loaded quotes, and Dhaka/London/New York clocks.

@@ -17,6 +17,11 @@ const FX_ORDER = ['USD', 'EUR', 'GBP', 'INR', 'SGD', 'CNH', 'JPY', 'AUD', 'CAD',
 
 let lastNews: NewsItem[] = [];
 
+/** Drop a trailing " - Outlet" credit; the outlet is shown in its own column. */
+function stripCredit(title: string): string {
+  return title.replace(/\s+[-–—|]\s+[^-–—|]{2,40}$/u, '') || title;
+}
+
 /** Opens Launchpad news row n (1-based) in a new tab; false if there is no such row. */
 export function openNewsRow(n: number): boolean {
   const item = lastNews[n - 1];
@@ -78,7 +83,7 @@ function newsPanel(items: NewsItem[] | null, err: boolean): HTMLElement {
         h('span', { class: 'tp-muted' }, `${i + 1})`),
         h('span', { class: 'tp-muted' }, dhakaTime(n.publishedAt)),
         h('span', { class: 'tp-amber tp-ellipsis' }, n.source.toUpperCase().slice(0, 14)),
-        h('a', { href: n.link, target: '_blank', rel: 'noopener noreferrer', lang: /[ঀ-৿]/.test(n.title) ? 'bn' : 'en' }, n.title)))),
+        h('a', { href: n.link, target: '_blank', rel: 'noopener noreferrer', lang: /[ঀ-৿]/.test(n.title) ? 'bn' : 'en' }, stripCredit(n.title))))),
       sourceLine('Red = alert · type <n> <GO> to open row n · Bangladeshi outlets and stories about Bangladesh, newest first'),
     ];
   }

@@ -112,6 +112,7 @@ const SOURCE_DOMAIN_MATCHERS = [
 const SOURCE_DOMAIN_OVERRIDES = new Map([
   ['api.ioda.inetintel.cc.gatech.edu', 'infrastructure'], // BDSI: IODA internet outages
   ['ioda.inetintel.cc.gatech.edu', 'infrastructure'], // BDSI: IODA dashboard links
+  ['www.dse.com.bd', 'finance'], // BDSI: Dhaka Stock Exchange public pages
   ['fawazahmed0 currency-api', 'finance'],
   ['ammancity.gov.jo', 'finance'],
   ['data.1212.mn', 'finance'],

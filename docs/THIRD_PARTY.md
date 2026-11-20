@@ -27,7 +27,7 @@ Last reviewed: 2026-11-20.
 
 | Name | URL | Licence / terms | How we use it | Attribution | Verdict |
 |---|---|---|---|---|---|
-| Dhaka Stock Exchange website | https://www.dse.com.bd | No published open licence; public web pages | `api/bd-markets.js` reads DSEX/DS30/DSES and top movers for the DSE panel | "Source: Dhaka Stock Exchange" | **Amber**: OK for the free prototype; Pro tier needs a DSE data-vendor agreement (CLAUDE.md §5.1) |
+| Dhaka Stock Exchange website | https://www.dse.com.bd | No published open licence; public web pages. robots.txt disallows `/api`, so BDSI reads only allowed pages (`/`, `/recent-market-information`, `/company/<CODE>`, `/news/today`) with a BDSI user agent | `api/_dse-pages.js` → `api/bd-markets.js` (market summary), `api/bd-stock.js` (stock pages, screener), `scripts/bdsi-archive-dse.mjs` (daily close archive in Redis). Company contact details are not stored | "Source: Dhaka Stock Exchange" | **Amber**: OK for the free prototype; Pro tier needs a DSE data-vendor agreement (CLAUDE.md §5.1) |
 | Bangladesh Bank exchange rates | https://www.bb.org.bd/en/index.php/econdata/exchangerate | Government publication, no explicit licence | Official USD/BDT and other rates for the Taka panel | "Source: Bangladesh Bank" | **Amber**: verify reuse terms |
 | Trading Corporation of Bangladesh (TCB) daily market prices | https://tcb.gov.bd | Government publication, no explicit licence | Dhaka retail prices (xlsx) for the Bazaar panel | "Source: TCB" | **Amber**: verify reuse terms |
 | ExchangeRate-API open access | https://open.er-api.com | Free; attribution link required | Fallback for the Taka panel when Bangladesh Bank is unreachable; shown as "not official" | Link "Rates by Exchange Rate API" | **Green** with attribution |

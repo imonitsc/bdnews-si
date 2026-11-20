@@ -95,3 +95,6 @@ jobs:
           # Manual runs can name specific seeders; licence gates still apply.
           ONLY_SEEDERS: ${{ github.event.inputs.only || '' }}
         run: ./scripts/run-seeders.sh
+      - name: Archive DSE daily closes (stock price history)
+        if: ${{ always() && (github.event.inputs.only == '' || github.event.inputs.only == null) }}
+        run: node scripts/bdsi-archive-dse.mjs

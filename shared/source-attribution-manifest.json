@@ -16959,7 +16959,13 @@
       "status": "terms-review",
       "references": [
         {
+          "path": "api/_dse-pages.js"
+        },
+        {
           "path": "api/bd-markets.js"
+        },
+        {
+          "path": "api/bd-stock.js"
         }
       ]
     },
@@ -18028,10 +18034,10 @@
       "status": "terms-review",
       "references": [
         {
-          "path": "api/bd-ask.js"
+          "path": "api/_dse-pages.js"
         },
         {
-          "path": "api/bd-markets.js"
+          "path": "api/bd-ask.js"
         }
       ]
     },
@@ -22745,6 +22751,9 @@
         },
         {
           "path": "src/terminal/risk-map.ts"
+        },
+        {
+          "path": "src/terminal/screens/stock.ts"
         }
       ]
     },

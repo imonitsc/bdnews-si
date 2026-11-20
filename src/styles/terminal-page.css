@@ -62,7 +62,7 @@ button { font: inherit; }
 /* function keys and tabs */
 .tp-fkeys { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; padding: 5px 10px; border-bottom: 1px solid var(--tp-line); }
 .tp-fkey { background: var(--tp-amber); color: #000; padding: 4px 8px; font-size: 12px; font-weight: 500; text-decoration: none; min-height: 26px; display: inline-flex; align-items: center; }
-.tp-fkey b { font-weight: 600; }
+.tp-fkey b { font-weight: 600; margin-right: 5px; }
 .tp-fkey:hover, .tp-fkey.on { background: var(--tp-yellow); color: #000; }
 .tp-tab { color: var(--tp-dim); border: 1px solid #333; padding: 4px 10px; font-size: 12px; text-decoration: none; min-height: 26px; display: inline-flex; align-items: center; }
 .tp-tab.on, .tp-tab:hover { color: #fff; border-color: var(--tp-amber); }
@@ -177,3 +177,23 @@ button { font: inherit; }
 .tp-ask-sources li:target { outline: 1px solid var(--tp-yellow); }
 .tp-ask-sources a { color: #fff; }
 @media (max-width: 1000px) { .tp-ask { grid-template-columns: minmax(0, 1fr); } }
+
+/* STOCK */
+.tp-stock-head { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.tp-stock-name { margin: 0; font-size: 18px; color: #fff; font-weight: 500; }
+.tp-stock-px { text-align: right; }
+.tp-kv { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px 10px; }
+.tp-range { display: flex; flex-direction: column; gap: 3px; }
+.tp-range-bar { position: relative; height: 6px; background: #222; border: 1px solid #333; }
+.tp-range-mark { position: absolute; top: -4px; width: 2px; height: 12px; background: var(--tp-yellow); }
+.tp-range-ends { display: flex; justify-content: space-between; font-size: 11px; color: var(--tp-muted); }
+.tp-chart-wrap { margin: 0; }
+.tp-chart { display: block; width: 100%; height: auto; background: #050505; border: 1px solid var(--tp-line); }
+.tp-holders { display: flex; flex-direction: column; gap: 4px; }
+.tp-holder { display: grid; grid-template-columns: 110px minmax(0, 1fr) 70px; gap: 8px; align-items: center; }
+.tp-holder-k { color: var(--tp-dim); }
+.tp-holder-bar { height: 8px; background: #1a1a1a; }
+.tp-holder-bar span { display: block; height: 100%; background: var(--tp-amber); }
+.tp-disc { margin: 0; padding-left: 16px; display: flex; flex-direction: column; gap: 6px; font-size: 12px; }
+.tp-disc a { color: #fff; }
+@media (max-width: 900px) { .tp-kv { grid-template-columns: repeat(2, minmax(0, 1fr)); } }

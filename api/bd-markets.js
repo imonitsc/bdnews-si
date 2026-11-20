@@ -2,11 +2,12 @@
 //   GET /api/bd-markets            → { dse, fx, bazaar, fetchedAt }
 //   GET /api/bd-markets?part=dse   → one part only (dse | fx | bazaar)
 // Sources (public pages, read server-side and cached; data belongs to the publishers):
-//   - Dhaka Stock Exchange: https://www.dse.com.bd/api/live/snapshot (JSON used by dse.com.bd)
+//   - Dhaka Stock Exchange: public pages / and /recent-market-information (robots.txt disallows /api)
 //   - Bangladesh Bank:      https://www.bb.org.bd/en/index.php/econdata/exchangerate (HTML table)
 //   - TCB:                  https://tcb.gov.bd/pages/daily-rmps → latest daily .xlsx
 import { readFirstSheetRows } from './_xlsx-lite.js';
 import { getTextWithAiaRepair } from './_aia-fetch.js';
+import { fetchDsePage, parseHome, parseRecentMarket, buildDseSummary } from './_dse-pages.js';
 
 // Node.js runtime: some Bangladeshi government hosts fail from the Edge runtime's fetch,
 // and Node reports the underlying network error.
@@ -28,6 +29,7 @@ async function fetchWithTimeout(url, init = {}, ms = 12_000) {
 const num = (v) => (typeof v === 'number' && Number.isFinite(v) ? v : null);
 
 // ── Dhaka Stock Exchange ────────────────────────────────────────────────────
+// Legacy shape for the old /api/live/snapshot JSON (no longer fetched; kept for tests of old payloads).
 export function shapeDse(json) {
   const m = json?.market;
   if (!m || !Array.isArray(m.indices)) throw new Error('dse: unexpected shape');
@@ -69,10 +71,11 @@ export function shapeDse(json) {
   };
 }
 
+// dse.com.bd's robots.txt disallows /api, so the market summary is built from the
+// public home page (prices, session, DSEX intraday) and the daily market table.
 async function loadDse() {
-  const res = await fetchWithTimeout('https://www.dse.com.bd/api/live/snapshot', { headers: { accept: 'application/json' } });
-  if (!res.ok) throw new Error(`dse: HTTP ${res.status}`);
-  return shapeDse(await res.json());
+  const [home, recent] = await Promise.all([fetchDsePage('/'), fetchDsePage('/recent-market-information')]);
+  return buildDseSummary(parseHome(home), parseRecentMarket(recent));
 }
 
 // ── Bangladesh Bank exchange rates ──────────────────────────────────────────

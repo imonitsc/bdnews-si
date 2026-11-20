@@ -29,14 +29,15 @@ const FULL_PANELS: Record<string, PanelConfig> = {
   'bd-dse': { name: 'Dhaka Stock Exchange', enabled: true, priority: 1 }, // bdnews SI
   'bd-taka': { name: 'Taka Rates', enabled: true, priority: 1 }, // bdnews SI
   'bd-bazaar': { name: 'Dhaka Bazaar Prices', enabled: true, priority: 1 }, // bdnews SI
-  // bdnews SI: OSINT panels promoted next to the Bangladesh panels.
+  // bdnews SI: OSINT panels promoted next to the Bangladesh panels. Telegram, X and airline
+  // intelligence stay off: they need World Monitor's relay server or paid APIs.
   'ucdp-events': { name: 'UCDP Conflict Events', enabled: true, priority: 1 },
   displacement: { name: 'UNHCR Displacement', enabled: true, priority: 1 },
   'internet-disruptions': { name: 'Internet Disruptions', enabled: true, priority: 1 },
   'satellite-fires': { name: 'Fires', enabled: true, priority: 1 },
-  'telegram-intel': { name: 'Telegram Intel', enabled: true, priority: 1, ...(_desktop && { premium: 'locked' as const }) },
-  'x-intel': { name: 'X News Accounts', enabled: true, priority: 1, ...(_desktop && { premium: 'locked' as const }) },
-  'airline-intel': { name: 'Airline Intelligence', enabled: true, priority: 1 },
+  'telegram-intel': { name: 'Telegram Intel', enabled: false, priority: 2, ...(_desktop && { premium: 'locked' as const }) },
+  'x-intel': { name: 'X News Accounts', enabled: false, priority: 2, ...(_desktop && { premium: 'locked' as const }) },
+  'airline-intel': { name: 'Airline Intelligence', enabled: false, priority: 2 },
   'live-webcams': { name: 'Live Webcams', enabled: true, priority: 1 },
   'windy-webcams': { name: 'Windy Live Webcam', enabled: false, priority: 2 },
   insights: { name: 'AI Insights', enabled: true, priority: 1 },

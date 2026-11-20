@@ -171,16 +171,19 @@ export const LAYER_EXPLANATIONS: Partial<Record<keyof MapLayers, LayerExplanatio
 };
 
 const VARIANT_LAYER_ORDER: Record<MapVariant, Array<keyof MapLayers>> = {
+  // BDSI: Bangladesh preset first (BD_PRIMARY_LAYERS), then the global layers that the
+  // picker groups under an "Advanced / Global" heading. Same set as upstream, reordered.
   full: [
-    'iranAttacks', 'hotspots', 'conflicts',
+    'hotspots', 'conflicts', 'protests', 'ucdpEvents', 'displacement', 'fires', 'natural', 'weather', 'climate',
+    'outages', 'ais', 'flights', 'aircraftEmergencies', 'tradeRoutes', 'waterways',
+    'ciiChoropleth', 'diseaseOutbreaks', 'dayNight',
+    'iranAttacks',
     'bases', 'nuclear', 'irradiators', 'radiationWatch', 'spaceports',
     'cables', 'pipelines', 'storageFacilities', 'fuelShortages', 'datacenters', 'military',
-    'ais', 'tradeRoutes', 'flights', 'aircraftEmergencies', 'protests',
-    'ucdpEvents', 'displacement', 'climate', 'weather', 'canadaRoads', 'canadaAlerts',
-    'outages', 'cyberThreats', 'natural', 'fires',
-    'waterways', 'economic', 'minerals', 'gpsJamming',
-    'satellites', 'ciiChoropleth', 'resilienceScore', 'sanctions', 'no2Activity', 'reservoirLevels', 'dayNight', 'webcams',
-    'diseaseOutbreaks',
+    'canadaRoads', 'canadaAlerts',
+    'cyberThreats',
+    'economic', 'minerals', 'gpsJamming',
+    'satellites', 'resilienceScore', 'sanctions', 'no2Activity', 'reservoirLevels', 'webcams',
   ],
   tech: [
     'startupHubs', 'techHQs', 'accelerators', 'cloudRegions',
@@ -228,6 +231,30 @@ const IRAN_ATTACKS_ENABLED = typeof window !== 'undefined' && import.meta.env.VI
 /** True when a layer is feature-sunset and must not appear in any picker. */
 export function isSunsetLayer(key: keyof MapLayers): boolean {
   return !IRAN_ATTACKS_ENABLED && key === 'iranAttacks';
+}
+
+/**
+ * BDSI: layers that make up the Bangladesh preset at the top of the full-variant picker.
+ * Everything after them is listed under an "Advanced / Global" heading.
+ */
+export const BD_PRIMARY_LAYERS: ReadonlySet<keyof MapLayers> = new Set<keyof MapLayers>([
+  'protests', 'ucdpEvents', 'displacement', 'fires', 'natural', 'weather', 'climate',
+  'outages', 'ais', 'flights', 'aircraftEmergencies', 'tradeRoutes', 'waterways',
+  'hotspots', 'conflicts', 'ciiChoropleth', 'diseaseOutbreaks', 'dayNight',
+]);
+
+export const GLOBAL_LAYER_GROUP_LABEL = 'Advanced / Global';
+
+/**
+ * HTML for the group heading to insert before `key` in the full-variant picker, or ''.
+ * Only the first non-preset layer gets it.
+ */
+export function layerGroupHeadingBefore(keys: ReadonlyArray<keyof MapLayers>, index: number, variant: MapVariant): string {
+  if (variant !== 'full' || index === 0) return '';
+  const key = keys[index]!;
+  const prev = keys[index - 1]!;
+  if (BD_PRIMARY_LAYERS.has(key) || !BD_PRIMARY_LAYERS.has(prev)) return '';
+  return `<div class="layer-group-heading" role="presentation">${GLOBAL_LAYER_GROUP_LABEL}</div>`;
 }
 
 export function getOrderedLayerKeys(variant: MapVariant): Array<keyof MapLayers> {
@@ -574,6 +601,7 @@ export function bindLayerSearch(container: HTMLElement): void {
         if (alias.includes(q)) keys.forEach(k => synonymHits.add(k));
       }
     }
+    container.querySelectorAll<HTMLElement>('.layer-group-heading').forEach((h) => { h.style.display = q ? 'none' : ''; });
     container.querySelectorAll('.layer-toggle').forEach(label => {
       const el = label as HTMLElement;
       if (el.hasAttribute('data-layer-hidden')) return;

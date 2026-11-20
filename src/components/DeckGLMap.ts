@@ -138,6 +138,7 @@ import { resolveTradeRouteSegments, TRADE_ROUTES as TRADE_ROUTES_LIST, type Trad
 import type { ScenarioVisualState } from '@/config/scenario-templates';
 import {
   getLayersForVariant,
+  layerGroupHeadingBefore,
   resolveLayerLabel,
   bindLayerSearch,
   getLayerExplanation,
@@ -6318,10 +6319,11 @@ export class DeckGLMap {
       </div>
       <input type="text" class="layer-search" placeholder="${t('components.deckgl.layerSearch')}" autocomplete="off" spellcheck="false" />
       <div class="toggle-list" style="max-height: 32vh; overflow-y: auto; scrollbar-width: thin;">
-        ${layerConfig.map(({ key, label, icon, premium, explainLabel, hasExplanation }) => {
+        ${layerConfig.map(({ key, label, icon, premium, explainLabel, hasExplanation }, i) => {
+          const groupHeading = layerGroupHeadingBefore(layerConfig.map((c) => c.key), i, (SITE_VARIANT || 'full') as MapVariant);
           const isLocked = premium === 'locked' && !premiumUnlocked;
           const isEnhanced = premium === 'enhanced' && !premiumUnlocked;
-          return `
+          return `${groupHeading}
           <div class="layer-toggle-row" data-layer="${key}">
             <label class="layer-toggle${isLocked ? ' layer-toggle-locked' : ''}" data-layer="${key}">
               <input type="checkbox" ${this.state.layers[key as keyof MapLayers] ? 'checked' : ''}${isLocked ? ' disabled' : ''}>

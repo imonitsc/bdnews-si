@@ -4,6 +4,7 @@ import { generateSummary, type SummarizeOptions } from '@/services/summarization
 import { parallelAnalysis, type AnalyzedHeadline } from '@/services/parallel-analysis';
 import { signalAggregator, type RegionalConvergence } from '@/services/signal-aggregator';
 import { focalPointDetector } from '@/services/focal-point-detector';
+import { selectHomeFocalPoints } from '@/config/home-focus';
 import { stripOrefLabels } from '@/services/oref-alerts';
 import { getCachedCountryScoreValue } from '@/services/cached-risk-scores';
 import { getTheaterPostureSummaries } from '@/services/military-surge';
@@ -1021,10 +1022,8 @@ export class InsightsPanel extends Panel {
 
   private renderFocalPoints(): string {
     // Show focal points with news+signals correlations, or those with active strikes
-    const correlatedFPs = this.lastFocalPoints.filter(
-      fp => (fp.newsMentions > 0 && fp.signalCount > 0) ||
-            fp.signalTypes.includes('active_strike')
-    ).slice(0, 5);
+    // BDSI: same rule, but Bangladesh (if in the news) and its neighbours come first.
+    const correlatedFPs = selectHomeFocalPoints(this.lastFocalPoints, 5);
 
     if (correlatedFPs.length === 0) {
       return '';

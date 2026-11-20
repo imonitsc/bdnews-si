@@ -340,3 +340,14 @@ body, body *:not(svg):not(svg *) { font-family: var(--font-mono); }
 .bdm-stale { color: var(--bdn-down, #ff4040); }
 :root[data-theme="light"] .bdm-idx-v, :root[data-theme="light"] .bdm-stats b, :root[data-theme="light"] .bdm-table b, :root[data-theme="light"] .bdm-hero b { color: #000; }
 .bdm-note { font-size: 11px; color: var(--bdn-amber, #ffa31a); border-left: 2px solid var(--bdn-amber, #ffa31a); padding: 2px 6px; }
+
+/* BDSI: "Advanced / Global" heading in the map layer picker (map-layer-definitions.ts). */
+.layer-toggles .layer-group-heading {
+  margin: 8px 0 4px;
+  padding: 4px 6px 2px;
+  border-top: 1px solid rgba(255, 170, 0, 0.35);
+  color: #ffaa00;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}

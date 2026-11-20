@@ -34,6 +34,7 @@ import { getGlobeRenderScale, resolveGlobePixelRatio, resolvePerformanceProfile,
 import {
   getLayerExplanation,
   getLayersForVariant,
+  layerGroupHeadingBefore,
   hasCuratedLayerExplanation,
   resolveLayerLabel,
   bindLayerSearch,
@@ -2369,10 +2370,11 @@ export class GlobeMap {
       </div>
       <input type="text" class="layer-search" placeholder="${t('components.deckgl.layerSearch')}" autocomplete="off" spellcheck="false" />
       <div class="toggle-list" style="max-height:32vh;overflow-y:auto;scrollbar-width:thin;">
-        ${layers.map(({ key, label, icon, presentation }) => {
+        ${layers.map(({ key, label, icon, presentation }, i) => {
             const explainLabel = escapeHtml(`Explain ${label} layer`);
             const hasExplanation = hasCuratedLayerExplanation(key);
-            return `
+            const groupHeading = layerGroupHeadingBefore(layers.map((l) => l.key), i, (SITE_VARIANT || 'full') as MapVariant);
+            return `${groupHeading}
           <div class="layer-toggle-row" data-layer="${key}">
             <label class="layer-toggle" data-layer="${key}">
               <input type="checkbox" ${this.layers[key] ? 'checked' : ''}>

@@ -602,7 +602,16 @@ export const REGIONAL_FEED_ROLLOUT_STAGES = [
  * Keep the narrower frontline set above for its one-shot migration contract;
  * this broader set is only for current cap selection.
  */
+/** bdnews SI: Bangladeshi outlets must survive the free-tier source cap (every visitor is free tier here). */
+export const BANGLADESH_PROTECTED_SOURCES = [
+  'The Daily Star', 'Dhaka Tribune', 'Prothom Alo', 'bdnews24',
+  'The Business Standard', 'New Age Bangladesh', 'Financial Express BD', 'UNB Bangladesh', 'Prothom Alo English',
+  'Kaler Kantho', 'Jugantor', 'Samakal', 'The Daily Ittefaq', 'Bangla Tribune', 'Bangladesh Pratidin',
+  'Jago News 24', 'Dhaka Post',
+] as const;
+
 export const FREE_CAP_PROTECTED_SOURCES = [
+  ...BANGLADESH_PROTECTED_SOURCES,
   ...FRONTLINE_EUROPE_PROTECTED_SOURCES,
   ...REGIONAL_FEED_ROLLOUT_DEFAULT_SOURCES,
   ...CANADA_EN_DEFAULT_SOURCES,

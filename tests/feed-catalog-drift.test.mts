@@ -840,6 +840,7 @@ describe('feed catalog drift', () => {
     assert.deepEqual(
       [...feeds.FREE_CAP_PROTECTED_SOURCES].sort(),
       [
+        ...feeds.BANGLADESH_PROTECTED_SOURCES, // bdnews SI
         ...FRONTLINE_EUROPE,
         ...REGIONAL_ROLLOUT_DEFAULTS,
         ...feeds.CANADA_EN_DEFAULT_SOURCES,
@@ -1254,6 +1255,17 @@ describe('feed catalog drift', () => {
 
     for (const name of REGIONAL_ROLLOUT_DEFAULTS) {
       assert.ok(protectedNames.has(name), `${name} must be explicitly protected from the free cap`);
+      assert.ok(keep.has(name), `${name} must survive the free source cap`);
+      assert.ok(!autoDisabled.has(name), `${name} must not be auto-disabled by the free source cap`);
+    }
+  });
+
+  it('keeps every bdnews SI Bangladeshi source on and under the production free cap', () => {
+    const disabledEn = new Set(feeds.computeDefaultDisabledSources('en'));
+    const protectedNames = new Set(feeds.FREE_CAP_PROTECTED_SOURCES);
+    const { keep, autoDisabled } = selectSourcesUnderCap(feeds.FEEDS, feeds.INTEL_SOURCES, disabledEn, 80, protectedNames);
+    for (const name of feeds.BANGLADESH_PROTECTED_SOURCES) {
+      assert.ok(!disabledEn.has(name), `${name} must start enabled for a fresh EN profile`);
       assert.ok(keep.has(name), `${name} must survive the free source cap`);
       assert.ok(!autoDisabled.has(name), `${name} must not be auto-disabled by the free source cap`);
     }

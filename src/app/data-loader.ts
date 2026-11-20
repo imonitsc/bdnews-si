@@ -1775,8 +1775,10 @@ export class DataLoaderManager implements AppModule {
 
   renderNewsForCategory(category: string, items: NewsItem[]): void {
     this.ctx.newsByCategory[category] = items;
-    // bdnews SI: keep the Bangladesh panel in step with every other category's news.
-    if (category !== BANGLADESH_NEWS_PANEL_KEY && this.ctx.newsPanels[BANGLADESH_NEWS_PANEL_KEY]) {
+    // bdnews SI: keep the Bangladesh list in step with every other category's news. Always
+    // store it, even before the Bangladesh panel exists: the lazily mounted panel backfills
+    // from newsByCategory, so skipping this left it empty until the next refresh.
+    if (category !== BANGLADESH_NEWS_PANEL_KEY) {
       this.renderNewsForCategory(BANGLADESH_NEWS_PANEL_KEY, collectBangladeshNews(this.ctx.newsByCategory));
     }
     const filteredItems = this.filterItemsByTimeRange(items);

@@ -47,7 +47,8 @@ let inflight: Promise<BdMarkets> | null = null;
 export function fetchBdMarkets(force = false): Promise<BdMarkets> {
   if (!force && last && Date.now() - last.at < FRESH_MS) return Promise.resolve(last.data);
   if (inflight) return inflight;
-  inflight = fetch('/api/bd-markets', { headers: { accept: 'application/json' } })
+  // 25 s: the API itself is capped at 30 s; never leave a panel loading forever.
+  inflight = fetch('/api/bd-markets', { headers: { accept: 'application/json' }, signal: AbortSignal.timeout(25_000) })
     .then(async (res) => {
       const data = (await res.json()) as BdMarkets;
       if (!res.ok && !data?.dse && !data?.fx && !data?.bazaar) throw new Error(`bd-markets HTTP ${res.status}`);

@@ -47,17 +47,34 @@ abstract class BdMarketsPanel extends Panel {
     this.timer = setInterval(() => void this.fetchData(), this.refreshMs);
   }
 
+  /** Which part of the /api/bd-markets response this panel shows. */
+  protected abstract readonly part: 'dse' | 'fx' | 'bazaar';
+
   public async fetchData(): Promise<void> {
     try {
       const data = await fetchBdMarkets();
       this.render(data);
+      if (this._hasData) {
+        // CLAUDE.md §3.4: never show old numbers as current. The API marks a part stale when it
+        // had to fall back to its cached copy because the source was unreachable.
+        if (data[this.part]?.stale) this.markStale('The source could not be reached; showing the last data received.');
+        else this.clearDataBadge();
+      }
     } catch {
       this.fail('Bangladesh market data is unavailable right now.');
     }
   }
 
+  protected markStale(reason: string): void {
+    this.setDataBadge('cached', 'STALE', reason);
+  }
+
   protected fail(message: string): void {
-    if (this._hasData) return;
+    // Keep data already on screen, but flag it so it is not read as current.
+    if (this._hasData) {
+      this.markStale('The last refresh failed; showing the previous data.');
+      return;
+    }
     this.showError(message, () => void this.fetchData());
   }
 
@@ -71,6 +88,7 @@ abstract class BdMarketsPanel extends Panel {
 }
 
 export class DseBdPanel extends BdMarketsPanel {
+  protected readonly part = 'dse' as const;
   constructor() {
     super('bd-dse', 'Dhaka Stock Exchange', 'DSEX, DS30 and DSES indices, turnover, market breadth and top movers from the Dhaka Stock Exchange. Refreshed every minute.', 60_000);
   }
@@ -126,6 +144,7 @@ const FX_NAMES: Record<string, string> = {
 };
 
 export class TakaRatesPanel extends BdMarketsPanel {
+  protected readonly part = 'fx' as const;
   constructor() {
     super('bd-taka', 'Taka Rates', 'Official Bangladesh Bank exchange rates of the Taka (BDT): the USD/BDT interbank rate and cross rates, as published each working day.', 15 * 60_000);
   }
@@ -154,6 +173,7 @@ export class TakaRatesPanel extends BdMarketsPanel {
 }
 
 export class BazaarPricesPanel extends BdMarketsPanel {
+  protected readonly part = 'bazaar' as const;
   private showAll = false;
   private lastData: BdMarkets | null = null;
 

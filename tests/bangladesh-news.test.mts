@@ -1,5 +1,6 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { collectBangladeshNews, isBangladeshNews } from '../src/config/bangladesh-news.ts';
 
 const item = (source: string, title: string, link: string, iso: string) => ({ source, title, link, pubDate: new Date(iso) });
@@ -20,5 +21,14 @@ describe('Bangladesh News panel selection', () => {
       bangladesh: [item('Dhaka Post', 'stale', 'https://x/4', '2026-11-20T13:00:00Z')],
     });
     assert.deepEqual(out.map((n) => n.link), ['https://x/3', 'https://x/1']);
+  });
+
+  it('stores the Bangladesh list even before its lazily mounted panel exists', () => {
+    // The panel backfills from newsByCategory.bangladesh when it mounts; gating the update on the
+    // panel's existence left a late-mounting panel empty until the next 20-minute refresh.
+    const src = readFileSync(new URL('../src/app/data-loader.ts', import.meta.url), 'utf8');
+    const block = src.slice(src.indexOf('renderNewsForCategory(category: string'), src.indexOf('const filteredItems = this.filterItemsByTimeRange(items);'));
+    assert.match(block, /collectBangladeshNews\(this\.ctx\.newsByCategory\)/);
+    assert.doesNotMatch(block, /newsPanels\[BANGLADESH_NEWS_PANEL_KEY\]/);
   });
 });

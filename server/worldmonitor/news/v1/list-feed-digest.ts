@@ -92,6 +92,7 @@ import {
 import { newsPublisherCoverageKey, stripAttributionSuffix } from '../../../../shared/story-identity.js';
 // @ts-expect-error — JS module, no declaration file
 import { STORY_ALIAS_PUBLISH_SCRIPT } from '../../../../shared/story-alias-publish-script.mjs';
+import { BANGLADESH_SOURCE_NAMES } from '../../../../shared/bangladesh-sources.js';
 import { RSS_FEED_RENEW_SCRIPT } from '../../../../shared/rss-feed-renew-script.mjs';
 import { classifyOpinion } from '../../../_shared/opinion-classifier.js';
 import { classifyFeelGood } from '../../../_shared/feelgood-classifier.js';
@@ -202,6 +203,10 @@ const ITEMS_PER_FEED = 5;
 // the whole feed grows the pool from about 4,400 to 8,300 headlines.
 const COUNTRY_ITEMS_PER_FEED = 100;
 const MAX_ITEMS_PER_CATEGORY = 20;
+// bdnews SI: Asia also carries up to this many extra stories from Bangladeshi outlets, beyond its
+// importance-ranked top 20, so the Bangladesh News panel is fed even when global stories outrank them.
+const BANGLADESH_RESERVED_ASIA_ITEMS = 30;
+const BANGLADESH_SOURCES = new Set<string>(BANGLADESH_SOURCE_NAMES);
 const FEED_CAP_LEDGER_TOP = 20;
 
 // #10976: the feeds that lost the most items to ITEMS_PER_FEED, so a missed
@@ -4065,7 +4070,16 @@ async function buildDigest(
         : items.filter((item) => typeof item.link !== 'string' || !revokedUrls.has(item.link));
       servableItems.push(...servable);
       ledgerDrops.perCategoryCap += Math.max(0, servable.length - MAX_ITEMS_PER_CATEGORY);
-      slicedByCategory.set(category, servable.slice(0, MAX_ITEMS_PER_CATEGORY));
+      const headSlice = servable.slice(0, MAX_ITEMS_PER_CATEGORY);
+      if (category === 'asia') {
+        const reserved = servable
+          .slice(MAX_ITEMS_PER_CATEGORY)
+          .filter((item) => BANGLADESH_SOURCES.has(item.source))
+          .sort((a, b) => b.publishedAt - a.publishedAt)
+          .slice(0, BANGLADESH_RESERVED_ASIA_ITEMS);
+        headSlice.push(...reserved);
+      }
+      slicedByCategory.set(category, headSlice);
     }
 
     const allSliced = [...slicedByCategory.values()].flat();

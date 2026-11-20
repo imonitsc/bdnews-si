@@ -1,14 +1,11 @@
 // bdnews SI: the Bangladesh News panel. It has no feed category of its own; it collects, from every
 // news category already loaded, the stories that come from a Bangladeshi outlet or are about Bangladesh.
 
+import { BANGLADESH_SOURCE_NAMES } from '../../shared/bangladesh-sources.js';
+
 export const BANGLADESH_NEWS_PANEL_KEY = 'bangladesh';
 
-export const BANGLADESH_NEWS_SOURCES: ReadonlySet<string> = new Set([
-  'The Daily Star', 'Dhaka Tribune', 'Prothom Alo', 'bdnews24',
-  'The Business Standard', 'New Age Bangladesh', 'Financial Express BD', 'UNB Bangladesh', 'Prothom Alo English',
-  'Kaler Kantho', 'Jugantor', 'Samakal', 'The Daily Ittefaq', 'Bangla Tribune', 'Bangladesh Pratidin',
-  'Jago News 24', 'Dhaka Post',
-]);
+export const BANGLADESH_NEWS_SOURCES: ReadonlySet<string> = new Set(BANGLADESH_SOURCE_NAMES);
 
 const BANGLADESH_TOPIC = /\b(bangladesh|bangladeshi|dhaka|chattogram|chittagong|sylhet|khulna|rajshahi|rohingya|cox'?s bazar|teesta|padma)\b|বাংলাদেশ|ঢাকা/i;
 

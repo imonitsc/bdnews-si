@@ -1,4 +1,5 @@
 import countryCoverageOptIns from '../../shared/country-news-opt-ins.json';
+import { BANGLADESH_SOURCE_NAMES } from '../../shared/bangladesh-sources.js';
 import publisherDirectOptIns from '../../shared/publisher-direct-opt-ins.json';
 import type { Feed } from '@/types';
 import { SITE_VARIANT } from './variant';
@@ -603,12 +604,7 @@ export const REGIONAL_FEED_ROLLOUT_STAGES = [
  * this broader set is only for current cap selection.
  */
 /** bdnews SI: Bangladeshi outlets must survive the free-tier source cap (every visitor is free tier here). */
-export const BANGLADESH_PROTECTED_SOURCES = [
-  'The Daily Star', 'Dhaka Tribune', 'Prothom Alo', 'bdnews24',
-  'The Business Standard', 'New Age Bangladesh', 'Financial Express BD', 'UNB Bangladesh', 'Prothom Alo English',
-  'Kaler Kantho', 'Jugantor', 'Samakal', 'The Daily Ittefaq', 'Bangla Tribune', 'Bangladesh Pratidin',
-  'Jago News 24', 'Dhaka Post',
-] as const;
+export const BANGLADESH_PROTECTED_SOURCES: readonly string[] = BANGLADESH_SOURCE_NAMES;
 
 export const FREE_CAP_PROTECTED_SOURCES = [
   ...BANGLADESH_PROTECTED_SOURCES,

@@ -4364,6 +4364,94 @@ export const SERVER_NEWS_CATALOG: ServerNewsCatalog = {
       ],
       "asia": [
         {
+          "name": "The Daily Star",
+          "url": "https://news.google.com/rss/search?q=site%3Athedailystar.net%20when%3A14d&hl=en-US&gl=US&ceid=US:en"
+        },
+        {
+          "name": "Dhaka Tribune",
+          "url": "https://news.google.com/rss/search?q=site%3Adhakatribune.com%20when%3A14d&hl=en-US&gl=US&ceid=US:en"
+        },
+        {
+          "name": "Prothom Alo",
+          "url": "https://www.prothomalo.com/stories.rss",
+          "lang": "bn",
+          "fetchInAllLanguages": true
+        },
+        {
+          "name": "bdnews24",
+          "url": "https://news.google.com/rss/search?q=site%3Abdnews24.com+when%3A7d&hl=en-US&gl=US&ceid=US%3Aen",
+          "lang": "bn",
+          "fetchInAllLanguages": true
+        },
+        {
+          "name": "The Business Standard",
+          "url": "https://news.google.com/rss/search?q=site%3Atbsnews.net%20when%3A7d&hl=en-US&gl=US&ceid=US:en"
+        },
+        {
+          "name": "New Age Bangladesh",
+          "url": "https://news.google.com/rss/search?q=site%3Anewagebd.net%20when%3A7d&hl=en-US&gl=US&ceid=US:en"
+        },
+        {
+          "name": "Financial Express BD",
+          "url": "https://news.google.com/rss/search?q=site%3Athefinancialexpress.com.bd%20when%3A7d&hl=en-US&gl=US&ceid=US:en"
+        },
+        {
+          "name": "UNB Bangladesh",
+          "url": "https://news.google.com/rss/search?q=site%3Aunb.com.bd%20when%3A7d&hl=en-US&gl=US&ceid=US:en"
+        },
+        {
+          "name": "Prothom Alo English",
+          "url": "https://news.google.com/rss/search?q=site%3Aen.prothomalo.com%20when%3A7d&hl=en-US&gl=US&ceid=US:en"
+        },
+        {
+          "name": "Kaler Kantho",
+          "url": "https://news.google.com/rss/search?q=site%3Akalerkantho.com%20when%3A7d&hl=bn&gl=BD&ceid=BD:bn",
+          "lang": "bn",
+          "fetchInAllLanguages": true
+        },
+        {
+          "name": "Jugantor",
+          "url": "https://news.google.com/rss/search?q=site%3Ajugantor.com%20when%3A7d&hl=bn&gl=BD&ceid=BD:bn",
+          "lang": "bn",
+          "fetchInAllLanguages": true
+        },
+        {
+          "name": "Samakal",
+          "url": "https://news.google.com/rss/search?q=site%3Asamakal.com%20when%3A7d&hl=bn&gl=BD&ceid=BD:bn",
+          "lang": "bn",
+          "fetchInAllLanguages": true
+        },
+        {
+          "name": "The Daily Ittefaq",
+          "url": "https://news.google.com/rss/search?q=site%3Aittefaq.com.bd%20when%3A7d&hl=bn&gl=BD&ceid=BD:bn",
+          "lang": "bn",
+          "fetchInAllLanguages": true
+        },
+        {
+          "name": "Bangla Tribune",
+          "url": "https://news.google.com/rss/search?q=site%3Abanglatribune.com%20when%3A7d&hl=bn&gl=BD&ceid=BD:bn",
+          "lang": "bn",
+          "fetchInAllLanguages": true
+        },
+        {
+          "name": "Bangladesh Pratidin",
+          "url": "https://news.google.com/rss/search?q=site%3Abd-pratidin.com%20when%3A7d&hl=bn&gl=BD&ceid=BD:bn",
+          "lang": "bn",
+          "fetchInAllLanguages": true
+        },
+        {
+          "name": "Jago News 24",
+          "url": "https://news.google.com/rss/search?q=site%3Ajagonews24.com%20when%3A7d&hl=bn&gl=BD&ceid=BD:bn",
+          "lang": "bn",
+          "fetchInAllLanguages": true
+        },
+        {
+          "name": "Dhaka Post",
+          "url": "https://news.google.com/rss/search?q=site%3Adhakapost.com%20when%3A7d&hl=bn&gl=BD&ceid=BD:bn",
+          "lang": "bn",
+          "fetchInAllLanguages": true
+        },
+        {
           "name": "BBC Asia",
           "url": "https://feeds.bbci.co.uk/news/world/asia/rss.xml"
         },
@@ -4541,14 +4629,6 @@ export const SERVER_NEWS_CATALOG: ServerNewsCatalog = {
         {
           "name": "Pajhwok Afghan News",
           "url": "https://news.google.com/rss/search?q=site%3Apajhwok.com%20Afghanistan%20when%3A7d&hl=en-US&gl=US&ceid=US:en"
-        },
-        {
-          "name": "The Daily Star",
-          "url": "https://news.google.com/rss/search?q=site%3Athedailystar.net%20when%3A14d&hl=en-US&gl=US&ceid=US:en"
-        },
-        {
-          "name": "Dhaka Tribune",
-          "url": "https://news.google.com/rss/search?q=site%3Adhakatribune.com%20when%3A14d&hl=en-US&gl=US&ceid=US:en"
         },
         {
           "name": "Times of India",
@@ -5041,12 +5121,6 @@ export const SERVER_NEWS_CATALOG: ServerNewsCatalog = {
           "fetchInAllLanguages": true
         },
         {
-          "name": "Prothom Alo",
-          "url": "https://www.prothomalo.com/stories.rss",
-          "lang": "bn",
-          "fetchInAllLanguages": true
-        },
-        {
           "name": "RNZ",
           "url": "https://www.rnz.co.nz/rss/national.xml",
           "lang": "en",
@@ -5347,83 +5421,9 @@ export const SERVER_NEWS_CATALOG: ServerNewsCatalog = {
           "fetchInAllLanguages": true
         },
         {
-          "name": "bdnews24",
-          "url": "https://news.google.com/rss/search?q=site%3Abdnews24.com+when%3A7d&hl=en-US&gl=US&ceid=US%3Aen",
-          "lang": "bn",
-          "fetchInAllLanguages": true
-        },
-        {
           "name": "Matichon",
           "url": "https://www.matichon.co.th/feed",
           "lang": "th",
-          "fetchInAllLanguages": true
-        },
-        {
-          "name": "The Business Standard",
-          "url": "https://news.google.com/rss/search?q=site%3Atbsnews.net%20when%3A7d&hl=en-US&gl=US&ceid=US:en"
-        },
-        {
-          "name": "New Age Bangladesh",
-          "url": "https://news.google.com/rss/search?q=site%3Anewagebd.net%20when%3A7d&hl=en-US&gl=US&ceid=US:en"
-        },
-        {
-          "name": "Financial Express BD",
-          "url": "https://news.google.com/rss/search?q=site%3Athefinancialexpress.com.bd%20when%3A7d&hl=en-US&gl=US&ceid=US:en"
-        },
-        {
-          "name": "UNB Bangladesh",
-          "url": "https://news.google.com/rss/search?q=site%3Aunb.com.bd%20when%3A7d&hl=en-US&gl=US&ceid=US:en"
-        },
-        {
-          "name": "Prothom Alo English",
-          "url": "https://news.google.com/rss/search?q=site%3Aen.prothomalo.com%20when%3A7d&hl=en-US&gl=US&ceid=US:en"
-        },
-        {
-          "name": "Kaler Kantho",
-          "url": "https://news.google.com/rss/search?q=site%3Akalerkantho.com%20when%3A7d&hl=bn&gl=BD&ceid=BD:bn",
-          "lang": "bn",
-          "fetchInAllLanguages": true
-        },
-        {
-          "name": "Jugantor",
-          "url": "https://news.google.com/rss/search?q=site%3Ajugantor.com%20when%3A7d&hl=bn&gl=BD&ceid=BD:bn",
-          "lang": "bn",
-          "fetchInAllLanguages": true
-        },
-        {
-          "name": "Samakal",
-          "url": "https://news.google.com/rss/search?q=site%3Asamakal.com%20when%3A7d&hl=bn&gl=BD&ceid=BD:bn",
-          "lang": "bn",
-          "fetchInAllLanguages": true
-        },
-        {
-          "name": "The Daily Ittefaq",
-          "url": "https://news.google.com/rss/search?q=site%3Aittefaq.com.bd%20when%3A7d&hl=bn&gl=BD&ceid=BD:bn",
-          "lang": "bn",
-          "fetchInAllLanguages": true
-        },
-        {
-          "name": "Bangla Tribune",
-          "url": "https://news.google.com/rss/search?q=site%3Abanglatribune.com%20when%3A7d&hl=bn&gl=BD&ceid=BD:bn",
-          "lang": "bn",
-          "fetchInAllLanguages": true
-        },
-        {
-          "name": "Bangladesh Pratidin",
-          "url": "https://news.google.com/rss/search?q=site%3Abd-pratidin.com%20when%3A7d&hl=bn&gl=BD&ceid=BD:bn",
-          "lang": "bn",
-          "fetchInAllLanguages": true
-        },
-        {
-          "name": "Jago News 24",
-          "url": "https://news.google.com/rss/search?q=site%3Ajagonews24.com%20when%3A7d&hl=bn&gl=BD&ceid=BD:bn",
-          "lang": "bn",
-          "fetchInAllLanguages": true
-        },
-        {
-          "name": "Dhaka Post",
-          "url": "https://news.google.com/rss/search?q=site%3Adhakapost.com%20when%3A7d&hl=bn&gl=BD&ceid=BD:bn",
-          "lang": "bn",
           "fetchInAllLanguages": true
         }
       ],

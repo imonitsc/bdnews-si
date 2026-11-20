@@ -25,3 +25,18 @@ describe('DSE screener filter', () => {
     assert.deepEqual(screen(rows, { ...DEFAULT_CRITERIA, assetType: '', tradedOnly: false }).length, 5);
   });
 });
+
+import { sectorStats, SECTOR_PRESETS } from '../src/terminal/screens/research.ts';
+
+describe('sector research', () => {
+  it('computes sector KPIs from traded rows only', () => {
+    const s = sectorStats([row('A', { percent: 2, valueMn: 3 }), row('B', { percent: -1, valueMn: 1 }), row('C', { trades: 0, percent: 5 })]);
+    assert.deepEqual(s, { listed: 3, traded: 2, advanced: 1, declined: 1, valueMn: 4, avgChange: 0.5 });
+  });
+  it('matches RMG news in English and Bangla', () => {
+    const rmg = SECTOR_PRESETS[0]!;
+    assert.ok(rmg.news.test('Garment exports rise in October'));
+    assert.ok(rmg.news.test('তৈরি পোশাক রপ্তানি বেড়েছে'));
+    assert.ok(!rmg.news.test('Cricket team wins series'));
+  });
+});

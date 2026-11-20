@@ -82,3 +82,7 @@ Guided by `CLAUDE.md` (now in the repo root).
 - **AI Insights** lists Bangladesh (when in the news) and its neighbours first among focal points.
 - **Map layers**: Bangladesh preset first; global layers under an "Advanced / Global" heading.
 - **Command line** (`src/config/terminal-commands.ts`): typed registry of every CLAUDE.md §6 command, `HELP` / `HELP <FUNC>`, closest-match suggestions, autocomplete, F1–F10 keys; unbuilt commands say "planned, phase N".
+
+## Claude and the district map (2026-11-21)
+- **Claude as the main AI model**: `LLM_PRIMARY_PROVIDER=anthropic` + `ANTHROPIC_API_KEY` put Claude first in the server chain (`server/_shared/llm.ts`) and the seeders' chain (`scripts/lib/llm-chain.cjs`); `seed-insights.mjs` calls the native Messages API (default `claude-sonnet-5-5`). Upstream providers remain fallbacks. Keys go in GitHub Actions secrets and Vercel env.
+- **BD Districts map layer** (on by default): 64 districts shaded by activity with 8 division outlines; hover shows news, protests, conflict events, fires, division total and newest headlines. Built in the browser every minute from loaded news (English + Bangla district names), protests, UCDP conflict events and FIRMS fires (`src/services/bd-district-activity.ts`, `src/app/bd-districts-runtime.ts`). Boundaries: geoBoundaries ADM2 (BBS/OCHA, CC BY 3.0 IGO) in `public/data/`.

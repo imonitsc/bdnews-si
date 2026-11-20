@@ -6,6 +6,7 @@
 import type { Screen } from '../shell';
 import { h, fmtNum, dhakaTime, dhakaDate, panel, sourceLine, stateBox } from '../dom';
 import { allNews, boundaries, fires, setStatus, type FeatureCollection, type GeoEvent } from '../data';
+import { bayMap, inBox, type Marker } from '../bay-map';
 
 export interface Site { name: string; kind: 'coal' | 'gas' | 'nuclear' | 'lng' | 'gasfield'; mw?: number; lat: number; lon: number; place: string }
 
@@ -31,51 +32,18 @@ export function distanceKm(a: { lat: number; lon: number }, b: { lat: number; lo
   return 2 * R * Math.asin(Math.sqrt(x));
 }
 
-const BOX = { minLon: 82, maxLon: 95, minLat: 14, maxLat: 27 };
-const inBox = (p: { lat: number; lon: number }) => p.lon >= BOX.minLon && p.lon <= BOX.maxLon && p.lat >= BOX.minLat && p.lat <= BOX.maxLat;
 const ENERGY_NEWS = /\b(power|electricity|load.?shedding|gas|lng|fuel|energy|petrobangla|bpdb|pgcb|cyclone|storm|flood|rain|landslide|weather|heatwave|depression|signal)|বিদ্যুৎ|গ্যাস|জ্বালানি|লোডশেডিং|ঘূর্ণিঝড়|বন্যা|বৃষ্টি|ভূমিধস|সংকেত|নিম্নচাপ/i;
 const BD = /bangladesh|dhaka|chattogram|chittagong|khulna|barishal|sylhet|cox|বাংলাদেশ|ঢাকা/i;
 
 function drawMap(districts: FeatureCollection, storms: Storm[], fireList: GeoEvent[]): SVGSVGElement {
-  const W = 560, H = 520;
-  const kx = Math.cos((21 * Math.PI) / 180);
-  const sx = W / ((BOX.maxLon - BOX.minLon) * kx), sy = H / (BOX.maxLat - BOX.minLat);
-  const s = Math.min(sx, sy);
-  const px = (lon: number) => (lon - BOX.minLon) * kx * s;
-  const py = (lat: number) => (BOX.maxLat - lat) * s;
-  const NS = 'http://www.w3.org/2000/svg';
-  const svg = document.createElementNS(NS, 'svg');
-  svg.setAttribute('viewBox', `0 0 ${Math.round((BOX.maxLon - BOX.minLon) * kx * s)} ${Math.round((BOX.maxLat - BOX.minLat) * s)}`);
-  svg.setAttribute('class', 'tp-riskmap');
-  svg.setAttribute('role', 'img');
-  svg.setAttribute('aria-label', `Bay of Bengal: ${storms.length} active storm(s), ${SITES.length} power and gas sites, ${fireList.length} fire detections`);
-  const add = (tag: string, attrs: Record<string, string>, title?: string) => {
-    const e = document.createElementNS(NS, tag);
-    for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
-    if (title) { const t = document.createElementNS(NS, 'title'); t.textContent = title; e.append(t); }
-    svg.append(e);
-    return e;
-  };
-  add('rect', { x: '0', y: '0', width: '100%', height: '100%', fill: '#03070d' });
-  for (const f of districts.features) {
-    const polys = f.geometry.type === 'Polygon' ? [f.geometry.coordinates as number[][][]] : (f.geometry.coordinates as number[][][][]);
-    const d = polys.map((poly) => poly.map((ring) => ring.map(([x, y], i) => `${i ? 'L' : 'M'}${px(x!).toFixed(1)},${py(y!).toFixed(1)}`).join('') + 'Z').join('')).join('');
-    add('path', { d, fill: '#111', stroke: '#5a4100', 'stroke-width': '0.5' }, `${f.properties.name} (${f.properties.division})`);
-  }
-  for (const f of fireList.filter(inBox)) add('circle', { cx: px(f.lon).toFixed(1), cy: py(f.lat).toFixed(1), r: '1.8', fill: '#ff7a1a', opacity: '0.8' }, 'Fire detection (NASA FIRMS)');
-  for (const st of SITES) {
-    const x = px(st.lon), y = py(st.lat);
-    const color = st.kind === 'nuclear' ? '#b388ff' : st.kind === 'coal' ? '#bfbfbf' : st.kind === 'lng' ? '#4fc3f7' : '#5bd96b';
-    if (st.kind === 'gasfield') add('circle', { cx: x.toFixed(1), cy: y.toFixed(1), r: '4', fill: color, stroke: '#000' }, `${st.name} · ${st.place}`);
-    else add('rect', { x: (x - 4).toFixed(1), y: (y - 4).toFixed(1), width: '8', height: '8', fill: color, stroke: '#000' }, `${st.name}${st.mw ? ` · ${st.mw} MW` : ''} · ${st.place}`);
-  }
-  for (const st of storms) {
-    const x = px(st.lon), y = py(st.lat);
-    for (const r of [300, 150]) add('circle', { cx: x.toFixed(1), cy: y.toFixed(1), r: String((r / 111) * s), fill: 'none', stroke: '#ff6b6b', 'stroke-dasharray': '4 3', 'stroke-width': '1' }, `${r} km from ${st.title}`);
-    add('text', { x: (x + 8).toFixed(1), y: (y - 8).toFixed(1), fill: '#ff6b6b', 'font-size': '12' }, st.title).textContent = `${st.title.replace(/^Tropical Cyclone\s*/i, 'TC ')}`;
-    add('circle', { cx: x.toFixed(1), cy: y.toFixed(1), r: '6', fill: '#ff6b6b', stroke: '#000' }, `${st.title} · ${st.magnitude ?? '?'} ${st.unit ?? ''} · ${st.source ?? ''}`);
-  }
-  return svg;
+  const color = (k: Site['kind']) => (k === 'nuclear' ? '#b388ff' : k === 'coal' ? '#bfbfbf' : k === 'lng' ? '#4fc3f7' : '#5bd96b');
+  const markers: Marker[] = [
+    ...fireList.map((f): Marker => ({ lat: f.lat, lon: f.lon, shape: 'dot', color: '#ff7a1a', size: 3.6, title: 'Fire detection (NASA FIRMS)' })),
+    ...SITES.map((st): Marker => ({ lat: st.lat, lon: st.lon, shape: st.kind === 'gasfield' ? 'circle' : 'square', color: color(st.kind), title: `${st.name}${st.mw ? ` · ${st.mw} MW` : ''} · ${st.place}` })),
+    ...storms.map((st): Marker => ({ lat: st.lat, lon: st.lon, shape: 'circle', color: '#ff6b6b', size: 6, title: `${st.title} · ${st.magnitude ?? '?'} ${st.unit ?? ''} · ${st.source ?? ''}`, label: st.title.replace(/^Tropical Cyclone\s*/i, 'TC ') })),
+  ];
+  return bayMap({ districts, markers, rings: storms.map((st) => ({ lat: st.lat, lon: st.lon, radiiKm: [150, 300], color: '#ff6b6b', title: st.title })),
+    ariaLabel: `Bay of Bengal: ${storms.length} active storm(s), ${SITES.length} power and gas sites, ${fireList.length} fire detections` });
 }
 
 export const powerScreen: Screen = {

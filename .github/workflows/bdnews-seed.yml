@@ -9,6 +9,11 @@ on:
   schedule:
     - cron: '17 */3 * * *'   # every 3 hours (a full run takes about an hour)
   workflow_dispatch:
+    inputs:
+      only:
+        description: 'Run only these seeders (space-separated file names, e.g. "seed-insights.mjs seed-fire-detections.mjs"). Empty = all.'
+        required: false
+        default: ''
 
 concurrency:
   group: bdnews-seed
@@ -86,4 +91,7 @@ jobs:
           echo "UPSTASH_REDIS_REST_TOKEN=$token" >> "$GITHUB_ENV"
       - run: npm ci --no-audit --no-fund
       - name: Run seeders
+        env:
+          # Manual runs can name specific seeders; licence gates still apply.
+          ONLY_SEEDERS: ${{ github.event.inputs.only || '' }}
         run: ./scripts/run-seeders.sh

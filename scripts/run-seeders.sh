@@ -135,8 +135,22 @@ licence_block() {
   done
 }
 
+# BDSI: ONLY_SEEDERS="seed-a.mjs seed-b.mjs" runs just those (manual workflow input).
+only_wanted() {
+  [ -z "${ONLY_SEEDERS:-}" ] && return 0
+  for want in $ONLY_SEEDERS; do [ "$want" = "$1" ] && return 0; done
+  return 1
+}
+if [ -n "${ONLY_SEEDERS:-}" ]; then
+  for want in $ONLY_SEEDERS; do
+    case "$want" in seed-*.mjs) ;; *) echo "Not a seeder file name: $want" >&2; exit 2 ;; esac
+    [ -f "$SCRIPT_DIR/$want" ] || { echo "No such seeder: $want" >&2; exit 2; }
+  done
+fi
+
 for f in "$SCRIPT_DIR"/seed-*.mjs; do
   name="$(basename "$f")"
+  only_wanted "$name" || continue
   printf "→ %s ... " "$name"
   blocked=$(licence_block "$name")
   if [ -n "$blocked" ]; then

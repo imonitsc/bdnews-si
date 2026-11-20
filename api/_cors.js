@@ -10,6 +10,9 @@ export function isHostedAppOrigin(origin) {
 
 const ALLOWED_ORIGIN_PATTERNS = [
   APP_ORIGIN_PATTERN,
+  // bdnews SI deployment hosts (production domain and this project's Vercel previews).
+  /^https:\/\/(?:www\.)?bdnews\.si$/,
+  /^https:\/\/bdnews-si(?:-[a-z0-9-]+)?\.vercel\.app$/,
   /^https?:\/\/tauri\.localhost(:\d+)?$/,
   /^https?:\/\/[a-z0-9-]+\.tauri\.localhost(:\d+)?$/i,
   /^tauri:\/\/localhost$/,

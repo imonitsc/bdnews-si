@@ -7,7 +7,7 @@ name: Seed data
 
 on:
   schedule:
-    - cron: '17 * * * *'   # hourly
+    - cron: '17 */3 * * *'   # every 3 hours (a full run takes about an hour)
   workflow_dispatch:
 
 concurrency:
@@ -20,11 +20,11 @@ permissions:
 jobs:
   seed:
     runs-on: ubuntu-latest
-    timeout-minutes: 55
+    timeout-minutes: 150
     env:
       UPSTASH_REDIS_REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL || secrets.UPSTASH_REDIS_KV_REST_API_URL }}
       UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN || secrets.UPSTASH_REDIS_KV_REST_API_TOKEN }}
-      SEED_TIMEOUT: '600'
+      SEED_TIMEOUT: '300'
       NASA_FIRMS_API_KEY: ${{ secrets.NASA_FIRMS_API_KEY }}
       FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
       EIA_API_KEY: ${{ secrets.EIA_API_KEY }}

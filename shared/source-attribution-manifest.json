@@ -883,6 +883,9 @@
       "status": "excluded",
       "references": [
         {
+          "path": "api/bd-ask.js"
+        },
+        {
           "path": "server/_shared/llm-anthropic.ts"
         }
       ]
@@ -14108,6 +14111,9 @@
       "status": "terms-review",
       "references": [
         {
+          "path": "api/bd-ask.js"
+        },
+        {
           "path": "scripts/lib/food-prices-adapters/tcb.mjs"
         }
       ]
@@ -15752,6 +15758,9 @@
       "status": "excluded",
       "references": [
         {
+          "path": "api/bd-ask.js"
+        },
+        {
           "path": "src/config/auth.ts"
         }
       ]
@@ -16905,6 +16914,9 @@
       "status": "terms-review",
       "references": [
         {
+          "path": "api/bd-ask.js"
+        },
+        {
           "path": "api/bd-markets.js"
         }
       ]
@@ -18016,6 +18028,9 @@
       "status": "terms-review",
       "references": [
         {
+          "path": "api/bd-ask.js"
+        },
+        {
           "path": "api/bd-markets.js"
         }
       ]
@@ -18363,6 +18378,9 @@
       "attribution": "Credit www.exchangerate-api.com and link to the original upstream API/dataset.",
       "status": "terms-review",
       "references": [
+        {
+          "path": "api/bd-ask.js"
+        },
         {
           "path": "api/bd-markets.js"
         }

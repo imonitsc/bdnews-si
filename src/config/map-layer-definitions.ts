@@ -121,6 +121,8 @@ export const LAYER_REGISTRY: Record<keyof MapLayers, LayerDefinition> = {
   processingPlants:         def('processingPlants',         '&#127981;', 'processingPlants',         'Processing Plants', ['deck']),
   commodityPorts:           def('commodityPorts',           '&#9973;',   'commodityPorts',           'Commodity Ports', ['deck']),
   webcams:                  def('webcams',                  '&#128247;', 'webcams',                  'Live Webcams'),
+  // BDSI: Bangladesh division/district activity (news + protests + conflict + fires).
+  bdDistricts:              def('bdDistricts',              '&#128506;', 'bdDistricts',              'BD Districts', ['deck']),
   // weatherRadar removed — radar tiles now auto-start when Weather Alerts layer is toggled on
   diseaseOutbreaks:         def('diseaseOutbreaks',         '&#129440;', 'diseaseOutbreaks',         'Disease Outbreaks', ['deck']),
   // DeckGL-only layers: `renderers: ['deck']` hides them from the globe
@@ -174,7 +176,7 @@ const VARIANT_LAYER_ORDER: Record<MapVariant, Array<keyof MapLayers>> = {
   // BDSI: Bangladesh preset first (BD_PRIMARY_LAYERS), then the global layers that the
   // picker groups under an "Advanced / Global" heading. Same set as upstream, reordered.
   full: [
-    'hotspots', 'conflicts', 'protests', 'ucdpEvents', 'displacement', 'fires', 'natural', 'weather', 'climate',
+    'hotspots', 'conflicts', 'bdDistricts', 'protests', 'ucdpEvents', 'displacement', 'fires', 'natural', 'weather', 'climate',
     'outages', 'ais', 'flights', 'aircraftEmergencies', 'tradeRoutes', 'waterways',
     'ciiChoropleth', 'diseaseOutbreaks', 'dayNight',
     'iranAttacks',
@@ -238,7 +240,7 @@ export function isSunsetLayer(key: keyof MapLayers): boolean {
  * Everything after them is listed under an "Advanced / Global" heading.
  */
 export const BD_PRIMARY_LAYERS: ReadonlySet<keyof MapLayers> = new Set<keyof MapLayers>([
-  'protests', 'ucdpEvents', 'displacement', 'fires', 'natural', 'weather', 'climate',
+  'bdDistricts', 'protests', 'ucdpEvents', 'displacement', 'fires', 'natural', 'weather', 'climate',
   'outages', 'ais', 'flights', 'aircraftEmergencies', 'tradeRoutes', 'waterways',
   'hotspots', 'conflicts', 'ciiChoropleth', 'diseaseOutbreaks', 'dayNight',
 ]);

@@ -186,6 +186,7 @@ const layers = {
   processingPlants: false,
   commodityPorts: false,
   webcams: false,
+  bdDistricts: false,
   diseaseOutbreaks: false,
 };
 

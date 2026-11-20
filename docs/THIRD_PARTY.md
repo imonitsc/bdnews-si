@@ -33,6 +33,7 @@ Last reviewed: 2026-11-20.
 | ExchangeRate-API open access | https://open.er-api.com | Free; attribution link required | Fallback for the Taka panel when Bangladesh Bank is unreachable; shown as "not official" | Link "Rates by Exchange Rate API" | **Green** with attribution |
 | NASA FIRMS active fires | https://firms.modaps.eosdis.nasa.gov | NASA open data | Fires panel and map layer (`NASA_FIRMS_API_KEY`, GitHub Actions) | "NASA FIRMS" | **Green** |
 | UCDP GED / Candidate events | https://ucdp.uu.se | CC BY 4.0 | Armed Conflict panel and map layer (`UCDP_ACCESS_TOKEN`, requested 2026-11-20) | "UCDP, Uppsala University" | **Green** |
+| Bangladesh district boundaries (ADM2) | https://www.geoboundaries.org (source: BBS / OCHA ROAP, HDX "Administrative boundaries of Bangladesh") | CC BY 3.0 IGO | `public/data/bd-districts.geojson` (simplified) and `bd-divisions.geojson` (divisions merged from districts) for the BD Districts map layer | "Boundaries: BBS / OCHA ROAP via geoBoundaries, CC BY 3.0 IGO" (in the files; shown with the layer) | **Green** with attribution |
 | IODA internet outage events | https://ioda.inetintel.cc.gatech.edu | Free public API; terms to confirm | Internet Disruptions panel (`scripts/lib/ioda-outages.mjs`), used when no Cloudflare Radar token is set; each row says "Source: IODA (Georgia Tech)" | "IODA, Georgia Tech" | **Amber**: confirm commercial terms before Pro |
 
 ## 3. Upstream data sources this deployment currently runs

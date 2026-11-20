@@ -219,6 +219,7 @@ const FULL_MAP_LAYERS: MapLayers = {
   processingPlants: false,
   commodityPorts: false,
   webcams: false,
+  bdDistricts: true,
   diseaseOutbreaks: false,
 };
 
@@ -289,6 +290,7 @@ const FULL_MOBILE_MAP_LAYERS: MapLayers = {
   processingPlants: false,
   commodityPorts: false,
   webcams: false,
+  bdDistricts: true,
   diseaseOutbreaks: false,
 };
 
@@ -400,6 +402,7 @@ const TECH_MAP_LAYERS: MapLayers = {
   processingPlants: false,
   commodityPorts: false,
   webcams: false,
+  bdDistricts: false,
   diseaseOutbreaks: false,
 };
 
@@ -464,6 +467,7 @@ const TECH_MOBILE_MAP_LAYERS: MapLayers = {
   processingPlants: false,
   commodityPorts: false,
   webcams: false,
+  bdDistricts: false,
   diseaseOutbreaks: false,
 };
 
@@ -611,6 +615,7 @@ const FINANCE_MAP_LAYERS: MapLayers = {
   processingPlants: false,
   commodityPorts: false,
   webcams: false,
+  bdDistricts: false,
   diseaseOutbreaks: false,
 };
 
@@ -675,6 +680,7 @@ const FINANCE_MOBILE_MAP_LAYERS: MapLayers = {
   processingPlants: false,
   commodityPorts: false,
   webcams: false,
+  bdDistricts: false,
   diseaseOutbreaks: false,
 };
 
@@ -755,6 +761,7 @@ const HAPPY_MAP_LAYERS: MapLayers = {
   processingPlants: false,
   commodityPorts: false,
   webcams: false,
+  bdDistricts: false,
   diseaseOutbreaks: false,
 };
 
@@ -819,6 +826,7 @@ const HAPPY_MOBILE_MAP_LAYERS: MapLayers = {
   processingPlants: false,
   commodityPorts: false,
   webcams: false,
+  bdDistricts: false,
   diseaseOutbreaks: false,
 };
 
@@ -929,6 +937,7 @@ const COMMODITY_MAP_LAYERS: MapLayers = {
   processingPlants: true,
   commodityPorts: true,
   webcams: false,
+  bdDistricts: false,
   diseaseOutbreaks: false,
 };
 
@@ -993,6 +1002,7 @@ const COMMODITY_MOBILE_MAP_LAYERS: MapLayers = {
   processingPlants: false,
   commodityPorts: true,
   webcams: false,
+  bdDistricts: false,
   diseaseOutbreaks: false,
 };
 
@@ -1100,6 +1110,7 @@ const ENERGY_MAP_LAYERS: MapLayers = {
   processingPlants: false,
   commodityPorts: true,   // LNG import/export + crude terminals
   webcams: false,
+  bdDistricts: false,
   diseaseOutbreaks: false,
   storageFacilities: true, // UGS / SPR / LNG / crude hubs (Day 9-10 registry)
   fuelShortages: true,     // Global fuel shortage alerts (Day 11-12 registry)
@@ -1161,6 +1172,7 @@ const ENERGY_MOBILE_MAP_LAYERS: MapLayers = {
   processingPlants: false,
   commodityPorts: true,
   webcams: false,
+  bdDistricts: false,
   diseaseOutbreaks: false,
   storageFacilities: true,
   fuelShortages: true,

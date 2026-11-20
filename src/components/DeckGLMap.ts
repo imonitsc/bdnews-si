@@ -211,6 +211,7 @@ import { NO2_ACTIVITY_LEGEND, no2ActivityFill, no2ActivityTooltip, NO2_ACTIVITY_
 import type { No2ActivityRegionView, No2ActivitySnapshot } from '@/services/economic/no2-activity';
 import type { NotamAirspaceRestriction } from '@/services/notam-airspace';
 import { dispatchWebcamLayerClick, resolveWebcamStreamUrl, type WebcamLeafLike } from '@/components/map/webcam-click';
+import { activityBand, SCORE_FORMULA, type BdActivitySnapshot, type DistrictActivity } from '@/services/bd-district-activity';
 import {
   type BBox,
   type BoundedFeature,
@@ -835,6 +836,13 @@ export class DeckGLMap {
   // CII choropleth data
   private ciiScoresMap: Map<string, { score: number; level: string }> = new Map();
   private ciiScoresVersion = 0;
+  // BDSI: Bangladesh district activity layer.
+  private bdDistrictGeo: { type: 'FeatureCollection'; features: unknown[] } | null = null;
+  private bdDivisionGeo: { type: 'FeatureCollection'; features: unknown[] } | null = null;
+  private bdActivity: Map<string, DistrictActivity> = new Map();
+  private bdActivitySnapshot: BdActivitySnapshot | null = null;
+  private bdActivityMax = 0;
+  private bdActivityVersion = 0;
   private resilienceScoresMap: ReturnType<typeof buildResilienceChoroplethMap> = new Map();
   private resilienceScoresVersion = 0;
   private no2Activity: No2ActivitySnapshot | null = null;
@@ -2607,6 +2615,7 @@ export class DeckGLMap {
       const resilienceLayer = this.createResilienceChoroplethLayer();
       if (resilienceLayer) layers.push(resilienceLayer);
     }
+    if (mapLayers.bdDistricts) layers.push(...this.createBdDistrictLayers());
     if (mapLayers.no2Activity) layers.push(...this.createNo2ActivityLayers());
     // Sanctions choropleth
     if (mapLayers.sanctions) {
@@ -5220,6 +5229,91 @@ export class DeckGLMap {
     });
   }
 
+  // BDSI: amber ramp for district activity bands 1–5 (0 = transparent).
+  private static readonly BD_BAND_COLORS: ReadonlyArray<[number, number, number, number]> = [
+    [0, 0, 0, 0],
+    [255, 214, 140, 70],
+    [255, 186, 74, 105],
+    [255, 153, 0, 140],
+    [235, 100, 20, 170],
+    [210, 45, 30, 200],
+  ];
+
+  private createBdDistrictLayers(): GeoJsonLayer[] {
+    const out: GeoJsonLayer[] = [];
+    if (this.bdDistrictGeo) {
+      const activity = this.bdActivity;
+      const max = this.bdActivityMax;
+      out.push(new GeoJsonLayer({
+        id: 'bd-districts-layer',
+        data: this.bdDistrictGeo as never,
+        filled: true,
+        stroked: true,
+        getFillColor: (feature: { properties?: Record<string, unknown> }) => {
+          const a = activity.get(String(feature.properties?.id ?? ''));
+          return DeckGLMap.BD_BAND_COLORS[a ? activityBand(a.score, max) : 0]!;
+        },
+        getLineColor: [255, 170, 0, 90] as [number, number, number, number],
+        getLineWidth: 1,
+        lineWidthMinPixels: 0.5,
+        pickable: true,
+        updateTriggers: { getFillColor: [this.bdActivityVersion] },
+      }));
+    }
+    if (this.bdDivisionGeo) {
+      out.push(new GeoJsonLayer({
+        id: 'bd-divisions-layer',
+        data: this.bdDivisionGeo as never,
+        filled: false,
+        stroked: true,
+        getLineColor: [255, 170, 0, 230] as [number, number, number, number],
+        getLineWidth: 2,
+        lineWidthMinPixels: 1.5,
+        pickable: false,
+      }));
+    }
+    return out;
+  }
+
+  private bdDistrictTooltip(id: string, fallbackName: string): string {
+    const text = (v: unknown) => escapeHtml(String(v ?? ''));
+    const a = this.bdActivity.get(id);
+    const snap = this.bdActivitySnapshot;
+    if (!a || !snap) {
+      return `<div class="deckgl-tooltip"><strong>${text(fallbackName)}</strong><br/><span style="opacity:.7">Activity data loading…</span></div>`;
+    }
+    const div = snap.divisions.find((d) => d.name === a.division);
+    const rows = [
+      `News stories: <b>${a.news}</b>`,
+      `Protests / unrest: <b>${a.protests}</b>`,
+      `Conflict events: <b>${a.conflicts}</b>${a.fatalities ? ` (${a.fatalities} reported deaths)` : ''}`,
+      `Fire detections: <b>${a.fires}</b>`,
+    ].join('<br/>');
+    const heads = a.headlines.map((hl) => `<div style="margin-top:3px">• ${text(hl.title.slice(0, 110))} <span style="opacity:.6">(${text(hl.source)})</span></div>`).join('');
+    const updated = new Date(snap.computedAt).toLocaleTimeString('en-GB', { timeZone: 'Asia/Dhaka', hour: '2-digit', minute: '2-digit' });
+    return `<div class="deckgl-tooltip" style="max-width:320px"><strong>${text(a.name)}</strong> <span style="opacity:.7">· ${text(a.division)} division</span>`
+      + `<br/>Activity score: <b>${Math.round(a.score * 10) / 10}</b>${div ? ` <span style="opacity:.7">(division ${Math.round(div.score)})</span>` : ''}`
+      + `<br/>${rows}${heads}`
+      + `<div style="margin-top:4px;opacity:.6;font-size:10px">Score = ${text(SCORE_FORMULA)}. Activity, not a risk index. Updated ${updated} Dhaka. Boundaries: BBS / OCHA via geoBoundaries (CC BY 3.0 IGO).</div></div>`;
+  }
+
+  public setBdDistricts(
+    boundaries: { districts: { type: 'FeatureCollection'; features: unknown[] }; divisions: { type: 'FeatureCollection'; features: unknown[] } } | null,
+    snapshot: BdActivitySnapshot | null,
+  ): void {
+    if (boundaries) {
+      this.bdDistrictGeo = boundaries.districts;
+      this.bdDivisionGeo = boundaries.divisions;
+    }
+    if (snapshot) {
+      this.bdActivitySnapshot = snapshot;
+      this.bdActivity = new Map(snapshot.districts.map((d) => [d.id, d]));
+      this.bdActivityMax = snapshot.districts.reduce((m, d) => Math.max(m, d.score), 0);
+      this.bdActivityVersion++;
+    }
+    this.render();
+  }
+
   private createResilienceChoroplethLayer(): GeoJsonLayer | null {
     if (!this.countriesGeoJsonData || this.resilienceScoresMap.size === 0) return null;
     const scores = this.resilienceScoresMap;
@@ -5694,6 +5788,9 @@ export class DeckGLMap {
         const hcScore = hcCode ? this.happinessScores.get(hcCode as string) : undefined;
         const hcScoreStr = hcScore != null ? numericLabel(hcScore, 1) : 'No data';
         return { html: `<div class="deckgl-tooltip"><strong>${text(hcName)}</strong><br/>Happiness: ${hcScoreStr}/10${hcScore != null ? `<br/><span style="opacity:.7">${text(this.happinessSource)} (${numericLabel(this.happinessYear, 0)})</span>` : ''}</div>` };
+      }
+      case 'bd-districts-layer': {
+        return { html: this.bdDistrictTooltip(String(obj.properties?.id ?? ''), String(obj.properties?.name ?? 'District')) };
       }
       case 'cii-choropleth-layer': {
         const ciiName = obj.properties?.name ?? 'Unknown';

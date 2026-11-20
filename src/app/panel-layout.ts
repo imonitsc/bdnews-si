@@ -192,6 +192,7 @@ import {
 } from '@/services/checkout-return-state';
 import { resolveCheckoutContext, type CheckoutContext } from '../../shared/checkout-attribution';
 import { mountTerminalBar } from '@/app/terminal-bar';
+import { startBdDistrictActivity } from '@/app/bd-districts-runtime';
 import { HEADER_LOGO_SVG, LOGO_MARK_SVG } from '@/config/brand-logo';
 import { siteFooterHtml } from '@/config/site-footer';
 import { BRAND } from '@/config/brand';
@@ -1537,6 +1538,7 @@ export class PanelLayoutManager implements AppModule {
       </footer>
     `, "legacy direct innerHTML migration"));
     mountTerminalBar(this.ctx); // bdnews SI terminal strip
+    startBdDistrictActivity(this.ctx); // BDSI: district activity map layer
     // Move the same links so navigation, analytics and focus targets stay shared.
     this.variantPlacementCleanup?.();
     const switcher = this.ctx.container.querySelector('.variant-switcher');

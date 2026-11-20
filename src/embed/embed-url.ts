@@ -149,6 +149,7 @@ export function createBlankMapLayers(): MapLayers {
     processingPlants: false,
     commodityPorts: false,
     webcams: false,
+    bdDistricts: false,
     diseaseOutbreaks: false,
     storageFacilities: false,
     fuelShortages: false,

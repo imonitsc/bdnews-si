@@ -284,6 +284,7 @@ export class MapContainer {
   private cachedRepairShips: RepairShip[] | null = null;
   private cachedCableHealth: Record<string, CableHealthRecord> | null = null;
   private cachedProtests: SocialUnrestEvent[] | null = null;
+  private cachedBdDistricts: Parameters<DeckGLMap['setBdDistricts']> | null = null;
   private cachedFlightDelays: AirportDelayAlert[] | null = null;
   private cachedAircraftPositions: PositionSample[] | null = null;
   private cachedMilitaryFlights: MilitaryFlight[] | null = null;
@@ -907,6 +908,7 @@ export class MapContainer {
     if (this.cachedCableAdvisories != null && this.cachedRepairShips != null) this.setCableActivity(this.cachedCableAdvisories, this.cachedRepairShips);
     if (this.cachedCableHealth) this.setCableHealth(this.cachedCableHealth);
     if (this.cachedProtests) this.setProtests(this.cachedProtests);
+    if (this.cachedBdDistricts) this.setBdDistricts(...this.cachedBdDistricts);
     if (this.cachedFlightDelays) this.setFlightDelays(this.cachedFlightDelays);
     if (this.cachedAircraftPositions) this.setAircraftPositions(this.cachedAircraftPositions);
     if (this.cachedMilitaryFlights) this.setMilitaryFlights(this.cachedMilitaryFlights, this.cachedMilitaryFlightClusters ?? []);
@@ -1429,6 +1431,11 @@ export class MapContainer {
     }
   }
 
+  /** BDSI: last UCDP events handed to the map (for the district activity layer). */
+  public getCachedUcdpEvents(): readonly UcdpGeoEvent[] {
+    return this.cachedUcdpEvents ?? [];
+  }
+
   public setUcdpEvents(events: UcdpGeoEvent[]): void {
     this.cachedUcdpEvents = events;
     if (this.useGlobe) { this.globeMap?.setUcdpEvents(events); return; }
@@ -1603,6 +1610,13 @@ export class MapContainer {
     callback: (supported: boolean) => void,
   ): void {
     this.cachedOnChinaCorridorRendererCapabilityChange = callback;
+  }
+
+  /** BDSI: Bangladesh district boundaries and activity (deck.gl only). */
+  public setBdDistricts(...args: Parameters<DeckGLMap['setBdDistricts']>): void {
+    const prev = this.cachedBdDistricts;
+    this.cachedBdDistricts = [args[0] ?? prev?.[0] ?? null, args[1] ?? prev?.[1] ?? null];
+    if (this.useDeckGL && !this.useGlobe) this.deckGLMap?.setBdDistricts(...this.cachedBdDistricts);
   }
 
   public setCIIScores(scores: CIIScore[]): void {

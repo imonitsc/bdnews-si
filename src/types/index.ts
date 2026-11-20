@@ -765,6 +765,8 @@ export interface MapLayers {
   processingPlants: boolean;
   commodityPorts: boolean;
   webcams: boolean;
+  // BDSI: Bangladesh division/district activity choropleth
+  bdDistricts: boolean;
   // Health layers
   diseaseOutbreaks: boolean;
   // Energy variant layers (new — optional so existing MapLayers literals

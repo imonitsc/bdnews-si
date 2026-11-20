@@ -105,8 +105,12 @@ export function parseBbRates(html) {
 async function loadFx() {
   const res = await fetchWithTimeout('https://www.bb.org.bd/en/index.php/econdata/exchangerate', { headers: { accept: 'text/html' } });
   if (!res.ok) throw new Error(`fx: HTTP ${res.status}`);
-  const { rates, asOf } = parseBbRates(await res.text());
-  if (!rates.some((r) => r.code === 'USD')) throw new Error('fx: USD rate not found');
+  const html = await res.text();
+  const { rates, asOf } = parseBbRates(html);
+  if (!rates.some((r) => r.code === 'USD')) {
+    const title = /<title>([^<]{0,80})/i.exec(html)?.[1] ?? '';
+    throw new Error(`fx: USD rate not found (status ${res.status}, ${html.length} bytes, tables ${(html.match(/<table/gi) || []).length}, title "${title.trim()}")`);
+  }
   return {
     base: 'BDT',
     asOf,
@@ -199,8 +203,12 @@ export function parseTcbRows(rows) {
 async function loadBazaar() {
   const page = await fetchWithTimeout('https://tcb.gov.bd/pages/daily-rmps', { headers: { accept: 'text/html' } }, 15_000);
   if (!page.ok) throw new Error(`bazaar: HTTP ${page.status}`);
-  const file = findLatestTcbFile(await page.text());
-  if (!file) throw new Error('bazaar: no daily file link');
+  const listing = await page.text();
+  const file = findLatestTcbFile(listing);
+  if (!file) {
+    const title = /<title>([^<]{0,80})/i.exec(listing)?.[1] ?? '';
+    throw new Error(`bazaar: no daily file link (status ${page.status}, ${listing.length} bytes, title "${title.trim()}")`);
+  }
   const res = await fetchWithTimeout(file.url, {}, 15_000);
   if (!res.ok) throw new Error(`bazaar file: HTTP ${res.status}`);
   const { key, all } = parseTcbRows(await readFirstSheetRows(await res.arrayBuffer()));
@@ -231,7 +239,8 @@ async function getPart(part) {
     return { ...data, stale: false, updatedAt: cache.get(part)?.at ?? now };
   } catch (err) {
     if (hit) return { ...hit.data, stale: true, updatedAt: hit.at };
-    return { error: String(err?.message || err).slice(0, 200) };
+    const cause = err?.cause ? ` (cause: ${String(err.cause?.message || err.cause).slice(0, 120)})` : '';
+    return { error: `${err?.name ?? 'Error'}: ${String(err?.message || err)}${cause}`.slice(0, 300) };
   }
 }
 

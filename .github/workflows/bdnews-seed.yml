@@ -52,6 +52,14 @@ jobs:
             echo "::error::Add UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN as repository secrets."
             exit 1
           fi
+          # Accept the redis(s)://default:TOKEN@HOST:PORT connection string too:
+          # the REST endpoint is https://HOST and the password is the REST token.
+          case "$url" in
+            redis://*|rediss://*)
+              rest=${url#*://}; creds=${rest%@*}; hostport=${rest##*@}
+              [ "$creds" != "$rest" ] && [ -z "$token" ] && token=${creds#*:}
+              url="https://${hostport%%:*}" ;;
+          esac
           case "$url" in
             https://*) ;;
             *) echo "::error::UPSTASH_REDIS_REST_URL must be the REST URL starting with https:// (got ${#url} characters that do not start with https://)."; exit 1 ;;

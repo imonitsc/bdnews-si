@@ -53,3 +53,16 @@ describe('power screen', () => {
     for (const s of SITES) assert.ok(s.lat > 20.5 && s.lat < 26.7 && s.lon > 88 && s.lon < 92.7, s.name);
   });
 });
+
+describe('SEA: border news filter', async () => {
+  const { isBorderNews } = await import('../src/terminal/screens/sea.ts');
+  it('keeps Rohingya and Bangladesh border stories', () => {
+    assert.ok(isBorderNews('Rights groups urge sanctions after court finds Myanmar committed genocide against Rohingya'));
+    assert.ok(isBorderNews('BGB detains 12 at Teknaf'));
+    assert.ok(isBorderNews('Two killed on Bangladesh-India border'));
+  });
+  it('drops unrelated matches', () => {
+    assert.ok(!isBorderNews("Cops Are Pushing Extremely Corny 'Grand Theft Auto 6' Slop", 'Wired'));
+    assert.ok(!isBorderNews('Venezuela President pushes back at Guyana over border controversy', 'Demerara Waves'));
+  });
+});

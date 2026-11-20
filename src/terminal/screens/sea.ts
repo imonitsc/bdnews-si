@@ -24,7 +24,11 @@ export const INFRA: Array<{ name: string; kind: 'port' | 'cable' | 'lng' | 'camp
 
 const SEA_BOX = { minLon: 87.5, maxLon: 94.5, minLat: 19.5, maxLat: 27 };
 const PORT_NEWS = /\b(port|chattogram|chittagong|mongla|payra|matarbari|container|vessel|ship|shipping|freight|cargo|bay of bengal|maritime|coast guard|navy|fishing ban|trawler|sea|lng)|বন্দর|কনটেইনার|জাহাজ|বঙ্গোপসাগর|নৌবাহিনী|কোস্ট গার্ড/i;
-const BORDER_NEWS = /\b(rohingya|myanmar|rakhine|arakan|border|bgb|bsf|teknaf|naf river|ukhia|refugee|camp|bhasan char|smuggl|infiltrat|push.?in|frontier)|রোহিঙ্গা|মিয়ানমার|সীমান্ত|বিজিবি|বিএসএফ|টেকনাফ|উখিয়া|শরণার্থী/i;
+// Strong terms match alone; generic ones (border, Myanmar, refugee…) need a Bangladesh mention.
+const BORDER_STRONG = /\b(rohingya|rakhine|arakan army|teknaf|naf river|ukhia|bhasan char|bgb|bsf)\b|রোহিঙ্গা|টেকনাফ|উখিয়া|বিজিবি|বিএসএফ|সীমান্ত/i;
+const BORDER_GENERIC = /\b(border|myanmar|refugees?|smuggl\w*|push-?in|infiltrat\w*)\b|মিয়ানমার|শরণার্থী/i;
+const BD_CONTEXT = /bangladesh|dhaka|chattogram|chittagong|cox'?s bazar|sylhet|[ঀ-৿]/i;
+export const isBorderNews = (title: string, source = ''): boolean => BORDER_STRONG.test(title) || (BORDER_GENERIC.test(title) && BD_CONTEXT.test(`${title} ${source}`));
 
 export const seaScreen: Screen = {
   code: 'SEA',
@@ -43,7 +47,7 @@ export const seaScreen: Screen = {
         h('div', { class: 'tp-slot' }, panel({ n: 2, title: 'MYANMAR BORDER AND ROHINGYA', code: 'BORDER', hint: 'BORDER' }, borderBox)),
         h('div', { class: 'tp-slot' }, panel({ n: 3, title: 'PORTS AND SHIPPING NEWS', code: 'PORT', hint: 'PORT' }, portBox)),
         h('div', { class: 'tp-slot' }, panel({ n: 4, title: 'VESSELS AND AIRCRAFT', code: 'AIS', hint: 'SEA AIS' },
-          stateBox('planned', 'Live vessel positions are not connected. CLAUDE.md requires a licensed source: BDSI-run AIS-catcher receivers at Chattogram, Mongla and Cox\'s Bazar (separate service) or a licensed satellite AIS provider. OpenSky, adsb.fi and Global Fishing Watch stay off until licensed.'),
+          stateBox('planned', 'Live vessel positions are not connected. BDSI uses only licensed or self-run sources for this: BDSI-run AIS-catcher receivers at Chattogram, Mongla and Cox\'s Bazar (separate service) or a licensed satellite AIS provider. OpenSky, adsb.fi and Global Fishing Watch stay off until licensed.'),
           h('div', { class: 'tp-stat-k' }, 'ALSO NOT CONNECTED YET'),
           h('ul', { class: 'tp-nc' },
             h('li', {}, h('span', { class: 'tp-w' }, 'Port queue at Chattogram, Mongla, Payra'), h('span', { class: 'tp-muted' }, ' — planned source: Chittagong Port Authority daily berthing')),
@@ -83,7 +87,7 @@ export const seaScreen: Screen = {
 
     void Promise.all([unhcr, allNews().catch(() => null)]).then(([u, items]) => {
       if (!alive) return;
-      const border = (items ?? []).filter((n) => BORDER_NEWS.test(n.title));
+      const border = (items ?? []).filter((n) => isBorderNews(n.title, n.source));
       const ports = (items ?? []).filter((n) => PORT_NEWS.test(n.title) && (/bangladesh|bay of bengal|chattogram|chittagong|mongla|payra|[ঀ-৿]/i.test(`${n.title} ${n.source}`)));
       borderBox.replaceChildren(
         u ? h('div', { class: 'tp-stats' },

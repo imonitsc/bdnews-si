@@ -550,7 +550,7 @@ export class SearchModal {
     this.overlay.setAttribute('role', 'dialog');
     this.overlay.setAttribute('aria-modal', 'true');
     declareOverlay(this.overlay, { reload: 'blocking' });
-    this.overlay.setAttribute('aria-label', hasCommands ? 'World Monitor intelligence command deck' : this.placeholder);
+    this.overlay.setAttribute('aria-label', hasCommands ? 'BDSI intelligence command deck' : this.placeholder);
     this.overlay.dataset.searchScope = this.activeScope;
     // Claim human authority in capture phase, before a click can close the
     // palette or start a new selection. Keyboard-generated clicks have no
@@ -566,7 +566,7 @@ export class SearchModal {
         <div class="search-sheet">
           <div class="search-sheet-handle"></div>
           <div class="search-mobile-ident">
-            <span>WM // ${hasCommands ? 'COMMAND DECK' : escapeHtml(this.placeholder)}</span>
+            <span>BDSI // ${hasCommands ? 'COMMAND DECK' : escapeHtml(this.placeholder)}</span>
           </div>
           <div class="search-sheet-header">
             <span class="search-sheet-icon" aria-hidden="true"></span>
@@ -607,7 +607,7 @@ export class SearchModal {
           <div class="search-command-topline">
             <div class="search-command-ident">
               <span class="search-command-mark" aria-hidden="true"><i></i></span>
-              <span>WM // ${hasCommands ? 'INTELLIGENCE COMMAND DECK' : escapeHtml(this.placeholder)}</span>
+              <span>BDSI // ${hasCommands ? 'INTELLIGENCE COMMAND DECK' : escapeHtml(this.placeholder)}</span>
             </div>
             <div class="search-command-metrics" aria-label="Search index status">
               <span><strong data-search-entity-count>${this.getIndexedEntityCount()}</strong> SIGNALS</span>

@@ -1184,7 +1184,7 @@ export class OrbitalWatchPage {
     const credits: ResultCredit[] = [];
     if (events.conflict.status === 'ok' || events.unrest.status === 'ok') credits.push({ source: 'GDELT · UCDP', text: t('orbitalWatch.sources.conflict') });
     if (events.fires.status === 'ok') credits.push({ source: 'NASA FIRMS', text: t('orbitalWatch.sources.fires') });
-    if (events.outages.status === 'ok') credits.push({ source: 'WorldMonitor', text: t('orbitalWatch.sources.outages') });
+    if (events.outages.status === 'ok') credits.push({ source: 'BDSI', text: t('orbitalWatch.sources.outages') });
     if (live.vessels.status === 'ok') credits.push({ source: 'AIS', text: t('orbitalWatch.sources.vessels') });
     return credits;
   }

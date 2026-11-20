@@ -5,6 +5,7 @@ import { enqueueSentryCall } from '@/bootstrap/sentry-defer';
 import { resolveLanguageTag } from '@/shared/language-tags';
 import { EXPLICIT_LOCALE_KEY, readQueryLanguage, stripQueryLanguage } from '@/utils/i18n-url';
 import { LatestRequestGuard } from '@/utils/latest-request-guard';
+import { brandPostProcessor } from '@/config/brand-rebrand';
 
 // Keep only first-paint English strings in the entry chunk. The full English
 // dictionary is loaded through localeModules so it can split like other locales.
@@ -183,7 +184,10 @@ export async function initI18n({ waitForFullTranslation = false }: { waitForFull
 
   await i18next
     .use(detector)
+    .use(brandPostProcessor)
     .init({
+      // BDSI: rewrite upstream "World Monitor" product names in every language.
+      postProcess: ['bdsiBrand'],
       resources: {
         en: { translation: enShellTranslation as TranslationDictionary },
       },

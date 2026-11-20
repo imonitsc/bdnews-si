@@ -298,7 +298,7 @@ export async function applyWebMcpSwitchMonitor(
       reason: 'unavailable',
       message: navigation === 'unavailable'
         ? 'That monitor is not available on this dashboard.'
-        : 'World Monitor could not switch monitors.',
+        : 'BD Situation Intelligence could not switch monitors.',
       context,
     };
   }

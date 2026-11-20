@@ -467,7 +467,7 @@ export class LatestBriefPanel extends Panel {
         logo,
         h('div', { className: 'latest-brief-empty-title' }, 'Sign in to view your brief.'),
         h('div', { className: 'latest-brief-empty-body' },
-          'Your personalised brief is tied to your WorldMonitor account. Sign in to see today\u2019s issue.',
+          'Your personalised brief is tied to your BDSI account. Sign in to see today\u2019s issue.',
         ),
       ),
     );
@@ -488,7 +488,7 @@ export class LatestBriefPanel extends Panel {
         logo,
         h('div', { className: 'latest-brief-empty-title' }, 'Pro required.'),
         h('div', { className: 'latest-brief-empty-body' },
-          'The WorldMonitor Brief is included with the Pro plan. Upgrade to unlock today\u2019s issue.',
+          'The BDSI Brief is included with the Pro plan. Upgrade to unlock today\u2019s issue.',
         ),
       ),
     );
@@ -590,7 +590,7 @@ export class LatestBriefPanel extends Panel {
       h('div', { className: 'latest-brief-cover' },
         coverLogo,
         h('div', { className: 'latest-brief-cover-issue' }, data.dateLong),
-        h('div', { className: 'latest-brief-cover-title' }, 'WorldMonitor'),
+        h('div', { className: 'latest-brief-cover-title' }, 'BDSI'),
         h('div', { className: 'latest-brief-cover-title' }, 'Brief.'),
         h('div', { className: 'latest-brief-cover-kicker' }, threadLabel),
       ),
@@ -606,7 +606,7 @@ export class LatestBriefPanel extends Panel {
     const shareBtn = h('button', {
       type: 'button',
       className: 'latest-brief-share',
-      'aria-label': 'Share WorldMonitor — copies a referral link',
+      'aria-label': 'Share BDSI — copies a referral link',
       disabled: true,
     }, 'Share ↗');
     const shareStatus = h('span', {

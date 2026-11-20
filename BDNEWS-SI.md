@@ -86,3 +86,25 @@ Guided by `CLAUDE.md` (now in the repo root).
 ## Claude and the district map (2026-11-21)
 - **Claude as the main AI model**: `LLM_PRIMARY_PROVIDER=anthropic` + `ANTHROPIC_API_KEY` put Claude first in the server chain (`server/_shared/llm.ts`) and the seeders' chain (`scripts/lib/llm-chain.cjs`); `seed-insights.mjs` calls the native Messages API (default `claude-sonnet-5-5`). Upstream providers remain fallbacks. Keys go in GitHub Actions secrets and Vercel env.
 - **BD Districts map layer** (on by default): 64 districts shaded by activity with 8 division outlines; hover shows news, protests, conflict events, fires, division total and newest headlines. Built in the browser every minute from loaded news (English + Bangla district names), protests, UCDP conflict events and FIRMS fires (`src/services/bd-district-activity.ts`, `src/app/bd-districts-runtime.ts`). Boundaries: geoBoundaries ADM2 (BBS/OCHA, CC BY 3.0 IGO) in `public/data/`.
+
+## BDSI Terminal (2026-11-21)
+
+The bdnews.si home page is now the terminal (`/terminal`, sign-in required). The old dashboard and full map stay at `/dashboard`. Screens follow the Launchpad design; every number comes from a named source, and anything not connected yet says so.
+
+| Key | Screen | What it shows |
+|---|---|---|
+| — | Launchpad | DSE summary, Bangladesh news, district risk map, Taka rates |
+| F1 | STOCK `<CODE>` | Quote, statistics, chart from archived closes, financials, dividends, shareholding, disclosures, related news |
+| F2 | SCRN | Screener over all DSE instruments, watchlist and price alerts (stored in the browser) |
+| F3 | ECO | Taka rates, Dhaka bazaar prices, DSEX history, economy news; list of macro series not connected yet |
+| F4 | POWER | Plants, LNG terminals and active storms on a Bay map; energy news; PGCB and Petrobangla not connected yet |
+| F6 | SEA | Ports, cable landings, refugee camps, UCDP conflict and GDELT unrest, UNHCR figures, border and port news; AIS not connected |
+| F7 | RSRCH | Sector research (RMG, BANK, PHARMA, POWER, TELECOM) from DSE data and news |
+| F8 | ASK | AI analyst (Claude) with numbered citations; says what the sources cannot confirm |
+| F9 | CHAT | Follow-up conversation with the analyst, kept only in the browser |
+
+Data notes:
+- DSE data is read from public dsebd.org pages only (`/`, `/recent-market-information`, `/company/<CODE>`, `/news/today`), because robots.txt disallows `/api`. No contact details are stored.
+- The seed job archives daily closes and index values to Redis (`scripts/bdsi-archive-dse.mjs`), which is what draws the stock charts. Charts grow one session per trading day.
+- `/api/bd-ask` needs `ANTHROPIC_API_KEY` in Vercel. 20 questions per user per hour.
+- Typing a ticker or a built command in the dashboard command bar now opens the terminal screen.

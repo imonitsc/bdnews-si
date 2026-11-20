@@ -186,6 +186,9 @@ export const PANEL_SCOPE_BEHAVIOUR: Readonly<Record<string, PanelScopeBehaviour>
   'satellite-fires': 'unsupported', // Fires
   'grocery-basket': 'unsupported', // Grocery Index
   bigmac: 'unsupported', // Big Mac Index
+  'bd-dse': 'global', // bdnews SI: Dhaka Stock Exchange (Bangladesh market data)
+  'bd-taka': 'global', // bdnews SI: Taka rates
+  'bd-bazaar': 'global', // bdnews SI: Dhaka bazaar prices
   'disease-outbreaks': 'filters', // Disease Outbreaks
   'social-velocity': 'unsupported', // Social Velocity
   displacement: 'filters', // UNHCR Displacement

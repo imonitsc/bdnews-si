@@ -14,12 +14,12 @@ interface TerminalCommand {
 export const TERMINAL_COMMANDS: readonly TerminalCommand[] = [
   { code: 'BD', label: 'BD NEWS', target: 'bangladesh', aliases: ['BDN', 'NEWS', 'N'] },
   { code: 'TV', label: 'LIVE TV', target: 'live-news', aliases: ['LIVE'] },
+  { code: 'DSE', label: 'DSE', target: 'bd-dse', aliases: ['DSEX', 'STOCKS', 'SHARE'] },
+  { code: 'TAKA', label: 'TAKA', target: 'bd-taka', aliases: ['BDT', 'FX', 'USDBDT'] },
+  { code: 'BAZAR', label: 'BAZAR', target: 'bd-bazaar', aliases: ['BAZAAR', 'TCB', 'PRICES'] },
   { code: 'MAP', label: 'MAP', target: 'map', aliases: ['GEO'] },
-  { code: 'MKT', label: 'MARKETS', target: 'markets', aliases: ['MKTS', 'EQ'] },
-  { code: 'CMDTY', label: 'COMMOD', target: 'commodities', aliases: ['CMD', 'GOLD'] },
-  { code: 'ASIA', label: 'ASIA', target: 'asia' },
+  { code: 'MKT', label: 'WORLD MKTS', target: 'markets', aliases: ['MKTS', 'EQ'] },
   { code: 'WRLD', label: 'WORLD', target: 'politics', aliases: ['WORLD', 'W'] },
-  { code: 'ECO', label: 'MACRO', target: 'economic', aliases: ['MACRO'] },
   { code: 'AI', label: 'INSIGHTS', target: 'insights', aliases: ['INS'] },
   { code: 'RISK', label: 'RISK', target: 'cii', aliases: ['CII'] },
 ];
@@ -220,10 +220,30 @@ export function mountTerminalBar(ctx: AppContext): void {
   const firstFetch = window.setTimeout(() => void fetchOwnQuotes(), 4000);
   const quoteTimer = window.setInterval(() => void fetchOwnQuotes(), 5 * 60_000);
 
+  // Bangladesh first: DSE indices and the Bangladesh Bank USD/BDT rate.
+  let bdQuotes: MarketData[] = [];
+  const fetchBdQuotes = async () => {
+    try {
+      const { fetchBdMarkets } = await import('@/services/bd-markets');
+      const d = await fetchBdMarkets();
+      const out: MarketData[] = [];
+      for (const i of d.dse && !d.dse.error ? d.dse.indices : []) {
+        out.push({ symbol: i.key, name: i.key, display: i.key, price: i.value, change: i.percent });
+      }
+      const usd = d.fx && !d.fx.error ? d.fx.rates.find((r) => r.code === 'USD') : undefined;
+      if (usd) out.push({ symbol: 'USDBDT', name: 'USD/BDT', display: 'USD/BDT', price: usd.mid, change: null });
+      if (out.length) bdQuotes = out;
+    } catch {
+      // Keep the previous Bangladesh quotes.
+    }
+  };
+  void fetchBdQuotes();
+  const bdTimer = window.setInterval(() => void fetchBdQuotes(), 60_000);
+
   const tick = () => {
     for (const c of clockNodes) c.value.textContent = clockText(c.tz);
     const live = ctx.latestMarkets ?? [];
-    renderTicker(track, live.length > 0 ? live : ownQuotes);
+    renderTicker(track, [...bdQuotes, ...(live.length > 0 ? live : ownQuotes)]);
   };
   tick();
   const timer = window.setInterval(tick, 1000);
@@ -241,6 +261,7 @@ export function mountTerminalBar(ctx: AppContext): void {
   cleanup = () => {
     window.clearInterval(timer);
     window.clearInterval(quoteTimer);
+    window.clearInterval(bdTimer);
     window.clearTimeout(firstFetch);
     document.removeEventListener('keydown', onKey);
   };

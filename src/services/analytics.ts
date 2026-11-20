@@ -1,4 +1,5 @@
 import { bucketPanelKeyForAnalytics } from '@/utils/analytics-panel-key';
+import { isGatedHost } from '@/config/auth';
 import { isViewportBand, viewportAnalyticsFields, type ViewportBand } from '../../shared/analytics-viewport';
 export { bucketPanelKeyForAnalytics } from '@/utils/analytics-panel-key';
 /**
@@ -752,8 +753,8 @@ export function trackContentHandoff(): void {
 export function initAnalytics(): void {
   if (umamiLoadScheduled || typeof window === 'undefined' || typeof document === 'undefined') return;
   // BD Situation Intelligence: World Monitor's Umami instance only counts its own hosts;
-  // do not load its script for visitors on other deployments (privacy policy).
-  if (!isAnalyticsHost()) return;
+  // do not load its script for bdnews.si visitors (privacy policy).
+  if (typeof location !== 'undefined' && isGatedHost(location.hostname)) return;
   umamiLoadScheduled = true;
   scheduleAfterFirstPaint(loadUmamiScript, 3000);
 }

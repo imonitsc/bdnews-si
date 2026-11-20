@@ -14066,6 +14066,9 @@
       "status": "terms-review",
       "references": [
         {
+          "path": "api/bd-markets.js"
+        },
+        {
           "path": "scripts/lib/food-prices-adapters/tcb.mjs"
         }
       ]
@@ -16854,6 +16857,20 @@
       ]
     },
     {
+      "host": "www.bb.org.bd",
+      "provider": "www.bb.org.bd",
+      "kind": "structured",
+      "observed": true,
+      "license": "Provider terms for this upstream API/dataset; verify before redistribution",
+      "attribution": "Credit www.bb.org.bd and link to the original upstream API/dataset.",
+      "status": "terms-review",
+      "references": [
+        {
+          "path": "api/bd-markets.js"
+        }
+      ]
+    },
+    {
       "host": "www.bbc.com",
       "provider": "BBC",
       "kind": "feed",
@@ -17933,6 +17950,20 @@
       "references": [
         {
           "path": "shared/news-catalog.json"
+        }
+      ]
+    },
+    {
+      "host": "www.dse.com.bd",
+      "provider": "www.dse.com.bd",
+      "kind": "structured",
+      "observed": true,
+      "license": "Provider terms for this upstream API/dataset; verify before redistribution",
+      "attribution": "Credit www.dse.com.bd and link to the original upstream API/dataset.",
+      "status": "terms-review",
+      "references": [
+        {
+          "path": "api/bd-markets.js"
         }
       ]
     },

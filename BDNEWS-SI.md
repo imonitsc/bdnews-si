@@ -59,3 +59,9 @@ running on a schedule. See `SELF_HOSTING.md` for the data seeders and optional A
 - Simplified sign-in page ("Bangladesh and the World").
 - Whole site uses IBM Plex Mono (SIL OFL 1.1, self-hosted in `public/fonts/`).
 - World Monitor's Umami analytics script no longer loads on non-worldmonitor hosts.
+
+## Bangladesh markets (2026-11-20)
+- `api/bd-markets.js` (Edge): reads the Dhaka Stock Exchange live snapshot (dse.com.bd), Bangladesh Bank's daily Taka rates (bb.org.bd) and TCB's daily Dhaka retail price .xlsx (tcb.gov.bd), caching each (1 min / 30 min / 60 min). `api/_xlsx-lite.js` reads the .xlsx without dependencies.
+- Panels `bd-dse`, `bd-taka`, `bd-bazaar` (`src/components/BdMarketsPanels.ts`), service `src/services/bd-markets.ts`.
+- Command bar: DSE, TAKA and BAZAR function keys; ticker starts with DSEX, DS30, DSES and USD/BDT.
+- Updated the panel-default snapshot lock in `tests/webmcp-dashboard.test.mts` for the added panels.

@@ -3845,6 +3845,16 @@ export class PanelLayoutManager implements AppModule {
     this.lazyPanel('grocery-basket', () =>
       this.importPanel('grocery-basket', () => import('@/components/GroceryBasketPanel'), 'GroceryBasketPanel', (GroceryBasketPanel) => new GroceryBasketPanel()),
     );
+    // bdnews SI: Bangladesh markets (src/components/BdMarketsPanels.ts, data from /api/bd-markets).
+    this.lazyPanel('bd-dse', () =>
+      this.importPanel('bd-dse', () => import('@/components/BdMarketsPanels'), 'DseBdPanel', (DseBdPanel) => new DseBdPanel()),
+    );
+    this.lazyPanel('bd-taka', () =>
+      this.importPanel('bd-taka', () => import('@/components/BdMarketsPanels'), 'TakaRatesPanel', (TakaRatesPanel) => new TakaRatesPanel()),
+    );
+    this.lazyPanel('bd-bazaar', () =>
+      this.importPanel('bd-bazaar', () => import('@/components/BdMarketsPanels'), 'BazaarPricesPanel', (BazaarPricesPanel) => new BazaarPricesPanel()),
+    );
     this.lazyPanel('bigmac', () =>
       this.importPanel('bigmac', () => import('@/components/BigMacPanel'), 'BigMacPanel', (BigMacPanel) => new BigMacPanel()),
     );

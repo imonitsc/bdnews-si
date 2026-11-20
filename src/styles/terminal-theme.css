@@ -293,3 +293,49 @@ body, body *:not(svg):not(svg *) { font-family: var(--font-mono); }
 .bdsi-footer a { text-decoration: none; }
 .bdsi-footer a:hover { text-decoration: underline; }
 .site-footer-copy.bdsi-footer .bdsi-footer-links a { color: inherit; }
+
+/* ---- Bangladesh markets panels (DSE, Taka, Bazaar) ---- */
+.bdm { display: flex; flex-direction: column; gap: 8px; padding: 6px 2px; font-size: 12px; color: var(--text, #f0e6d2); }
+.bdm .up { color: var(--bdn-up, #19e07a); }
+.bdm .down { color: var(--bdn-down, #ff4040); }
+.bdm .flat { color: var(--text-dim, #b8873d); }
+.bdm-muted { color: var(--text-dim, #b8873d); }
+.bdm-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.bdm-status { font-weight: 700; letter-spacing: 0.08em; font-size: 11px; }
+.bdm-status.open { color: var(--bdn-up, #19e07a); }
+.bdm-status.closed { color: var(--bdn-amber, #ffa31a); }
+.bdm-idx-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 6px; }
+.bdm-idx { border: 1px solid var(--border, #3a2a10); padding: 6px 8px; }
+.bdm-idx-k { color: var(--bdn-amber, #ffa31a); font-weight: 700; font-size: 11px; letter-spacing: 0.08em; }
+.bdm-idx-v { color: #fff; font-size: 18px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.bdm-idx.up .bdm-idx-c { color: var(--bdn-up, #19e07a); }
+.bdm-idx.down .bdm-idx-c { color: var(--bdn-down, #ff4040); }
+.bdm-idx-c { font-size: 11px; font-variant-numeric: tabular-nums; }
+.bdm-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 4px 12px; }
+.bdm-stats div { display: flex; justify-content: space-between; gap: 6px; border-bottom: 1px dotted var(--border, #3a2a10); padding: 2px 0; }
+.bdm-stats span { color: var(--text-dim, #b8873d); }
+.bdm-stats b { color: #fff; font-weight: 600; font-variant-numeric: tabular-nums; }
+.bdm-stats i { font-style: normal; }
+.bdm-breadth { display: flex; height: 4px; background: #1a1206; }
+.bdm-breadth span { display: block; height: 100%; }
+.bdm-breadth .up { background: var(--bdn-up, #19e07a); }
+.bdm-breadth .down { background: var(--bdn-down, #ff4040); }
+.bdm-breadth .flat { background: #6b5a3a; }
+.bdm-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 8px; }
+.bdm-table { width: 100%; font-variant-numeric: tabular-nums; }
+.bdm-table td { vertical-align: top; }
+/* Terminal look for every shared panel table (.wm-table, src/styles/panels.css). */
+:root:not([data-theme="light"]) .wm-table th { color: var(--bdn-amber, #ffa31a); border-bottom-color: var(--bdn-amber, #ffa31a); }
+.bdm-table tr:hover td { background: #120c00; }
+.bdm-table .r { text-align: right; white-space: nowrap; }
+.bdm-table b { color: #fff; font-weight: 600; }
+.bdm-sub { font-size: 10.5px; color: var(--text-dim, #b8873d); }
+.bdm-cat td { color: var(--bdn-amber, #ffa31a); }
+.bdm-hero { font-size: 13px; }
+.bdm-hero b { color: #fff; font-size: 20px; font-weight: 700; }
+.bdm-toggle { background: transparent; border: 1px solid var(--bdn-amber, #ffa31a); color: var(--bdn-amber, #ffa31a); font: inherit; font-size: 10px; font-weight: 700; padding: 2px 6px; cursor: pointer; }
+.bdm-toggle:hover, .bdm-toggle:focus-visible { background: var(--bdn-amber, #ffa31a); color: #000; outline: none; }
+.bdm-src { font-size: 10px; color: var(--text-dim, #b8873d); }
+.bdm-src a { color: var(--bdn-amber, #ffa31a); }
+.bdm-stale { color: var(--bdn-down, #ff4040); }
+:root[data-theme="light"] .bdm-idx-v, :root[data-theme="light"] .bdm-stats b, :root[data-theme="light"] .bdm-table b, :root[data-theme="light"] .bdm-hero b { color: #000; }

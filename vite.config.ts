@@ -1402,6 +1402,7 @@ export default defineConfig(({ mode }) => {
           verify: resolve(__dirname, 'verify.html'),
           desktopSignIn: resolve(__dirname, 'desktop-sign-in.html'),
           login: resolve(__dirname, 'login.html'), // BD Situation Intelligence sign-in
+          terminal: resolve(__dirname, 'terminal.html'), // BDSI terminal (Launchpad + function screens)
         },
         output: {
           // onlyExplicitManualChunks keeps the panel clusters from forming

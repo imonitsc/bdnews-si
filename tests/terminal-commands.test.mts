@@ -64,3 +64,26 @@ describe('command registry', () => {
     assert.doesNotMatch(helpLine(findCommand('DSE')!), /planned/);
   });
 });
+
+import { resolveTerminalInput, TERMINAL_ROUTES } from '../src/config/terminal-commands.ts';
+
+describe('terminal page routing', () => {
+  it('routes every available command somewhere', () => {
+    for (const c of COMMANDS) assert.ok(TERMINAL_ROUTES[c.mnemonic], `no terminal route for ${c.mnemonic}`);
+  });
+
+  it('opens Launchpad panels, screens, news rows and tickers', () => {
+    const dse = resolveTerminalInput('DSE <GO>');
+    assert.ok(dse.kind === 'go' && dse.target.kind === 'screen' && dse.target.focus === 1);
+    const ask = resolveTerminalInput('ASK why did textiles rise <GO>');
+    assert.ok(ask.kind === 'go' && ask.args === 'why did textiles rise');
+    assert.deepEqual(resolveTerminalInput('3 <GO>'), { kind: 'news', n: 3 });
+    assert.deepEqual(resolveTerminalInput('GP <GO>', new Set(['GP'])), { kind: 'ticker', code: 'GP' });
+    assert.deepEqual(resolveTerminalInput('SQURPHARMA EQUITY <GO>', new Set(['SQURPHARMA'])), { kind: 'ticker', code: 'SQURPHARMA' });
+  });
+
+  it('suggests commands for near-misses instead of guessing a ticker', () => {
+    const r = resolveTerminalInput('BAZZAR', new Set(['GP']));
+    assert.ok(r.kind === 'unknown' && r.suggestions.includes('BAZAR'));
+  });
+});

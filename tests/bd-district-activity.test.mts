@@ -113,3 +113,14 @@ describe('conflict window', () => {
     assert.equal(s.districts.find((d) => d.id === 'coxs-bazar')!.conflicts, 1);
   });
 });
+
+describe('country-level signals', () => {
+  it('does not count a protest pinned to the country centroid', () => {
+    const s = computeDistrictActivity({ news: [], protests: [
+      { lat: 24, lon: 90, time: hoursAgo(1), city: 'Bangladesh', country: 'Bangladesh' },
+      { lat: 23.8103, lon: 90.4125, time: hoursAgo(1), city: 'Dhaka', country: 'Bangladesh' },
+    ] }, locator, { now: NOW });
+    assert.equal(s.inputs.protestEvents, 1);
+    assert.equal(s.districts.find((d) => d.id === 'dhaka')!.protests, 1);
+  });
+});

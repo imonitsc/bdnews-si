@@ -159,3 +159,86 @@ export function helpLine(c: TerminalCommandDef): string {
   if (c.tier !== 'free') parts.push(c.tier.toUpperCase());
   return parts.join(' · ');
 }
+
+// ---------- BDSI terminal (/terminal) routing ----------
+
+/** Where a command goes in the terminal page: a screen (hash route), a Launchpad panel, or another page. */
+export type TerminalTarget =
+  | { kind: 'screen'; screen: string; focus?: number }
+  | { kind: 'page'; href: string }
+  | { kind: 'help' };
+
+/** Screen ids: '' = Launchpad; 'stock/<CODE>' is built from a ticker. */
+export const TERMINAL_ROUTES: Readonly<Record<string, TerminalTarget>> = {
+  BD: { kind: 'screen', screen: '', focus: 2 },
+  NEWS: { kind: 'screen', screen: '', focus: 2 },
+  DSE: { kind: 'screen', screen: '', focus: 1 },
+  RISK: { kind: 'screen', screen: '', focus: 3 },
+  FX: { kind: 'screen', screen: '', focus: 4 },
+  HELP: { kind: 'help' },
+  AI: { kind: 'screen', screen: 'ask' },
+  ASK: { kind: 'screen', screen: 'ask' },
+  BRIEF: { kind: 'screen', screen: 'ask' },
+  SCRN: { kind: 'screen', screen: 'scrn' },
+  WL: { kind: 'screen', screen: 'scrn' },
+  ALRT: { kind: 'screen', screen: 'scrn' },
+  CSE: { kind: 'screen', screen: 'scrn' },
+  BB: { kind: 'screen', screen: 'eco' },
+  CPI: { kind: 'screen', screen: 'eco' },
+  GDP: { kind: 'screen', screen: 'eco' },
+  REMIT: { kind: 'screen', screen: 'eco' },
+  EXP: { kind: 'screen', screen: 'eco' },
+  IMP: { kind: 'screen', screen: 'eco' },
+  RES: { kind: 'screen', screen: 'eco' },
+  YC: { kind: 'screen', screen: 'eco' },
+  BAZAR: { kind: 'screen', screen: 'eco' },
+  RMG: { kind: 'screen', screen: 'rsrch' },
+  POWER: { kind: 'screen', screen: 'power' },
+  WX: { kind: 'screen', screen: 'power' },
+  FLOOD: { kind: 'screen', screen: 'power' },
+  CYCLONE: { kind: 'screen', screen: 'power' },
+  SEA: { kind: 'screen', screen: 'sea' },
+  PORT: { kind: 'screen', screen: 'sea' },
+  BORDER: { kind: 'screen', screen: 'sea' },
+  CHAT: { kind: 'screen', screen: 'chat' },
+  MAP: { kind: 'page', href: '/dashboard' },
+  TV: { kind: 'page', href: '/dashboard' },
+  MKT: { kind: 'page', href: '/dashboard' },
+  WRLD: { kind: 'page', href: '/dashboard' },
+  CONF: { kind: 'page', href: '/dashboard' },
+  REF: { kind: 'page', href: '/dashboard' },
+  NET: { kind: 'page', href: '/dashboard' },
+  FIRE: { kind: 'page', href: '/dashboard' },
+};
+
+export type TerminalResolution =
+  | { kind: 'empty' }
+  | { kind: 'go'; target: TerminalTarget; command: TerminalCommandDef; args: string }
+  | { kind: 'help'; topic: TerminalCommandDef | null; unknownTopic?: string }
+  | { kind: 'ticker'; code: string }
+  | { kind: 'news'; n: number }
+  | { kind: 'unknown'; input: string; suggestions: string[] };
+
+const TICKER_SHAPE = /^[A-Z][A-Z0-9&.-]{1,14}$/;
+
+/**
+ * Resolve terminal input. Numbers open Launchpad news rows ("3 <GO>"); commands
+ * route by TERMINAL_ROUTES; known DSE codes open stock pages; anything else gets
+ * suggestions, plus a ticker attempt when it is shaped like one and no command is close.
+ */
+export function resolveTerminalInput(input: string, knownTickers: ReadonlySet<string> = new Set()): TerminalResolution {
+  const cleaned = input.trim().replace(/\s*<\s*GO\s*>\s*$/i, '').replace(/\s+GO$/i, '').trim();
+  const num = /^(\d{1,2})$/.exec(cleaned);
+  if (num) return { kind: 'news', n: Number(num[1]) };
+  const r = parseCommand(input, knownTickers);
+  if (r.kind === 'empty' || r.kind === 'help' || r.kind === 'ticker') return r;
+  if (r.kind === 'run') {
+    const target = TERMINAL_ROUTES[r.command.mnemonic];
+    if (target) return { kind: 'go', target, command: r.command, args: r.args };
+    return { kind: 'unknown', input: r.command.mnemonic, suggestions: [] };
+  }
+  // "GP EQUITY", "GP BD EQUITY QUOTE": the first word is the ticker.
+  const word = r.input;
+  if (TICKER_SHAPE.test(word) && (knownTickers.size === 0 ? r.suggestions.length === 0 : false)) return { kind: 'ticker', code: word };
+  return r;
+}

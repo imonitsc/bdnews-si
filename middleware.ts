@@ -726,6 +726,7 @@ export const config = {
     '/index.html',
     '/settings.html',
     '/live-channels.html',
+    '/terminal.html',
     '/mcp',
     '/api/:path*',
     '/((?!api(?:/|$)|mcp(?:/|$)|.*\\.[^/]+$).*)',

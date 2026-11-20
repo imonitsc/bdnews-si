@@ -19,6 +19,8 @@ export const GATED_PAGE_PATHS: ReadonlySet<string> = new Set([
   '/index.html',
   '/settings.html',
   '/live-channels.html',
+  '/terminal',
+  '/terminal.html',
 ]);
 
 /** Hosts this deployment gates: the production domain and this project's Vercel previews. */

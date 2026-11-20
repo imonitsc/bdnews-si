@@ -22724,6 +22724,9 @@
         },
         {
           "path": "src/embed/panels/fear-greed.ts"
+        },
+        {
+          "path": "src/terminal/risk-map.ts"
         }
       ]
     },

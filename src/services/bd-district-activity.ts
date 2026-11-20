@@ -141,7 +141,8 @@ export class DistrictLocator {
 
 export interface ActivityInputs {
   news: ReadonlyArray<{ title: string; link: string; source: string; pubDate: Date | string | number }>;
-  protests?: ReadonlyArray<{ lat: number; lon: number; time: Date | string | number }>;
+  /** `city` equal to `country` marks a country-level signal pinned to the centroid: not counted. */
+  protests?: ReadonlyArray<{ lat: number; lon: number; time: Date | string | number; city?: string; country?: string }>;
   conflicts?: ReadonlyArray<{ lat: number; lon: number; time: Date | string | number; fatalities?: number }>;
   fires?: ReadonlyArray<{ lat: number; lon: number }>;
 }
@@ -191,6 +192,7 @@ export function computeDistrictActivity(
   if (locator) {
     for (const p of inputs.protests ?? []) {
       if (!recent(toMs(p.time))) continue;
+      if (p.city && p.country && p.city.trim().toLowerCase() === p.country.trim().toLowerCase()) continue;
       const id = locator.locate(p.lat, p.lon);
       if (id) { byId.get(id)!.protests++; protestEvents++; }
     }

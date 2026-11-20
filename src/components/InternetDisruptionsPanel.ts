@@ -146,7 +146,12 @@ export class InternetDisruptionsPanel extends Panel {
 
   private buildOutageRow(o: InternetOutage, row?: ScopeRow<InternetOutage>): HTMLElement {
     const severityColor = o.severity === 'total' ? '#ff2020' : o.severity === 'major' ? '#ff8800' : '#ffcc00';
-    const badge = o.severity === 'total' ? 'NATIONWIDE' : o.severity === 'major' ? 'REGIONAL' : 'PARTIAL';
+    // BDSI: IODA outages carry no nationwide/regional verdict, only which independent
+    // signals dropped (scripts/lib/ioda-outages.mjs). Say that instead of a scope label.
+    const iodaSignals = o.categories?.[0] === 'IODA' ? o.categories.slice(1) : null;
+    const badge = iodaSignals
+      ? `${iodaSignals.length} SIGNAL${iodaSignals.length === 1 ? '' : 'S'}`
+      : o.severity === 'total' ? 'NATIONWIDE' : o.severity === 'major' ? 'REGIONAL' : 'PARTIAL';
     const ongoing = !o.endDate;
     return h('div', { className: 'id-row' },
       h('div', { className: 'id-row-header' },
@@ -158,6 +163,7 @@ export class InternetDisruptionsPanel extends Panel {
       ),
       h('div', { className: 'id-row-sub' }, o.title),
       o.cause ? h('div', { className: 'id-row-meta' }, o.cause.replace(/_/g, ' ')) : false,
+      iodaSignals ? h('div', { className: 'id-row-meta' }, `Source: IODA (Georgia Tech) · ${iodaSignals.join(', ')}`) : false,
     );
   }
 

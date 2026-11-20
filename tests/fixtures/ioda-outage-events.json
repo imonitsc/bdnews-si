@@ -1,0 +1,15 @@
+{
+  "type": "outages.events",
+  "metadata": { "requestTime": "2026-11-20T20:54:13+00:00" },
+  "error": null,
+  "data": [
+    { "location": "country/VE", "start": 1793877900, "duration": 1330152, "uncertainty": null, "method": "median", "datasource": "bgp", "status": 0, "fraction": null, "score": 23787.61, "location_name": "Venezuela", "overlaps_window": true },
+    { "location": "country/CN", "start": 1794492000, "duration": 275400, "uncertainty": null, "method": "sarima", "datasource": "gtr", "status": 0, "fraction": null, "score": 177990.61, "location_name": "China", "overlaps_window": true },
+    { "location": "country/CN", "start": 1794500000, "duration": 292000, "uncertainty": null, "method": "median", "datasource": "bgp", "status": 0, "fraction": null, "score": 9000, "location_name": "China", "overlaps_window": true },
+    { "location": "country/XK", "start": 1794563400, "duration": 178200, "uncertainty": null, "method": "median", "datasource": "bgp", "status": 0, "fraction": null, "score": 5400, "location_name": "Kosovo", "overlaps_window": true },
+    { "location": "country/BD", "start": 1795100000, "duration": 3600, "uncertainty": null, "method": "median", "datasource": "ping-slash24", "status": 0, "fraction": null, "score": 40, "location_name": "Bangladesh", "overlaps_window": true },
+    { "location": "country/ZZ", "start": 1795000000, "duration": 3600, "uncertainty": null, "method": "median", "datasource": "bgp", "status": 0, "fraction": null, "score": 99999999, "location_name": "Unknown", "overlaps_window": true },
+    { "location": "region/1234", "start": 1795000000, "duration": 3600, "uncertainty": null, "method": "median", "datasource": "bgp", "status": 0, "fraction": null, "score": 500, "location_name": "Some region", "overlaps_window": true },
+    { "location": "country/FR", "start": 1790000000, "duration": 3600, "uncertainty": null, "method": "median", "datasource": "bgp", "status": 0, "fraction": null, "score": 500, "location_name": "Old Place", "overlaps_window": false }
+  ]
+}

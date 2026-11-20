@@ -33,7 +33,7 @@ Last reviewed: 2026-11-20.
 | ExchangeRate-API open access | https://open.er-api.com | Free; attribution link required | Fallback for the Taka panel when Bangladesh Bank is unreachable; shown as "not official" | Link "Rates by Exchange Rate API" | **Green** with attribution |
 | NASA FIRMS active fires | https://firms.modaps.eosdis.nasa.gov | NASA open data | Fires panel and map layer (`NASA_FIRMS_API_KEY`, GitHub Actions) | "NASA FIRMS" | **Green** |
 | UCDP GED / Candidate events | https://ucdp.uu.se | CC BY 4.0 | Armed Conflict panel and map layer (`UCDP_ACCESS_TOKEN`, requested 2026-11-20) | "UCDP, Uppsala University" | **Green** |
-| IODA internet outage data (planned, step 3) | https://ioda.inetintel.cc.gatech.edu | Free public API; terms to confirm | Internet Disruptions panel, replacing Cloudflare Radar | "IODA, Georgia Tech" | **Amber**: confirm commercial terms before Pro |
+| IODA internet outage events | https://ioda.inetintel.cc.gatech.edu | Free public API; terms to confirm | Internet Disruptions panel (`scripts/lib/ioda-outages.mjs`), used when no Cloudflare Radar token is set; each row says "Source: IODA (Georgia Tech)" | "IODA, Georgia Tech" | **Amber**: confirm commercial terms before Pro |
 
 ## 3. Upstream data sources this deployment currently runs
 
@@ -48,7 +48,7 @@ consequences:
 | UNHCR Refugee Data Finder | CC BY 4.0 (verify per dataset) | On (Displacement panel) | **Green** (verify) |
 | ReliefWeb (OCHA) | Content licences vary by source | On | **Amber**: show original source per item |
 | adsb.lol | ODbL | Off (inside the gated military-flights seeder) | **Green** with attribution |
-| Cloudflare Radar | Needs a Cloudflare API token | Off (no token); replaced by IODA | n/a |
+| Cloudflare Radar | Needs a Cloudflare API token | Off (no token); outages come from IODA, DDoS/anomaly tabs stay empty | n/a |
 
 ## 4. Red-listed sources (non-commercial terms)
 

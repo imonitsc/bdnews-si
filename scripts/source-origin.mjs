@@ -525,6 +525,7 @@ const HOST_ORIGINS = Object.freeze({
   'airplanes.live': null,
   'api.airplanes.live': null,
   'api.cloudflare.com': 'US',
+  'api.ioda.inetintel.cc.gatech.edu': 'US',
   'radar.cloudflare.com': 'US',
   'api.abuseipdb.com': 'US',
   'api.alternative.me': null,

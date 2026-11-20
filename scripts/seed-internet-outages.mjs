@@ -9,6 +9,7 @@ import {
   resolveSeedMetaTtl,
 } from './_seed-utils.mjs';
 import { COUNTRY_COORDS, mapTrafficAnomaly, toEpochMs } from './lib/radar-country-coords.mjs';
+import { fetchIodaOutages } from './lib/ioda-outages.mjs';
 
 loadEnvFile(import.meta.url);
 
@@ -28,6 +29,10 @@ const DDOS_TTL = 10800;
 // settling into the truthful STALE_SEED warn. 2x the gate restores the ordered
 // escalation the DDoS sibling already has at 3h.
 const ANOMALIES_TTL = 7200;
+// BDSI: without a Cloudflare token the outages come from IODA (no key needed).
+// That deployment seeds every 3 h from GitHub Actions, so keep the key 4x that.
+const USE_IODA = !process.env.CLOUDFLARE_API_TOKEN;
+const IODA_CACHE_TTL = 12 * 3600;
 
 
 function mapOutageSeverity(outageType) {
@@ -88,8 +93,8 @@ function requireRadarObject(result, field, source) {
 async function fetchOutages() {
   const token = process.env.CLOUDFLARE_API_TOKEN;
   if (!token) {
-    console.log('CLOUDFLARE_API_TOKEN not set — skipping');
-    process.exit(0);
+    console.log('CLOUDFLARE_API_TOKEN not set — using IODA (Georgia Tech) outage events');
+    return fetchIodaOutages({ userAgent: CHROME_UA });
   }
 
   const resp = await fetch(`${CF_RADAR_URL}?dateRange=28d&limit=50`, {
@@ -384,7 +389,8 @@ async function fetchAll() {
 
   const [outagesResult] = await Promise.allSettled([
     fetchOutages(),
-    ...COMPANIONS.map((companion) => publishCompanion(companion, token)),
+    // DDoS and traffic-anomaly companions are Cloudflare-only; skip them without a token.
+    ...(token ? COMPANIONS.map((companion) => publishCompanion(companion, token)) : []),
   ]);
 
   if (outagesResult.status === 'rejected') throw outagesResult.reason;
@@ -401,8 +407,8 @@ export function declareRecords(data) {
 
 runSeed('infra', 'outages', CANONICAL_KEY, fetchAll, {
   validateFn: validate,
-  ttlSeconds: CACHE_TTL,
-  sourceVersion: 'cloudflare-radar-28d',
+  ttlSeconds: USE_IODA ? IODA_CACHE_TTL : CACHE_TTL,
+  sourceVersion: USE_IODA ? 'ioda-7d' : 'cloudflare-radar-28d',
 
   declareRecords,
   // The companion keys are written by publishCompanion(), outside runSeed's own
@@ -427,7 +433,7 @@ runSeed('infra', 'outages', CANONICAL_KEY, fetchAll, {
   // still alarms EMPTY (real publish failure).
   zeroIsValid: true,
   schemaVersion: 1,
-  maxStaleMin: 30,
+  maxStaleMin: USE_IODA ? 240 : 30,
 }).catch((err) => {
   const _cause = err.cause ? ` (cause: ${err.cause.message || err.cause.code || err.cause})` : ''; console.error('FATAL:', (err.message || err) + _cause);
   process.exit(1);

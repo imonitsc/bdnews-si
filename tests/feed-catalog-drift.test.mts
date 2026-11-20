@@ -217,7 +217,7 @@ const CRISIS_DESK_PACK = {
   'Egypt Independent': { category: 'middleeast', countries: ['EG'], url: 'https://www.egyptindependent.com/feed/', role: 'en-default' },
   'Mada Masr': { category: 'middleeast', countries: ['EG'], url: 'https://news.google.com/rss/search?q=site%3Amadamasr.com%20when%3A30d&hl=en-US&gl=US&ceid=US:en', role: 'opt-in' },
   'The Daily Star': { category: 'asia', countries: ['BD'], url: 'https://news.google.com/rss/search?q=site%3Athedailystar.net%20when%3A14d&hl=en-US&gl=US&ceid=US:en', role: 'en-default' },
-  'Dhaka Tribune': { category: 'asia', countries: ['BD'], url: 'https://news.google.com/rss/search?q=site%3Adhakatribune.com%20when%3A14d&hl=en-US&gl=US&ceid=US:en', role: 'opt-in' },
+  'Dhaka Tribune': { category: 'asia', countries: ['BD'], url: 'https://news.google.com/rss/search?q=site%3Adhakatribune.com%20when%3A14d&hl=en-US&gl=US&ceid=US:en', role: 'site-default' },
   'Daily Nation': { category: 'africa', countries: ['KE'], url: 'https://nation.africa/kenya/rss.xml', role: 'en-default' },
   'The Guardian Post': { category: 'africa', countries: ['CM'], url: 'https://news.google.com/rss/search?q=site%3Atheguardianpostcameroon.com%20when%3A30d&hl=en-US&gl=US&ceid=US:en', role: 'en-default' },
   Tchadinfos: { category: 'africa', countries: ['TD'], url: 'https://tchadinfos.com/feed/', lang: 'fr', role: 'opt-in' },

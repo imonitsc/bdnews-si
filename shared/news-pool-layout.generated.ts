@@ -208,6 +208,7 @@ export const NEWS_POOL_LAYOUT: NewsPoolLayout = {
       "edition": "full",
       "lang": "bn",
       "contentLanguages": [
+        "en",
         "bn"
       ]
     },

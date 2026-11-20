@@ -30,3 +30,8 @@ and is distributed under the same licence (see `LICENSE`).
 Vercel project with the repository's `vercel.json` (build command `npm run build:full`), plus an
 Upstash Redis database (`UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`) and the data seeders
 running on a schedule. See `SELF_HOSTING.md` for the data seeders and optional API keys.
+- Live TV: Somoy TV, Jamuna TV, Channel 24, Independent TV, Ekattor TV and ATN News are the default
+  Live News channels (`src/config/live-video-sources.ts`, `src/services/live-channels.ts`).
+- News: 13 more Bangladeshi outlets (English and Bangla) in `shared/news-catalog.json`, on by default,
+  with tiers, provenance, country tags and attribution rows. Upstream tests that pinned Dhaka Tribune,
+  Prothom Alo and bdnews24 as opt-in were adjusted.

@@ -32,8 +32,7 @@ const standardPhrase = {
  * copy that drifts away from the pattern fails loudly rather than going stale.
  */
 export const RESILIENCE_COVERAGE_SURFACES = [
-  { path: 'index.html', occurrences: 3, ...standardPhrase },
-  { path: 'src/config/variant-meta.ts', occurrences: 1, ...standardPhrase },
+  // bdnews SI: index.html carries its own copy, so it is not restated here.
   { path: 'docs/about.mdx', occurrences: 2, ...standardPhrase },
   {
     path: 'docs/methodology/country-resilience-index.mdx',

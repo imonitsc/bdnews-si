@@ -12,6 +12,20 @@ import {
 export type SourceType = 'wire' | 'gov' | 'intel' | 'mainstream' | 'market' | 'tech' | 'other' | 'unknown';
 
 export const SOURCE_TYPES: Record<string, SourceType> = {
+  // bdnews SI: Bangladeshi outlets
+  'The Business Standard': 'mainstream',
+  'New Age Bangladesh': 'mainstream',
+  'Financial Express BD': 'mainstream',
+  'UNB Bangladesh': 'wire',
+  'Prothom Alo English': 'mainstream',
+  'Kaler Kantho': 'mainstream',
+  'Jugantor': 'mainstream',
+  'Samakal': 'mainstream',
+  'The Daily Ittefaq': 'mainstream',
+  'Bangla Tribune': 'mainstream',
+  'Bangladesh Pratidin': 'mainstream',
+  'Jago News 24': 'mainstream',
+  'Dhaka Post': 'mainstream',
   "Guardian — Paraguay": "mainstream",
   "Reuters — Mali": "wire",
   "Reuters — Benin": "wire",
@@ -894,6 +908,20 @@ export const UNREVIEWED_SOURCE_RISK: Readonly<SourceRiskProfile> = Object.freeze
 });
 
 export const SOURCE_PROPAGANDA_RISK: Record<string, SourceRiskProfile> = {
+  // bdnews SI: Bangladeshi outlets
+  'The Business Standard': { risk: 'low', note: 'Established Bangladeshi newsroom selected for country coverage.' },
+  'New Age Bangladesh': { risk: 'low', note: 'Established Bangladeshi newsroom selected for country coverage.' },
+  'Financial Express BD': { risk: 'low', note: 'Established Bangladeshi newsroom selected for country coverage.' },
+  'UNB Bangladesh': { risk: 'low', note: 'Established Bangladeshi newsroom selected for country coverage.' },
+  'Prothom Alo English': { risk: 'low', note: 'Established Bangladeshi newsroom selected for country coverage.' },
+  'Kaler Kantho': { risk: 'low', note: 'Established Bangladeshi newsroom selected for country coverage.' },
+  'Jugantor': { risk: 'low', note: 'Established Bangladeshi newsroom selected for country coverage.' },
+  'Samakal': { risk: 'low', note: 'Established Bangladeshi newsroom selected for country coverage.' },
+  'The Daily Ittefaq': { risk: 'low', note: 'Established Bangladeshi newsroom selected for country coverage.' },
+  'Bangla Tribune': { risk: 'low', note: 'Established Bangladeshi newsroom selected for country coverage.' },
+  'Bangladesh Pratidin': { risk: 'low', note: 'Established Bangladeshi newsroom selected for country coverage.' },
+  'Jago News 24': { risk: 'low', note: 'Established Bangladeshi newsroom selected for country coverage.' },
+  'Dhaka Post': { risk: 'low', note: 'Established Bangladeshi newsroom selected for country coverage.' },
   "Guardian — Paraguay": {"risk": "low", "note": "Country-specific reporting from Guardian."},
   "Reuters — Mali": {"risk": "low", "note": "Country-specific reporting from Reuters."},
   "Reuters — Benin": {"risk": "low", "note": "Country-specific reporting from Reuters."},

@@ -5546,6 +5546,74 @@ export const BROWSER_NEWS_CATALOG: BrowserCatalog = {
           "url": "https://www.matichon.co.th/feed",
           "lang": "th",
           "fetchInAllLanguages": true
+        },
+        {
+          "name": "The Business Standard",
+          "url": "https://news.google.com/rss/search?q=site%3Atbsnews.net%20when%3A7d&hl=en-US&gl=US&ceid=US:en"
+        },
+        {
+          "name": "New Age Bangladesh",
+          "url": "https://news.google.com/rss/search?q=site%3Anewagebd.net%20when%3A7d&hl=en-US&gl=US&ceid=US:en"
+        },
+        {
+          "name": "Financial Express BD",
+          "url": "https://news.google.com/rss/search?q=site%3Athefinancialexpress.com.bd%20when%3A7d&hl=en-US&gl=US&ceid=US:en"
+        },
+        {
+          "name": "UNB Bangladesh",
+          "url": "https://news.google.com/rss/search?q=site%3Aunb.com.bd%20when%3A7d&hl=en-US&gl=US&ceid=US:en"
+        },
+        {
+          "name": "Prothom Alo English",
+          "url": "https://news.google.com/rss/search?q=site%3Aen.prothomalo.com%20when%3A7d&hl=en-US&gl=US&ceid=US:en"
+        },
+        {
+          "name": "Kaler Kantho",
+          "url": "https://news.google.com/rss/search?q=site%3Akalerkantho.com%20when%3A7d&hl=bn&gl=BD&ceid=BD:bn",
+          "lang": "bn",
+          "fetchInAllLanguages": true
+        },
+        {
+          "name": "Jugantor",
+          "url": "https://news.google.com/rss/search?q=site%3Ajugantor.com%20when%3A7d&hl=bn&gl=BD&ceid=BD:bn",
+          "lang": "bn",
+          "fetchInAllLanguages": true
+        },
+        {
+          "name": "Samakal",
+          "url": "https://news.google.com/rss/search?q=site%3Asamakal.com%20when%3A7d&hl=bn&gl=BD&ceid=BD:bn",
+          "lang": "bn",
+          "fetchInAllLanguages": true
+        },
+        {
+          "name": "The Daily Ittefaq",
+          "url": "https://news.google.com/rss/search?q=site%3Aittefaq.com.bd%20when%3A7d&hl=bn&gl=BD&ceid=BD:bn",
+          "lang": "bn",
+          "fetchInAllLanguages": true
+        },
+        {
+          "name": "Bangla Tribune",
+          "url": "https://news.google.com/rss/search?q=site%3Abanglatribune.com%20when%3A7d&hl=bn&gl=BD&ceid=BD:bn",
+          "lang": "bn",
+          "fetchInAllLanguages": true
+        },
+        {
+          "name": "Bangladesh Pratidin",
+          "url": "https://news.google.com/rss/search?q=site%3Abd-pratidin.com%20when%3A7d&hl=bn&gl=BD&ceid=BD:bn",
+          "lang": "bn",
+          "fetchInAllLanguages": true
+        },
+        {
+          "name": "Jago News 24",
+          "url": "https://news.google.com/rss/search?q=site%3Ajagonews24.com%20when%3A7d&hl=bn&gl=BD&ceid=BD:bn",
+          "lang": "bn",
+          "fetchInAllLanguages": true
+        },
+        {
+          "name": "Dhaka Post",
+          "url": "https://news.google.com/rss/search?q=site%3Adhakapost.com%20when%3A7d&hl=bn&gl=BD&ceid=BD:bn",
+          "lang": "bn",
+          "fetchInAllLanguages": true
         }
       ],
       "energy": [

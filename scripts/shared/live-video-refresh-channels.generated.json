@@ -2,6 +2,42 @@
   "generatedFrom": "src/config/live-video-sources.ts",
   "channels": [
     {
+      "channelId": "UCxHoBXkY88Tb8z1Ssj6CWsQ",
+      "slots": [
+        "live-news/somoy-tv"
+      ]
+    },
+    {
+      "channelId": "UCN6sm8iHiPd0cnoUardDAnw",
+      "slots": [
+        "live-news/jamuna-tv"
+      ]
+    },
+    {
+      "channelId": "UCHLqIOMPk20w-6cFgkA90jw",
+      "slots": [
+        "live-news/channel-24-bd"
+      ]
+    },
+    {
+      "channelId": "UCATUkaOHwO9EP_W87zCiPbA",
+      "slots": [
+        "live-news/independent-tv-bd"
+      ]
+    },
+    {
+      "channelId": "UCtqvtAVmad5zywaziN6CbfA",
+      "slots": [
+        "live-news/ekattor-tv"
+      ]
+    },
+    {
+      "channelId": "UC9Rgo0CrNyd7OWliLekqqGA",
+      "slots": [
+        "live-news/atn-news"
+      ]
+    },
+    {
       "channelId": "UCIALMKvObZNtJ6AmdCLP7Lg",
       "slots": [
         "live-news/bloomberg"

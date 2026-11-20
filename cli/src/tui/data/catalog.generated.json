@@ -11,6 +11,72 @@
   ],
   "channels": [
     {
+      "id": "somoy-tv",
+      "name": "Somoy TV",
+      "handle": "@somoynews360",
+      "region": "asia",
+      "geo": null,
+      "sources": [
+        "https://www.youtube.com/watch?v=1na8me3DYKM",
+        "https://www.youtube.com/channel/UCxHoBXkY88Tb8z1Ssj6CWsQ"
+      ]
+    },
+    {
+      "id": "jamuna-tv",
+      "name": "Jamuna TV",
+      "handle": "@jamunatvbd",
+      "region": "asia",
+      "geo": null,
+      "sources": [
+        "https://www.youtube.com/watch?v=UhtoArmJnYY",
+        "https://www.youtube.com/channel/UCN6sm8iHiPd0cnoUardDAnw"
+      ]
+    },
+    {
+      "id": "channel-24-bd",
+      "name": "Channel 24",
+      "handle": "@channel24digital",
+      "region": "asia",
+      "geo": null,
+      "sources": [
+        "https://www.youtube.com/watch?v=WMlDSbd6uB0",
+        "https://www.youtube.com/channel/UCHLqIOMPk20w-6cFgkA90jw"
+      ]
+    },
+    {
+      "id": "independent-tv-bd",
+      "name": "Independent TV",
+      "handle": "@IndependentTelevision",
+      "region": "asia",
+      "geo": null,
+      "sources": [
+        "https://www.youtube.com/watch?v=iWq2kH0iq2Q",
+        "https://www.youtube.com/channel/UCATUkaOHwO9EP_W87zCiPbA"
+      ]
+    },
+    {
+      "id": "ekattor-tv",
+      "name": "Ekattor TV",
+      "handle": "@ekattortelevision",
+      "region": "asia",
+      "geo": null,
+      "sources": [
+        "https://www.youtube.com/watch?v=fnIr_EbK6PM",
+        "https://www.youtube.com/channel/UCtqvtAVmad5zywaziN6CbfA"
+      ]
+    },
+    {
+      "id": "atn-news",
+      "name": "ATN News",
+      "handle": "@ATNNewsLtd",
+      "region": "asia",
+      "geo": null,
+      "sources": [
+        "https://www.youtube.com/watch?v=6mX8fUmi1z0",
+        "https://www.youtube.com/channel/UC9Rgo0CrNyd7OWliLekqqGA"
+      ]
+    },
+    {
       "id": "bloomberg",
       "name": "Bloomberg",
       "handle": "@markets",
@@ -1033,6 +1099,12 @@
       "key": "asia",
       "label": "Asia",
       "channelIds": [
+        "somoy-tv",
+        "jamuna-tv",
+        "channel-24-bd",
+        "independent-tv-bd",
+        "ekattor-tv",
+        "atn-news",
         "tbs-news",
         "ann-news",
         "ntv-news",
@@ -1092,14 +1164,16 @@
     }
   ],
   "defaultChannelIds": [
+    "somoy-tv",
+    "jamuna-tv",
+    "channel-24-bd",
+    "independent-tv-bd",
+    "ekattor-tv",
+    "atn-news",
+    "aljazeera",
     "bloomberg",
-    "sky",
-    "euronews",
     "dw",
-    "cnn",
-    "france24",
-    "alarabiya",
-    "aljazeera"
+    "sky"
   ],
   "webcams": [
     {

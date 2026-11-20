@@ -20,15 +20,18 @@ export interface BuiltinLiveChannel extends LiveChannel {
 }
 
 // Full variant: World news channels (24/7 live streams)
+// bdnews SI: Bangladeshi channels first, then a few international ones.
 const FULL_LIVE_CHANNELS: BuiltinLiveChannel[] = [
-  { id: 'bloomberg', name: 'Bloomberg', handle: '@markets' },
-  { id: 'sky', name: 'SkyNews', handle: '@SkyNews' },
-  { id: 'euronews', name: 'Euronews', handle: '@euronews' },
-  { id: 'dw', name: 'DW', handle: '@DWNews' },
-  { id: 'cnn', name: 'CNN', handle: '@CNN' },
-  { id: 'france24', name: 'France 24', handle: '@FRANCE24' },
-  { id: 'alarabiya', name: 'AlArabiya', handle: '@AlArabiya' },
+  { id: 'somoy-tv', name: 'Somoy TV', handle: '@somoynews360' },
+  { id: 'jamuna-tv', name: 'Jamuna TV', handle: '@jamunatvbd' },
+  { id: 'channel-24-bd', name: 'Channel 24', handle: '@channel24digital' },
+  { id: 'independent-tv-bd', name: 'Independent TV', handle: '@IndependentTelevision' },
+  { id: 'ekattor-tv', name: 'Ekattor TV', handle: '@ekattortelevision' },
+  { id: 'atn-news', name: 'ATN News', handle: '@ATNNewsLtd' },
   { id: 'aljazeera', name: 'AlJazeera', handle: '@AlJazeeraEnglish' },
+  { id: 'bloomberg', name: 'Bloomberg', handle: '@markets' },
+  { id: 'dw', name: 'DW', handle: '@DWNews' },
+  { id: 'sky', name: 'SkyNews', handle: '@SkyNews' },
 ];
 
 // Tech variant: Tech & business channels
@@ -41,6 +44,13 @@ const TECH_LIVE_CHANNELS: BuiltinLiveChannel[] = [
 // Optional channels users can add from the "Available Channels" tab UI
 // Includes default channels so they appear in the grid for toggle on/off
 export const OPTIONAL_LIVE_CHANNELS: BuiltinLiveChannel[] = [
+  // Bangladesh (also the defaults above)
+  { id: 'somoy-tv', name: 'Somoy TV', handle: '@somoynews360' },
+  { id: 'jamuna-tv', name: 'Jamuna TV', handle: '@jamunatvbd' },
+  { id: 'channel-24-bd', name: 'Channel 24', handle: '@channel24digital' },
+  { id: 'independent-tv-bd', name: 'Independent TV', handle: '@IndependentTelevision' },
+  { id: 'ekattor-tv', name: 'Ekattor TV', handle: '@ekattortelevision' },
+  { id: 'atn-news', name: 'ATN News', handle: '@ATNNewsLtd' },
   // North America (defaults first)
   { id: 'bloomberg', name: 'Bloomberg', handle: '@markets' },
   { id: 'yahoo', name: 'Yahoo Finance', handle: '@YahooFinance' },
@@ -147,7 +157,7 @@ const _REGION_ENTRIES: { key: string; labelKey: string; channelIds: string[] }[]
   { key: 'na', labelKey: 'components.liveNews.regionNorthAmerica', channelIds: ['bloomberg', 'yahoo', 'cnn', 'fox-news', 'livenow-fox', 'newsmax', 'abc-news', 'cbs-news', 'nbc-news', 'cbc-news', 'ctv-news', 'reuters-tv', 'nasa'] },
   { key: 'eu', labelKey: 'components.liveNews.regionEurope', channelIds: ['sky', 'euronews', 'dw', 'france24', 'bbc-news', 'gb-news', 'the-guardian', 'france24-en', 'phoenix', 'rtp3', 'welt', 'rtve', 'trt-haber', 'ntv-turkey', 'cnn-turk', 'tv-rain', 'rt', 'tvp-info', 'telewizja-republika', 'tagesschau24', 'euronews-fr', 'euronews-gr', 'skai-tv', 'ert-news', 'france24-fr', 'france-info', 'bfmtv', 'tv5monde-info', 'nrk1'] },
   { key: 'latam', labelKey: 'components.liveNews.regionLatinAmerica', channelIds: ['cnn-brasil', 'jovem-pan', 'record-news', 'band-jornalismo', 'tn-argentina', 'c5n', 'milenio', 'noticias-caracol', 'ntn24', 't13', 'dw-espanol', 'rt-espanol', 'cgtn-espanol'] },
-  { key: 'asia', labelKey: 'components.liveNews.regionAsia', channelIds: ['tbs-news', 'ann-news', 'ntv-news', 'cti-news', 'cgtn', 'wion', 'ndtv', 'cna-asia', 'nhk-world', 'arirang-news', 'india-today', 'abp-news'] },
+  { key: 'asia', labelKey: 'components.liveNews.regionAsia', channelIds: ['somoy-tv', 'jamuna-tv', 'channel-24-bd', 'independent-tv-bd', 'ekattor-tv', 'atn-news', 'tbs-news', 'ann-news', 'ntv-news', 'cti-news', 'cgtn', 'wion', 'ndtv', 'cna-asia', 'nhk-world', 'arirang-news', 'india-today', 'abp-news'] },
   { key: 'me', labelKey: 'components.liveNews.regionMiddleEast', channelIds: ['alarabiya', 'aljazeera', 'al-hadath', 'sky-news-arabia', 'trt-world', 'iran-intl', 'press-tv', 'cgtn-arabic', 'kan-11', 'i24-news', 'asharq-news', 'aljazeera-arabic', 'aljazeera-mubasher', 'alarabiya-business', 'al-qahera-news', 'dw-arabic', 'rt-arabic', 'rudaw'] },
   { key: 'africa', labelKey: 'components.liveNews.regionAfrica', channelIds: ['africanews', 'channels-tv', 'ktn-news', 'enca', 'sabc-news', 'arise-news'] },
   { key: 'oc', labelKey: 'components.liveNews.regionOceania', channelIds: ['abc-news-au'] },

@@ -282,7 +282,7 @@ export const CRISIS_FLOOR_OPT_IN_SOURCES = [
   'Efecto Cocuyo',
   '14ymedio',
   'Mada Masr',
-  'Dhaka Tribune',
+  // bdnews SI: 'Dhaka Tribune' is default-on here (DEFAULT_ENABLED_SOURCES.asia), not opt-in.
   'Tchadinfos',
   'Alwihda Info',
   'Radio Ndeke Luka',
@@ -293,6 +293,7 @@ export const CRISIS_DESK_ROLLOUT_SOURCES = [
   ...CRISIS_FLOOR_EN_DEFAULT_SOURCES,
   ...CRISIS_FLOOR_STRATEGIC_DEFAULT_SOURCES,
   ...CRISIS_FLOOR_OPT_IN_SOURCES,
+  'Dhaka Tribune', // bdnews SI: default-on (see CRISIS_FLOOR_OPT_IN_SOURCES)
 ] as const;
 
 /** Current editorial defaults introduced by the four regional feed PRs. */
@@ -691,6 +692,8 @@ export const DEFAULT_ENABLED_SOURCES: Record<string, string[]> = {
     'Amu TV', 'The Daily Star', 'Japan Times',
     // bdnews SI: Bangladesh sources on by default
     'Dhaka Tribune', 'Prothom Alo', 'bdnews24',
+    'The Business Standard', 'New Age Bangladesh', 'Financial Express BD', 'UNB Bangladesh', 'Prothom Alo English',
+    'Kaler Kantho', 'Jugantor', 'Samakal', 'The Daily Ittefaq', 'Bangla Tribune', 'Bangladesh Pratidin', 'Jago News 24', 'Dhaka Post',
   ],
   tech: ['Hacker News', 'Ars Technica', 'The Verge', 'MIT Tech Review'],
   ai: ['AI News', 'VentureBeat AI', 'The Verge AI', 'MIT Tech Review', 'ArXiv AI'],

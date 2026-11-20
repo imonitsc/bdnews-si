@@ -2480,6 +2480,20 @@
       ]
     },
     {
+      "host": "banglatribune.com",
+      "provider": "banglatribune.com",
+      "kind": "feed",
+      "observed": true,
+      "license": "Provider terms for this feed publisher; verify before redistribution",
+      "attribution": "Credit banglatribune.com and link to the original feed publisher.",
+      "status": "terms-review",
+      "references": [
+        {
+          "path": "shared/news-catalog.json"
+        }
+      ]
+    },
+    {
       "host": "barbadostoday.bb",
       "provider": "barbadostoday.bb",
       "kind": "feed",
@@ -2529,6 +2543,20 @@
       "license": "Excluded: live-video playback transport; channel/provider terms apply separately",
       "attribution": "Excluded from the external-provider count: presentation-only HLS stream, not an ingested dataset.",
       "status": "excluded"
+    },
+    {
+      "host": "bd-pratidin.com",
+      "provider": "bd-pratidin.com",
+      "kind": "feed",
+      "observed": true,
+      "license": "Provider terms for this feed publisher; verify before redistribution",
+      "attribution": "Credit bd-pratidin.com and link to the original feed publisher.",
+      "status": "terms-review",
+      "references": [
+        {
+          "path": "shared/news-catalog.json"
+        }
+      ]
     },
     {
       "host": "bd.usembassy.gov",
@@ -4469,6 +4497,20 @@
       ]
     },
     {
+      "host": "dhakapost.com",
+      "provider": "dhakapost.com",
+      "kind": "feed",
+      "observed": true,
+      "license": "Provider terms for this feed publisher; verify before redistribution",
+      "attribution": "Credit dhakapost.com and link to the original feed publisher.",
+      "status": "terms-review",
+      "references": [
+        {
+          "path": "shared/news-catalog.json"
+        }
+      ]
+    },
+    {
       "host": "dhakatribune.com",
       "provider": "Dhaka Tribune",
       "kind": "feed",
@@ -5153,6 +5195,20 @@
       "observed": true,
       "license": "Publisher terms apply; verify before redistribution.",
       "attribution": "MercoPress — headlines and publisher links.",
+      "status": "terms-review",
+      "references": [
+        {
+          "path": "shared/news-catalog.json"
+        }
+      ]
+    },
+    {
+      "host": "en.prothomalo.com",
+      "provider": "en.prothomalo.com",
+      "kind": "feed",
+      "observed": true,
+      "license": "Provider terms for this feed publisher; verify before redistribution",
+      "attribution": "Credit en.prothomalo.com and link to the original feed publisher.",
       "status": "terms-review",
       "references": [
         {
@@ -7750,6 +7806,34 @@
       ]
     },
     {
+      "host": "ittefaq.com.bd",
+      "provider": "ittefaq.com.bd",
+      "kind": "feed",
+      "observed": true,
+      "license": "Provider terms for this feed publisher; verify before redistribution",
+      "attribution": "Credit ittefaq.com.bd and link to the original feed publisher.",
+      "status": "terms-review",
+      "references": [
+        {
+          "path": "shared/news-catalog.json"
+        }
+      ]
+    },
+    {
+      "host": "jagonews24.com",
+      "provider": "jagonews24.com",
+      "kind": "feed",
+      "observed": true,
+      "license": "Provider terms for this feed publisher; verify before redistribution",
+      "attribution": "Credit jagonews24.com and link to the original feed publisher.",
+      "status": "terms-review",
+      "references": [
+        {
+          "path": "shared/news-catalog.json"
+        }
+      ]
+    },
+    {
       "host": "jam-news.net",
       "provider": "jam-news.net",
       "kind": "feed",
@@ -7935,6 +8019,20 @@
       ]
     },
     {
+      "host": "jugantor.com",
+      "provider": "jugantor.com",
+      "kind": "feed",
+      "observed": true,
+      "license": "Provider terms for this feed publisher; verify before redistribution",
+      "attribution": "Credit jugantor.com and link to the original feed publisher.",
+      "status": "terms-review",
+      "references": [
+        {
+          "path": "shared/news-catalog.json"
+        }
+      ]
+    },
+    {
       "host": "justice.gov",
       "provider": "justice.gov",
       "kind": "feed",
@@ -7955,6 +8053,20 @@
       "observed": true,
       "license": "Publisher terms apply; verify before redistribution.",
       "attribution": "Kaieteur News — headlines and publisher links.",
+      "status": "terms-review",
+      "references": [
+        {
+          "path": "shared/news-catalog.json"
+        }
+      ]
+    },
+    {
+      "host": "kalerkantho.com",
+      "provider": "kalerkantho.com",
+      "kind": "feed",
+      "observed": true,
+      "license": "Provider terms for this feed publisher; verify before redistribution",
+      "attribution": "Credit kalerkantho.com and link to the original feed publisher.",
       "status": "terms-review",
       "references": [
         {
@@ -9912,6 +10024,20 @@
       "observed": true,
       "license": "Publisher terms apply; verify before redistribution.",
       "attribution": "Netgazeti — headlines and publisher links.",
+      "status": "terms-review",
+      "references": [
+        {
+          "path": "shared/news-catalog.json"
+        }
+      ]
+    },
+    {
+      "host": "newagebd.net",
+      "provider": "newagebd.net",
+      "kind": "feed",
+      "observed": true,
+      "license": "Provider terms for this feed publisher; verify before redistribution",
+      "attribution": "Credit newagebd.net and link to the original feed publisher.",
       "status": "terms-review",
       "references": [
         {
@@ -12373,6 +12499,20 @@
       ]
     },
     {
+      "host": "samakal.com",
+      "provider": "samakal.com",
+      "kind": "feed",
+      "observed": true,
+      "license": "Provider terms for this feed publisher; verify before redistribution",
+      "attribution": "Credit samakal.com and link to the original feed publisher.",
+      "status": "terms-review",
+      "references": [
+        {
+          "path": "shared/news-catalog.json"
+        }
+      ]
+    },
+    {
       "host": "samoaglobalnews.com",
       "provider": "samoaglobalnews.com",
       "kind": "feed",
@@ -13903,6 +14043,20 @@
       ]
     },
     {
+      "host": "tbsnews.net",
+      "provider": "tbsnews.net",
+      "kind": "feed",
+      "observed": true,
+      "license": "Provider terms for this feed publisher; verify before redistribution",
+      "attribution": "Credit tbsnews.net and link to the original feed publisher.",
+      "status": "terms-review",
+      "references": [
+        {
+          "path": "shared/news-catalog.json"
+        }
+      ]
+    },
+    {
       "host": "tcb.gov.bd",
       "provider": "tcb.gov.bd",
       "kind": "structured",
@@ -14307,6 +14461,20 @@
       "observed": true,
       "license": "Provider terms for this feed publisher; verify before redistribution",
       "attribution": "Credit thediplomat.com and link to the original feed publisher.",
+      "status": "terms-review",
+      "references": [
+        {
+          "path": "shared/news-catalog.json"
+        }
+      ]
+    },
+    {
+      "host": "thefinancialexpress.com.bd",
+      "provider": "thefinancialexpress.com.bd",
+      "kind": "feed",
+      "observed": true,
+      "license": "Provider terms for this feed publisher; verify before redistribution",
+      "attribution": "Credit thefinancialexpress.com.bd and link to the original feed publisher.",
       "status": "terms-review",
       "references": [
         {
@@ -15230,6 +15398,20 @@
       "observed": true,
       "license": "Provider terms for this feed publisher; verify before redistribution",
       "attribution": "Credit ukrinform.ua and link to the original feed publisher.",
+      "status": "terms-review",
+      "references": [
+        {
+          "path": "shared/news-catalog.json"
+        }
+      ]
+    },
+    {
+      "host": "unb.com.bd",
+      "provider": "unb.com.bd",
+      "kind": "feed",
+      "observed": true,
+      "license": "Provider terms for this feed publisher; verify before redistribution",
+      "attribution": "Credit unb.com.bd and link to the original feed publisher.",
       "status": "terms-review",
       "references": [
         {

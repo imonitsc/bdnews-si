@@ -258,7 +258,12 @@ describe('optional country news coverage', () => {
     assert.deepEqual([...optIns].sort(), Object.keys(audit.additions).sort());
     for (const lang of new Set(['en', 'pt-BR', ...Object.values(audit.additions).map(source => source.language)])) {
       const disabled = new Set(client.computeDefaultDisabledSources(lang));
-      for (const name of optIns) assert.ok(disabled.has(name), `${lang}: ${name} must be opt-in`);
+      // bdnews SI turns these Bangladesh additions on by default (src/config/feeds.ts, DEFAULT_ENABLED_SOURCES.asia).
+      const siteDefaults = new Set(['Prothom Alo', 'bdnews24']);
+      for (const name of optIns) {
+        if (siteDefaults.has(name)) continue;
+        assert.ok(disabled.has(name), `${lang}: ${name} must be opt-in`);
+      }
     }
   });
 

@@ -67,6 +67,20 @@ const INTERNATIONAL_HOST_SUFFIXES = [
 // Host → ISO 3166-1 alpha-2, 'EU', or null (international).
 // Only hosts that cannot be inferred from a real ccTLD or government suffix.
 const HOST_ORIGINS = Object.freeze({
+  // bdnews SI: Bangladeshi news outlets
+  "banglatribune.com": "BD",
+  "dhakapost.com": "BD",
+  "en.prothomalo.com": "BD",
+  "ittefaq.com.bd": "BD",
+  "jagonews24.com": "BD",
+  "jugantor.com": "BD",
+  "kalerkantho.com": "BD",
+  "newagebd.net": "BD",
+  "samakal.com": "BD",
+  "bd-pratidin.com": "BD",
+  "tbsnews.net": "BD",
+  "thefinancialexpress.com.bd": "BD",
+  "unb.com.bd": "BD",
   "24ur.com": "SI",
   "abs-cbn.com": "PH",
   "addisstandard.com": "ET",

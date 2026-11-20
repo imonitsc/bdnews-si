@@ -89,6 +89,33 @@ export const WEBCAM_GRID_PRIORITY = [
  * channel's live embed where YouTube allows it. A channel with [] is hidden from Available channels.
  */
 export const LIVE_NEWS_SOURCES = {
+  // bdnews SI: Bangladeshi 24/7 news channels. Each runs a long-lived YouTube live; the channel entry
+  // after the pinned video lets the resolver pick up a restarted stream (checked 2026-11-20: all
+  // embeddable). Some are geo-blocked on YouTube in India.
+  'somoy-tv': [
+    'https://www.youtube.com/watch?v=1na8me3DYKM',
+    'https://www.youtube.com/channel/UCxHoBXkY88Tb8z1Ssj6CWsQ',
+  ],
+  'jamuna-tv': [
+    'https://www.youtube.com/watch?v=UhtoArmJnYY',
+    'https://www.youtube.com/channel/UCN6sm8iHiPd0cnoUardDAnw',
+  ],
+  'channel-24-bd': [
+    'https://www.youtube.com/watch?v=WMlDSbd6uB0',
+    'https://www.youtube.com/channel/UCHLqIOMPk20w-6cFgkA90jw',
+  ],
+  'independent-tv-bd': [
+    'https://www.youtube.com/watch?v=iWq2kH0iq2Q',
+    'https://www.youtube.com/channel/UCATUkaOHwO9EP_W87zCiPbA',
+  ],
+  'ekattor-tv': [
+    'https://www.youtube.com/watch?v=fnIr_EbK6PM',
+    'https://www.youtube.com/channel/UCtqvtAVmad5zywaziN6CbfA',
+  ],
+  'atn-news': [
+    'https://www.youtube.com/watch?v=6mX8fUmi1z0',
+    'https://www.youtube.com/channel/UC9Rgo0CrNyd7OWliLekqqGA',
+  ],
   bloomberg: [
     'https://www.bloomberg.com/media-manifest/streams/us.m3u8',
     'https://www.youtube.com/watch?v=QB5BNdBFujE',

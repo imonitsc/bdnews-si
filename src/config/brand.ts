@@ -15,6 +15,8 @@ export const BRAND = {
   showVariantSwitcher: false,
   /** Remove World Monitor Pro (premium: 'locked') panels; their sign-in and billing are not available here. */
   hideUpstreamPremiumPanels: true,
+  /** Panel cap for signed-in users (upstream's free tier allows 40). */
+  freeMaxPanels: 120,
 } as const;
 
 /** Starting map view: Bangladesh, with the rest of South Asia in frame. */

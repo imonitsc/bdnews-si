@@ -1,4 +1,5 @@
 import type { PanelConfig, MapLayers, DataSourceId } from '@/types';
+import { BRAND } from './brand';
 import { SITE_VARIANT } from './variant';
 // boundary-ignore: isDesktopRuntime is a pure env probe with no service dependencies
 import { isDesktopRuntime } from '@/services/runtime';
@@ -28,6 +29,14 @@ const FULL_PANELS: Record<string, PanelConfig> = {
   'bd-dse': { name: 'Dhaka Stock Exchange', enabled: true, priority: 1 }, // bdnews SI
   'bd-taka': { name: 'Taka Rates', enabled: true, priority: 1 }, // bdnews SI
   'bd-bazaar': { name: 'Dhaka Bazaar Prices', enabled: true, priority: 1 }, // bdnews SI
+  // bdnews SI: OSINT panels promoted next to the Bangladesh panels.
+  'ucdp-events': { name: 'UCDP Conflict Events', enabled: true, priority: 1 },
+  displacement: { name: 'UNHCR Displacement', enabled: true, priority: 1 },
+  'internet-disruptions': { name: 'Internet Disruptions', enabled: true, priority: 1 },
+  'satellite-fires': { name: 'Fires', enabled: true, priority: 1 },
+  'telegram-intel': { name: 'Telegram Intel', enabled: true, priority: 1, ...(_desktop && { premium: 'locked' as const }) },
+  'x-intel': { name: 'X News Accounts', enabled: true, priority: 1, ...(_desktop && { premium: 'locked' as const }) },
+  'airline-intel': { name: 'Airline Intelligence', enabled: true, priority: 1 },
   'live-webcams': { name: 'Live Webcams', enabled: true, priority: 1 },
   'windy-webcams': { name: 'Windy Live Webcam', enabled: false, priority: 2 },
   insights: { name: 'AI Insights', enabled: true, priority: 1 },
@@ -78,7 +87,6 @@ const FULL_PANELS: Record<string, PanelConfig> = {
   science: { name: 'Science', enabled: false, priority: 2 },
   monitors: { name: 'My Monitors', enabled: true, priority: 2 },
   'latest-brief': { name: 'Latest Brief', enabled: true, priority: 1, premium: 'locked' as const },
-  'satellite-fires': { name: 'Fires', enabled: true, priority: 2 },
   'macro-signals': { name: 'Market Regime', enabled: true, priority: 2 },
   'fear-greed': { name: 'Fear & Greed', enabled: true, priority: 2 },
   'aaii-sentiment': { name: 'AAII Sentiment', enabled: false, priority: 2 },
@@ -114,12 +122,10 @@ const FULL_PANELS: Record<string, PanelConfig> = {
   'fao-food-price-index': { name: 'FAO Food Price Index', enabled: false, priority: 2 },
   'etf-flows': { name: 'BTC ETF Tracker', enabled: true, priority: 2 },
   stablecoins: { name: 'Stablecoins', enabled: true, priority: 2 },
-  'ucdp-events': { name: 'UCDP Conflict Events', enabled: true, priority: 2 },
   'disease-outbreaks': { name: 'Disease Outbreaks', enabled: true, priority: 2 },
   'social-velocity': { name: 'Social Velocity', enabled: true, priority: 2 },
   'wsb-ticker-scanner': { name: 'WSB Ticker Scanner', enabled: true, priority: 75, premium: 'locked' as const },
   giving: { name: 'Global Giving', enabled: false, priority: 2 },
-  displacement: { name: 'UNHCR Displacement', enabled: true, priority: 2 },
   'ukmto-incidents': { name: 'UKMTO Incidents', enabled: false, priority: 2 },
   climate: { name: 'Climate Anomalies', enabled: true, priority: 2 },
   'reservoir-levels': { name: 'Strategic Water Levels', enabled: false, priority: 2 },
@@ -132,9 +138,6 @@ const FULL_PANELS: Record<string, PanelConfig> = {
   'radiation-watch': { name: 'Radiation Watch', enabled: true, priority: 2 },
   'thermal-escalation': { name: 'Thermal Escalation', enabled: true, priority: 2 },
   'oref-sirens': { name: 'Israel Sirens', enabled: true, priority: 2, ...(_desktop && { premium: 'locked' as const }) },
-  'telegram-intel': { name: 'Telegram Intel', enabled: true, priority: 2, ...(_desktop && { premium: 'locked' as const }) },
-  'x-intel': { name: 'X News Accounts', enabled: true, priority: 2, ...(_desktop && { premium: 'locked' as const }) },
-  'airline-intel': { name: 'Airline Intelligence', enabled: true, priority: 2 },
   'tech-readiness': { name: 'Tech Readiness Index', enabled: true, priority: 2 },
   'world-clock': { name: 'World Clock', enabled: true, priority: 2 },
   'national-debt': { name: 'Global Debt Clock', enabled: true, priority: 2 },
@@ -147,7 +150,9 @@ const FULL_PANELS: Record<string, PanelConfig> = {
 };
 
 const FULL_MAP_LAYERS: MapLayers = {
-  aircraftEmergencies: false,
+  // bdnews SI: Bangladesh OSINT defaults (ships in the Bay of Bengal, protests, fires,
+  // conflict and displacement on; Canada alerts, nuclear sites and global overlays off).
+  aircraftEmergencies: true,
   iranAttacks: IRAN_ATTACKS_ENABLED && !_desktop,
   gpsJamming: false,
   satellites: false,
@@ -160,29 +165,29 @@ const FULL_MAP_LAYERS: MapLayers = {
   storageFacilities: false,
   fuelShortages: false,
   hotspots: true,
-  ais: false,
-  nuclear: true,
+  ais: true,
+  nuclear: false,
   irradiators: false,
   radiationWatch: false,
-  sanctions: true,
+  sanctions: false,
   weather: true,
   canadaRoads: false,
-  canadaAlerts: true,
-  economic: true,
+  canadaAlerts: false,
+  economic: false,
   waterways: true,
   outages: true,
   cyberThreats: false,
   datacenters: false,
-  protests: false,
+  protests: true,
   flights: false,
   military: true,
   natural: true,
   spaceports: false,
   minerals: false,
-  fires: false,
+  fires: true,
   // Data source layers
-  ucdpEvents: false,
-  displacement: false,
+  ucdpEvents: true,
+  displacement: true,
   climate: false,
   reservoirLevels: false,
   no2Activity: false,
@@ -1283,7 +1288,8 @@ export function isPanelInVariantDefaults(key: string): boolean {
   return SITE_VARIANT_DEFAULTS.has(key);
 }
 
-export const FREE_MAX_PANELS = 40;
+// bdnews SI: no paid tier here, so the free panel cap (an upgrade prompt upstream) is raised.
+export const FREE_MAX_PANELS = BRAND.freeMaxPanels ?? 40;
 export const FREE_MAX_SOURCES = 80;
 
 export function isFreePanelCapCounted(key: string): boolean {

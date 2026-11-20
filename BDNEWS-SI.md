@@ -65,3 +65,8 @@ running on a schedule. See `SELF_HOSTING.md` for the data seeders and optional A
 - Panels `bd-dse`, `bd-taka`, `bd-bazaar` (`src/components/BdMarketsPanels.ts`), service `src/services/bd-markets.ts`.
 - Command bar: DSE, TAKA and BAZAR function keys; ticker starts with DSEX, DS30, DSES and USD/BDT.
 - Updated the panel-default snapshot lock in `tests/webmcp-dashboard.test.mts` for the added panels.
+
+## OSINT step 1 (2026-11-20)
+- OSINT panels promoted next to the Bangladesh panels at priority 1: UCDP Conflict Events, UNHCR Displacement, Internet Disruptions (added to this edition), Fires, Telegram Intel, X News Accounts, Airline Intelligence.
+- Free panel cap raised from 40 to 120 (`BRAND.freeMaxPanels`); there is no paid tier here. A one-time migration (`bdsi-osint-panels-v1`) re-enables these panels for existing visitors.
+- Bangladesh map defaults: ships (AIS), aircraft emergencies, protests, fires, UCDP events, displacement on; Canada alerts, nuclear sites, sanctions and economic overlays off.

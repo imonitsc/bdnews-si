@@ -1378,6 +1378,19 @@ export class App {
       }
     }
 
+    // bdnews SI: one-time switch-on of the OSINT panels for visitors whose saved settings
+    // had them disabled by the old 40-panel cap.
+    const BDSI_OSINT_MIGRATION_KEY = 'bdsi-osint-panels-v1';
+    if (storageAvailable && !localStorage.getItem(BDSI_OSINT_MIGRATION_KEY)) {
+      for (const key of ['ucdp-events', 'displacement', 'internet-disruptions', 'satellite-fires', 'telegram-intel', 'x-intel', 'airline-intel', 'bd-dse', 'bd-taka', 'bd-bazaar']) {
+        const config = getEffectivePanelConfig(key, SITE_VARIANT);
+        if (config.premium === 'locked') continue;
+        panelSettings[key] = { ...config, ...panelSettings[key], enabled: true };
+      }
+      saveToStorage(STORAGE_KEYS.panels, panelSettings);
+      localStorage.setItem(BDSI_OSINT_MIGRATION_KEY, 'done');
+    }
+
     const initialUrlState: ParsedMapUrlState | null = parseMapUrlState(window.location.search, mapLayers);
     // bdnews SI: with no camera in the URL, open the map on Bangladesh / South Asia.
     if (

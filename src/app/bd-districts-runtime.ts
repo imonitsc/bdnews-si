@@ -38,6 +38,7 @@ export function startBdDistrictActivity(ctx: AppContext): void {
   stop?.();
   let cancelled = false;
   let locator: DistrictLocator | null = null;
+  let boundaries: { districts: FeatureCollection; divisions: FeatureCollection } | null = null;
   let timer: number | null = null;
 
   const tick = () => {
@@ -53,16 +54,19 @@ export function startBdDistrictActivity(ctx: AppContext): void {
       ],
       fires: cache.satelliteFires ?? [],
     }, locator);
-    ctx.map?.setBdDistricts(null, latest);
+    // Boundaries go with every update (same objects, so nothing is re-parsed): the map
+    // can be created after they load, and a one-off hand-over would then be lost.
+    ctx.map?.setBdDistricts(boundaries, latest);
   };
 
-  void loadBoundaries().then((boundaries) => {
+  void loadBoundaries().then((loaded) => {
     if (cancelled) return;
-    if (boundaries) {
-      locator = new DistrictLocator(boundaries.districts.features as DistrictFeature[]);
-      ctx.map?.setBdDistricts(boundaries, null);
-    }
+    boundaries = loaded;
+    if (loaded) locator = new DistrictLocator(loaded.districts.features as DistrictFeature[]);
     tick();
+    // First minute: retry quickly so the layer appears as soon as the map exists.
+    let quick = 0;
+    const warm = window.setInterval(() => { tick(); if (++quick >= 6 || cancelled) window.clearInterval(warm); }, 5_000);
     timer = window.setInterval(tick, REFRESH_MS);
   });
 

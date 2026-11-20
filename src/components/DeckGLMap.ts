@@ -5301,7 +5301,7 @@ export class DeckGLMap {
     boundaries: { districts: { type: 'FeatureCollection'; features: unknown[] }; divisions: { type: 'FeatureCollection'; features: unknown[] } } | null,
     snapshot: BdActivitySnapshot | null,
   ): void {
-    if (boundaries) {
+    if (boundaries && boundaries.districts !== this.bdDistrictGeo) {
       this.bdDistrictGeo = boundaries.districts;
       this.bdDivisionGeo = boundaries.divisions;
     }

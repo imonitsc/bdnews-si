@@ -22,8 +22,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 55
     env:
-      UPSTASH_REDIS_REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL }}
-      UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
+      UPSTASH_REDIS_REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL || secrets.UPSTASH_REDIS_KV_REST_API_URL }}
+      UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN || secrets.UPSTASH_REDIS_KV_REST_API_TOKEN }}
       SEED_TIMEOUT: '600'
       NASA_FIRMS_API_KEY: ${{ secrets.NASA_FIRMS_API_KEY }}
       FRED_API_KEY: ${{ secrets.FRED_API_KEY }}

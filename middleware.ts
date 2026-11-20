@@ -704,6 +704,10 @@ async function proxyDocsLocaleHtml(request: Request, url: URL, host: string): Pr
 }
 
 export const config = {
+  // bdnews SI: pin the Edge runtime. New Vercel projects default Routing
+  // Middleware to Node.js, which loads this file unbundled and cannot resolve
+  // its extensionless relative imports.
+  runtime: 'edge',
   matcher: [
     '/mcp',
     '/api/:path*',

@@ -35,3 +35,6 @@ running on a schedule. See `SELF_HOSTING.md` for the data seeders and optional A
 - News: 13 more Bangladeshi outlets (English and Bangla) in `shared/news-catalog.json`, on by default,
   with tiers, provenance, country tags and attribution rows. Upstream tests that pinned Dhaka Tribune,
   Prothom Alo and bdnews24 as opt-in were adjusted.
+- Bangladesh News panel (`bangladesh`, right after Live News): stories from Bangladeshi outlets and
+  stories about Bangladesh, gathered from every loaded news category (`src/config/bangladesh-news.ts`,
+  `src/app/data-loader.ts`, `src/app/panel-layout.ts`).

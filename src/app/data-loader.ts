@@ -1,4 +1,5 @@
 import type { AppContext, AppModule } from '@/app/app-context';
+import { BANGLADESH_NEWS_PANEL_KEY, collectBangladeshNews } from '@/config/bangladesh-news';
 import { enqueueSentryCall } from '@/bootstrap/sentry-defer';
 import { isAnalyticsHost, track } from '@/services/analytics';
 import { isPageUnloading } from '@/bootstrap/page-unload-signal';
@@ -1774,6 +1775,10 @@ export class DataLoaderManager implements AppModule {
 
   renderNewsForCategory(category: string, items: NewsItem[]): void {
     this.ctx.newsByCategory[category] = items;
+    // bdnews SI: keep the Bangladesh panel in step with every other category's news.
+    if (category !== BANGLADESH_NEWS_PANEL_KEY && this.ctx.newsPanels[BANGLADESH_NEWS_PANEL_KEY]) {
+      this.renderNewsForCategory(BANGLADESH_NEWS_PANEL_KEY, collectBangladeshNews(this.ctx.newsByCategory));
+    }
     const filteredItems = this.filterItemsByTimeRange(items);
 
     const panel = this.ctx.newsPanels[category];

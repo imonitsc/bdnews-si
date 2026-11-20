@@ -192,6 +192,7 @@ import {
 } from '@/services/checkout-return-state';
 import { resolveCheckoutContext, type CheckoutContext } from '../../shared/checkout-attribution';
 import { BRAND } from '@/config/brand';
+import { BANGLADESH_NEWS_PANEL_KEY } from '@/config/bangladesh-news';
 
 function readSessionStorageValue(key: string): string | null {
   try {
@@ -3573,6 +3574,8 @@ export class PanelLayoutManager implements AppModule {
     this.createNewsPanel('africa', 'panels.africa');
     this.createNewsPanel('latam', 'panels.latam');
     this.createNewsPanel('asia', 'panels.asia');
+    // bdnews SI: Bangladesh stories gathered from every loaded category (src/config/bangladesh-news.ts).
+    this.createNewsPanelWithLabel(BANGLADESH_NEWS_PANEL_KEY, 'Bangladesh News', 'Stories from Bangladeshi outlets and stories about Bangladesh, newest first.', BANGLADESH_NEWS_PANEL_KEY);
     this.createNewsPanel('energy', 'panels.energy');
 
     // Iterate CANONICAL_FEEDS (union of all variants), not just the active

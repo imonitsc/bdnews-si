@@ -48,7 +48,8 @@ describe('PANEL_SCOPE_BEHAVIOUR', () => {
       .map(([key]) => key)
       .sort();
     assert.deepEqual(filtering, [
-      'africa', 'airline-intel', 'asia', 'cii', 'disaster-correlation', 'disease-outbreaks', 'displacement',
+      'africa', 'airline-intel', 'asia',
+      'bangladesh', 'cii', 'disaster-correlation', 'disease-outbreaks', 'displacement',
       'economic-correlation', 'energy-disruptions', 'escalation-correlation', 'europe', 'fuel-shortages',
       'intel', 'internet-disruptions', 'latam', 'middleeast', 'military-correlation', 'politics', 'population-exposure',
       'radiation-watch', 'reservoir-levels', 'security-advisories', 'ucdp-events', 'us',

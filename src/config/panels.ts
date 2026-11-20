@@ -24,6 +24,7 @@ const IRAN_ATTACKS_ENABLED = typeof window !== 'undefined' && import.meta.env.VI
 const FULL_PANELS: Record<string, PanelConfig> = {
   map: { name: 'Global Map', enabled: true, priority: 1 },
   'live-news': { name: 'Live News', enabled: true, priority: 1 },
+  bangladesh: { name: 'Bangladesh News', enabled: true, priority: 1 }, // bdnews SI
   'live-webcams': { name: 'Live Webcams', enabled: true, priority: 1 },
   'windy-webcams': { name: 'Windy Live Webcam', enabled: false, priority: 2 },
   insights: { name: 'AI Insights', enabled: true, priority: 1 },
@@ -1535,7 +1536,7 @@ export const PANEL_CATEGORY_MAP: Record<string, { labelKey: string; panelKeys: s
   },
   regionalNews: {
     labelKey: 'header.panelCatRegionalNews',
-    panelKeys: ['politics', 'us', 'europe', 'middleeast', 'africa', 'latam', 'asia'],
+    panelKeys: ['bangladesh', 'politics', 'us', 'europe', 'middleeast', 'africa', 'latam', 'asia'],
     variants: ['full'],
   },
   marketsFinance: {

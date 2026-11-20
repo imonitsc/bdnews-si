@@ -120,6 +120,7 @@ export const COMMANDS: Command[] = [
   { id: 'panel:middleeast', keywords: ['middle east news', 'mideast news', 'middle east', 'gulf', 'levant'], label: 'Panel: Middle East', icon: '\u{1F54C}', category: 'panels' },
   { id: 'panel:africa', keywords: ['africa news', 'africa', 'african', 'sahel'], label: 'Panel: Africa', icon: '\u{1F30D}', category: 'panels' },
   { id: 'panel:latam', keywords: ['latin america news', 'latam news', 'latin america', 'south america'], label: 'Panel: Latin America', icon: '\u{1F30E}', category: 'panels' },
+  { id: 'panel:bangladesh', keywords: ['bangladesh news', 'bangladesh', 'dhaka', 'bd news', 'bangla news'], label: 'Panel: Bangladesh News', icon: '\u{1F1E7}\u{1F1E9}', category: 'panels' },
   { id: 'panel:asia', keywords: ['asia news', 'asia-pacific news', 'asia', 'asia pacific', 'indo-pacific'], label: 'Panel: Asia-Pacific', icon: '\u{1F30F}', category: 'panels' },
   { id: 'panel:energy', keywords: ['energy', 'resources', 'oil news'], label: 'Panel: Energy & Resources', icon: '\u26A1', category: 'panels' },
   { id: 'panel:energy-complex', keywords: ['energy complex', 'oil markets', 'gas markets', 'energy prices'], label: 'Panel: Energy Complex', icon: '\u{1F6E2}\uFE0F', category: 'panels' },

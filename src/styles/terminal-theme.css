@@ -1,3 +1,18 @@
+/* One typeface for the whole site: IBM Plex Mono (SIL OFL 1.1), self-hosted in public/fonts. */
+@font-face { font-family: 'IBM Plex Mono'; font-style: normal; font-weight: 400; font-display: swap; src: url('/fonts/ibm-plex-mono/ibm-plex-mono-latin-400-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'IBM Plex Mono'; font-style: normal; font-weight: 500; font-display: swap; src: url('/fonts/ibm-plex-mono/ibm-plex-mono-latin-500-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'IBM Plex Mono'; font-style: normal; font-weight: 600; font-display: swap; src: url('/fonts/ibm-plex-mono/ibm-plex-mono-latin-600-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'IBM Plex Mono'; font-style: normal; font-weight: 700; font-display: swap; src: url('/fonts/ibm-plex-mono/ibm-plex-mono-latin-700-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+
+:root {
+  --font-mono: 'IBM Plex Mono', 'SF Mono', Menlo, Consolas, 'Liberation Mono', 'Noto Sans Bengali', monospace;
+  --font-body-base: var(--font-mono);
+  --font-body: var(--font-body-base);
+}
+/* Unlayered, so it beats every rule in @layer base (main.css) regardless of specificity.
+   Scripts Plex Mono lacks (Bangla, Arabic, CJK) fall back to system fonts glyph by glyph. */
+body, body *:not(svg):not(svg *) { font-family: var(--font-mono); }
+
 /* bdnews SI terminal theme.
    Unlayered, so it wins over main.css (which sits in @layer base).
    Applies to the dark theme only; the light theme is left as upstream ships it. */
@@ -272,3 +287,9 @@
 .bdn-signout { background: transparent; color: var(--bdn-amber, #ffa31a); border: 1px solid var(--bdn-amber, #ffa31a); font: inherit; font-size: 10px; font-weight: 700; padding: 2px 6px; cursor: pointer; }
 .bdn-signout:hover, .bdn-signout:focus-visible { background: var(--bdn-amber, #ffa31a); color: #000; outline: none; }
 @media (max-width: 1280px) { .bdn-user-email { display: none; } }
+
+/* Shared footer content (src/config/site-footer.ts). */
+.site-footer-copy.bdsi-footer { display: inline-flex; gap: 16px; flex-wrap: nowrap; }
+.bdsi-footer a { text-decoration: none; }
+.bdsi-footer a:hover { text-decoration: underline; }
+.site-footer-copy.bdsi-footer .bdsi-footer-links a { color: inherit; }

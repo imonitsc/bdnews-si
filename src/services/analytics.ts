@@ -751,6 +751,9 @@ export function trackContentHandoff(): void {
 
 export function initAnalytics(): void {
   if (umamiLoadScheduled || typeof window === 'undefined' || typeof document === 'undefined') return;
+  // BD Situation Intelligence: World Monitor's Umami instance only counts its own hosts;
+  // do not load its script for visitors on other deployments (privacy policy).
+  if (!isAnalyticsHost()) return;
   umamiLoadScheduled = true;
   scheduleAfterFirstPaint(loadUmamiScript, 3000);
 }

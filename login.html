@@ -4,33 +4,22 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sign in · BD Situation Intelligence</title>
-    <meta name="description" content="Sign in to BD Situation Intelligence: live news, markets and risk for Bangladesh." />
+    <meta name="description" content="Sign in to BD Situation Intelligence: Bangladesh and the world, live." />
     <meta name="robots" content="noindex" />
     <meta name="theme-color" content="#000000" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favico/favicon-32x32.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/favico/apple-touch-icon.png" />
   </head>
   <body class="bdsi-auth">
+    <header class="auth-top">
+      <a class="auth-logo" id="authLogo" href="/about.html" aria-label="BD Situation Intelligence"></a>
+      <span class="auth-tagline">Bangladesh and the World</span>
+    </header>
+
     <main class="auth-shell">
-      <section class="auth-brand" aria-hidden="true">
-        <div class="auth-logo" id="authLogo"></div>
-        <p class="auth-tagline">Live news, markets and risk for Bangladesh.</p>
-        <ul class="auth-points">
-          <li><span>NEWS</span> Bangladeshi outlets in English and Bangla, as they publish</li>
-          <li><span>TV</span> Somoy, Jamuna, Channel 24, Independent, Ekattor, ATN News</li>
-          <li><span>MKTS</span> Markets ticker, commodities and macro signals</li>
-          <li><span>MAP</span> Unrest, hazards and infrastructure across South Asia</li>
-        </ul>
-      </section>
-
       <section class="auth-card" aria-labelledby="authTitle">
-        <div class="auth-tabs" role="tablist" aria-label="Account">
-          <button type="button" role="tab" id="tabSignIn" aria-selected="true" data-mode="signin">Sign in</button>
-          <button type="button" role="tab" id="tabSignUp" aria-selected="false" data-mode="signup">Create account</button>
-        </div>
-
         <h1 id="authTitle" class="auth-title">Sign in</h1>
-        <p id="authSubtitle" class="auth-subtitle">Welcome back. Sign in to open the dashboard.</p>
+        <p id="authSubtitle" class="auth-subtitle" hidden></p>
 
         <form id="authForm" class="auth-form" novalidate>
           <label class="auth-field" id="nameField" hidden>
@@ -46,6 +35,10 @@
             <input id="authPassword" name="password" type="password" autocomplete="current-password" minlength="8" required />
           </label>
           <p class="auth-hint" id="passwordHint" hidden>At least 8 characters.</p>
+          <p class="auth-consent" id="consentNote" hidden>
+            By creating an account you agree to the <a href="/terms.html">Terms of Service</a> and
+            <a href="/privacy.html">Privacy Policy</a>.
+          </p>
 
           <button type="submit" class="auth-submit" id="authSubmit">Sign in</button>
           <p class="auth-message" id="authMessage" role="status" aria-live="polite"></p>
@@ -53,17 +46,13 @@
 
         <div class="auth-links">
           <button type="button" class="auth-link" id="forgotLink">Forgot password?</button>
+          <button type="button" class="auth-link" id="switchLink">Create account</button>
           <button type="button" class="auth-link" id="backLink" hidden>Back to sign in</button>
         </div>
       </section>
     </main>
 
-    <footer class="auth-footer">
-      © <span id="authYear"></span> BD Situation Intelligence · Built with the help of the open-source
-      <a href="https://github.com/koala73/worldmonitor" target="_blank" rel="noopener">World Monitor</a> project ·
-      Licensed under <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener license">GNU AGPL-3.0</a> ·
-      <a href="https://github.com/imonitsc/bdnews-si" target="_blank" rel="noopener">Source code</a>
-    </footer>
+    <footer class="site-footer bdsi-footer" id="authFooter"></footer>
 
     <script type="module" src="/src/login-main.ts"></script>
   </body>

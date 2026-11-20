@@ -2,6 +2,7 @@
 import './styles/login.css';
 import { HEADER_LOGO_SVG } from '@/config/brand-logo';
 import { LOGIN_PATH, safeNextPath } from '@/config/auth';
+import { siteFooterHtml } from '@/config/site-footer';
 import { authClient, syncAuthCookie } from '@/services/bdsi-auth';
 
 type Mode = 'signin' | 'signup' | 'forgot' | 'reset';
@@ -10,7 +11,8 @@ const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as 
 
 const logoSvg = new DOMParser().parseFromString(HEADER_LOGO_SVG, 'image/svg+xml').documentElement;
 $('authLogo').append(document.importNode(logoSvg, true));
-$('authYear').textContent = String(new Date().getFullYear());
+// Footer: static, trusted markup shared with the dashboard (src/config/site-footer.ts).
+$('authFooter').append(document.createRange().createContextualFragment(siteFooterHtml()));
 
 const form = $<HTMLFormElement>('authForm');
 const title = $('authTitle');
@@ -26,8 +28,8 @@ const emailInput = $<HTMLInputElement>('authEmail');
 const passwordInput = $<HTMLInputElement>('authPassword');
 const forgotLink = $<HTMLButtonElement>('forgotLink');
 const backLink = $<HTMLButtonElement>('backLink');
-const tabSignIn = $<HTMLButtonElement>('tabSignIn');
-const tabSignUp = $<HTMLButtonElement>('tabSignUp');
+const switchLink = $<HTMLButtonElement>('switchLink');
+const consentNote = $('consentNote');
 
 const params = new URLSearchParams(location.search);
 const nextPath = safeNextPath(params.get('next'));
@@ -35,8 +37,8 @@ const supabase = authClient();
 let mode: Mode = 'signin';
 
 const COPY: Record<Mode, { title: string; subtitle: string; submit: string }> = {
-  signin: { title: 'Sign in', subtitle: 'Welcome back. Sign in to open the dashboard.', submit: 'Sign in' },
-  signup: { title: 'Create account', subtitle: 'Free account. You will get an email to confirm your address.', submit: 'Create account' },
+  signin: { title: 'Sign in', subtitle: '', submit: 'Sign in' },
+  signup: { title: 'Create account', subtitle: 'We will email you a link to confirm your address.', submit: 'Create account' },
   forgot: { title: 'Reset password', subtitle: 'Enter your email and we will send you a reset link.', submit: 'Send reset link' },
   reset: { title: 'Choose a new password', subtitle: 'Enter a new password for your account.', submit: 'Save password' },
 };
@@ -59,12 +61,12 @@ function setMode(next: Mode): void {
   passwordInput.autocomplete = next === 'signin' ? 'current-password' : 'new-password';
   passwordInput.required = next !== 'forgot';
   emailInput.required = next !== 'reset';
+  subtitle.hidden = !c.subtitle;
+  consentNote.hidden = next !== 'signup';
   forgotLink.hidden = next !== 'signin';
+  switchLink.hidden = !(next === 'signin' || next === 'signup');
+  switchLink.textContent = next === 'signup' ? 'Have an account? Sign in' : 'Create account';
   backLink.hidden = next === 'signin' || next === 'signup';
-  const tabbed = next === 'signin' || next === 'signup';
-  tabSignIn.parentElement!.hidden = !tabbed;
-  tabSignIn.setAttribute('aria-selected', String(next === 'signin'));
-  tabSignUp.setAttribute('aria-selected', String(next === 'signup'));
   say('');
 }
 
@@ -83,8 +85,7 @@ function friendly(err: unknown): string {
   return msg || 'Something went wrong. Please try again.';
 }
 
-tabSignIn.addEventListener('click', () => setMode('signin'));
-tabSignUp.addEventListener('click', () => setMode('signup'));
+switchLink.addEventListener('click', () => setMode(mode === 'signup' ? 'signin' : 'signup'));
 forgotLink.addEventListener('click', () => setMode('forgot'));
 backLink.addEventListener('click', () => setMode('signin'));
 

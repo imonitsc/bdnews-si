@@ -193,6 +193,7 @@ import {
 import { resolveCheckoutContext, type CheckoutContext } from '../../shared/checkout-attribution';
 import { mountTerminalBar } from '@/app/terminal-bar';
 import { HEADER_LOGO_SVG, LOGO_MARK_SVG } from '@/config/brand-logo';
+import { siteFooterHtml } from '@/config/site-footer';
 import { BRAND } from '@/config/brand';
 import { BANGLADESH_NEWS_PANEL_KEY } from '@/config/bangladesh-news';
 
@@ -1531,7 +1532,7 @@ export class PanelLayoutManager implements AppModule {
       <footer class="site-footer" aria-label="${BRAND.shortName} status">
         <span class="site-footer-meta">
           <span class="site-footer-version">v${__APP_VERSION__}</span>
-          <span class="site-footer-copy">&copy; ${new Date().getFullYear()} ${BRAND.name} · Built with the help of the open-source <a href="${BRAND.upstreamRepoUrl}" target="_blank" rel="noopener">${BRAND.upstreamName}</a> project · Licensed under <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener license">GNU AGPL-3.0</a> · <a href="${BRAND.sourceRepoUrl}" target="_blank" rel="noopener">Source code</a></span>
+          <span class="site-footer-copy bdsi-footer">${siteFooterHtml()}</span>
         </span>
       </footer>
     `, "legacy direct innerHTML migration"));

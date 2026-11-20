@@ -1,0 +1,24 @@
+# bdnews Situation Intelligence (bdnews SI)
+
+Live situation intelligence for Bangladesh and South Asia, served at https://bdnews.si.
+
+bdnews SI is a modified version of [World Monitor](https://github.com/koala73/worldmonitor)
+by Elie Habib and contributors, licensed under the GNU Affero General Public License v3.0
+(AGPL-3.0-only). This repository is the corresponding source for the bdnews.si deployment
+and is distributed under the same licence (see `LICENSE`).
+
+- Upstream: https://github.com/koala73/worldmonitor
+- Based on upstream commit: `c19b0256830bcc53aeed953db40ffa034e33d38f` (version 2.11.8)
+- "World Monitor" is the upstream project's name; bdnews SI is not affiliated with or endorsed by it.
+
+## Changes from upstream
+
+- Branding: name, header, footer, page metadata and loading screen (`src/config/brand.ts`, `index.html`,
+  `src/app/panel-layout.ts`, `src/config/variant-meta.ts`, `src/services/pwa-install.ts`, `src/bootstrap/boot-failure.ts`).
+- Visible attribution "Based on World Monitor" and a "Source code (AGPL-3.0)" link in the header and footer.
+- Map opens on Bangladesh / South Asia when the URL has no camera (`src/App.ts`).
+- Regional intelligence board defaults to South Asia (`src/components/regional-intelligence-board-utils.ts`).
+- Dhaka Tribune, Prothom Alo and bdnews24 enabled by default (`src/config/feeds.ts`).
+- worldmonitor.app edition switcher, sibling-edition pages and Pro upsell banner turned off
+  (`src/app/panel-layout.ts`, `vite.config.ts`, `src/App.ts`).
+- `/` on bdnews.si serves the dashboard (`vercel.json`).

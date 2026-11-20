@@ -341,6 +341,18 @@ function uniqueKnownProviders(providers: readonly string[]): string[] {
   return out;
 }
 
+/**
+ * BDSI: the default chain, optionally led by Claude. Upstream keeps Anthropic
+ * opt-in only (customer routing policies). This deployment uses Claude as its
+ * main model, so LLM_PRIMARY_PROVIDER=anthropic (with ANTHROPIC_API_KEY set)
+ * puts it first; the usual providers stay behind it as fallbacks.
+ */
+export function defaultProviderChain(env: Record<string, string | undefined> = process.env): string[] {
+  const primary = env.LLM_PRIMARY_PROVIDER?.trim().toLowerCase();
+  if (primary === 'anthropic' && env.ANTHROPIC_API_KEY?.trim()) return ['anthropic', ...PROVIDER_CHAIN];
+  return [...PROVIDER_CHAIN];
+}
+
 export function resolveProviderChain(opts: {
   forcedProvider?: string;
   providerOrder?: string[];
@@ -354,11 +366,11 @@ export function resolveProviderChain(opts: {
   }
   if (opts.forcedProvider) return [opts.forcedProvider];
   if (!Array.isArray(opts.providerOrder) || opts.providerOrder.length === 0) {
-    return [...PROVIDER_CHAIN];
+    return defaultProviderChain();
   }
 
   const providers = uniqueKnownProviders(opts.providerOrder);
-  return providers.length > 0 ? providers : [...PROVIDER_CHAIN];
+  return providers.length > 0 ? providers : defaultProviderChain();
 }
 
 // The reasoning profile carries text users type (chat-analyst, deduct-situation).

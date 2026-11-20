@@ -156,7 +156,8 @@ async function callLLM(systemPrompt, userPrompt, opts = {}) {
   // reaches no provider.
   const chain = allowedProviders
     ? [...new Set(allowedProviders)].map((name) => LLM_PROVIDERS.find((p) => p.name === name)).filter(Boolean)
-    : LLM_PROVIDERS.filter((p) => !p.optIn);
+    // BDSI: LLM_PRIMARY_PROVIDER=anthropic enrols Claude (listed first) in the default chain.
+    : LLM_PROVIDERS.filter((p) => !p.optIn || p.name === String(process.env.LLM_PRIMARY_PROVIDER || '').trim().toLowerCase());
 
   const promptChars = (systemPrompt?.length ?? 0) + (userPrompt?.length ?? 0);
   const events = [];

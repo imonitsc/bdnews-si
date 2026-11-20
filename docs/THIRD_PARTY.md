@@ -69,6 +69,7 @@ consequences:
 | GitHub Actions | 3-hourly seed job | Commercial ToS |
 | Supabase | Sign-in (Auth) | Commercial ToS; user emails stored in Supabase |
 | Resend | Sign-in emails from bdnews.si | Commercial ToS |
+| Anthropic Claude API | Main AI model: AI Insights brief, analyst, summaries (seed job + Vercel functions) | Commercial ToS, paid per token; approved by the maintainer 2026-11-21 |
 
 ## 6. Map tiles and fonts
 

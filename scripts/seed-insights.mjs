@@ -449,7 +449,51 @@ async function readExistingInsights() {
 // Provider config — mirrors server/_shared/llm.ts getProviderCredentials()
 // Order: Ollama → paid OpenRouter → two fixed free OpenRouter models.
 // Each free model stays a separate application-validated attempt.
+// BDSI: Claude first when ANTHROPIC_API_KEY is set (native Messages API, not the
+// OpenAI-compat layer, which Anthropic documents as for testing only). Claude 5
+// models think by default and reject `temperature`; thinking tokens count against
+// max_tokens, so the visible budget gets fixed headroom and effort stays low.
+export const ANTHROPIC_INSIGHTS_DEFAULT_MODEL = 'claude-sonnet-5-5';
+const ANTHROPIC_THINKING_HEADROOM_TOKENS = 4_096;
+export function anthropicInsightsBody({ model, systemPrompt, userPrompt, maxTokens }) {
+  return {
+    model,
+    system: systemPrompt,
+    messages: [{ role: 'user', content: userPrompt }],
+    max_tokens: maxTokens + ANTHROPIC_THINKING_HEADROOM_TOKENS,
+    output_config: { effort: 'low' },
+  };
+}
+export function anthropicInsightsText(json) {
+  if (json?.stop_reason === 'refusal') return '';
+  return (Array.isArray(json?.content) ? json.content : [])
+    .filter((b) => b?.type === 'text' && typeof b.text === 'string')
+    .map((b) => b.text)
+    .join('')
+    .trim();
+}
+
 const LLM_PROVIDERS = [
+  {
+    name: 'anthropic',
+    envKey: 'ANTHROPIC_API_KEY',
+    apiUrl: 'https://api.anthropic.com/v1/messages',
+    model: () => process.env.ANTHROPIC_INSIGHTS_MODEL || process.env.ANTHROPIC_MODEL || ANTHROPIC_INSIGHTS_DEFAULT_MODEL,
+    headers: (key) => ({
+      'x-api-key': key,
+      'anthropic-version': '2023-06-01',
+      'Content-Type': 'application/json',
+      'User-Agent': CHROME_UA,
+    }),
+    buildBody: anthropicInsightsBody,
+    readText: anthropicInsightsText,
+    readUsage: (json) => ({
+      tokensPrompt: json?.usage?.input_tokens ?? 0,
+      tokensCompletion: json?.usage?.output_tokens ?? 0,
+      tokensTotal: (json?.usage?.input_tokens ?? 0) + (json?.usage?.output_tokens ?? 0),
+    }),
+    timeout: 45_000,
+  },
   {
     name: 'ollama',
     envKey: 'OLLAMA_API_URL',
@@ -619,16 +663,18 @@ async function callLLM(headline, options = {}) {
         const response = await insightsFetch(apiUrl, {
           method: 'POST',
           headers: provider.headers(envVal),
-          body: JSON.stringify({
-            model,
-            messages: [
-              { role: 'system', content: systemPrompt },
-              { role: 'user', content: effectiveUserPrompt },
-            ],
-            max_tokens: maxTokens,
-            temperature: samplingTemperature,
-            ...provider.extraBody,
-          }),
+          body: JSON.stringify(provider.buildBody
+            ? provider.buildBody({ model, systemPrompt, userPrompt: effectiveUserPrompt, maxTokens })
+            : {
+              model,
+              messages: [
+                { role: 'system', content: systemPrompt },
+                { role: 'user', content: effectiveUserPrompt },
+              ],
+              max_tokens: maxTokens,
+              temperature: samplingTemperature,
+              ...provider.extraBody,
+            }),
           signal: AbortSignal.timeout(Math.max(1, Math.min(provider.timeout, usable))),
         });
         if (!response.ok) {
@@ -646,12 +692,12 @@ async function callLLM(headline, options = {}) {
       }, provider.maxRetries ?? INSIGHTS_LLM_MAX_RETRIES, retryDelayMs);
 
       const json = await resp.json();
-      const usage = {
+      const usage = provider.readUsage ? provider.readUsage(json) : {
         tokensTotal: json.usage?.total_tokens ?? 0,
         tokensPrompt: json.usage?.prompt_tokens ?? 0,
         tokensCompletion: json.usage?.completion_tokens ?? 0,
       };
-      const rawText = json.choices?.[0]?.message?.content?.trim();
+      const rawText = provider.readText ? provider.readText(json) : json.choices?.[0]?.message?.content?.trim();
       if (!rawText) {
         console.warn(`  ${provider.name}: empty response`);
         record(false, { ...usage, reason: 'empty' });

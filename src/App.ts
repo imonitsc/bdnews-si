@@ -1,5 +1,5 @@
 import type { Monitor, PanelConfig, MapLayers } from '@/types';
-import { DEFAULT_FOCUS } from '@/config/brand';
+import { BRAND, DEFAULT_FOCUS } from '@/config/brand';
 import { WEB_APP_ORIGIN } from '@/config/web-origin';
 import {
   isStockResearchPath,
@@ -1367,6 +1367,14 @@ export class App {
           priority: panelSettings['runtime-config']?.priority ?? 2,
         };
         saveToStorage(STORAGE_KEYS.panels, panelSettings);
+      }
+    }
+
+    // bdnews SI: World Monitor Pro panels need World Monitor's own accounts and billing,
+    // which this deployment does not have; they could only ever show "Sign in to unlock".
+    if (BRAND.hideUpstreamPremiumPanels) {
+      for (const key of Object.keys(panelSettings)) {
+        if (getEffectivePanelConfig(key, SITE_VARIANT).premium === 'locked') delete panelSettings[key];
       }
     }
 

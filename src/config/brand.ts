@@ -13,6 +13,8 @@ export const BRAND = {
   upstreamRepoUrl: 'https://github.com/koala73/worldmonitor',
   /** Links to worldmonitor.app's other editions (Tech, Finance, ...). Off for this deployment. */
   showVariantSwitcher: false,
+  /** Remove World Monitor Pro (premium: 'locked') panels; their sign-in and billing are not available here. */
+  hideUpstreamPremiumPanels: true,
 } as const;
 
 /** Starting map view: Bangladesh, with the rest of South Asia in frame. */

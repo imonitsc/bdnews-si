@@ -1,0 +1,51 @@
+# bdnews SI: refresh dashboard data in Upstash Redis on a schedule.
+# Needs repository secrets UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN
+# (the REST URL and token of the bdnews-si-redis database). Optional API keys
+# (NASA_FIRMS_API_KEY, FRED_API_KEY, ...) can be added as secrets with the same
+# names; see SELF_HOSTING.md.
+name: Seed data
+
+on:
+  schedule:
+    - cron: '17 * * * *'   # hourly
+  workflow_dispatch:
+
+concurrency:
+  group: bdnews-seed
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  seed:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    env:
+      UPSTASH_REDIS_REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL }}
+      UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
+      SEED_TIMEOUT: '600'
+      NASA_FIRMS_API_KEY: ${{ secrets.NASA_FIRMS_API_KEY }}
+      FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+      EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
+      FINNHUB_API_KEY: ${{ secrets.FINNHUB_API_KEY }}
+      ALPHA_VANTAGE_API_KEY: ${{ secrets.ALPHA_VANTAGE_API_KEY }}
+      ACLED_EMAIL: ${{ secrets.ACLED_EMAIL }}
+      ACLED_PASSWORD: ${{ secrets.ACLED_PASSWORD }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - name: Check Redis secrets
+        run: |
+          if [ -z "$UPSTASH_REDIS_REST_URL" ] || [ -z "$UPSTASH_REDIS_REST_TOKEN" ]; then
+            echo "::error::Add UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN as repository secrets."
+            exit 1
+          fi
+      - run: npm ci --no-audit --no-fund
+      - name: Run seeders
+        run: ./scripts/run-seeders.sh

@@ -255,5 +255,5 @@
 .bdn-logo svg { display: block; width: auto; }
 .logo.bdn-logo svg { height: 18px; }
 .logo-mobile.bdn-logo svg { height: 16px; }
-:root:not([data-theme="light"]) .bdn-logo { color: #fff; }
-:root[data-theme="light"] .bdn-logo { color: #000; }
+:root:not([data-theme="light"]) .header .bdn-logo { color: #fff; letter-spacing: 0; }
+:root[data-theme="light"] .header .bdn-logo { color: #000; }

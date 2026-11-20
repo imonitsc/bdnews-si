@@ -46,3 +46,9 @@ running on a schedule. See `SELF_HOSTING.md` for the data seeders and optional A
 ## Logo (2026-11-20)
 - New "BD." wordmark (Inter Display, SIL OFL) in `brand/`; header uses `src/config/brand-logo.ts`.
 - Replaced the favicons, app icons and `og-image.png` in `public/favico/` with the new mark.
+
+## Sign-in (2026-11-20)
+- Supabase Auth (project `bd-situation-intelligence`, ap-south-1). Settings in `src/config/auth.ts`.
+- `login.html` + `src/login-main.ts`: sign in, create account, password reset.
+- `middleware-auth-gate.ts`: on bdnews.si and this project's Vercel previews, dashboard page requests without a valid Supabase token (cookie `bdsi_at`) redirect to `/login.html`. The dashboard also checks the session in the browser (`src/services/bdsi-auth.ts`) because the offline cache can serve the page. Data APIs remain public.
+- Command bar shows the signed-in email and a LOG OUT button.

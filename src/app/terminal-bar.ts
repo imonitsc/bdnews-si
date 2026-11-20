@@ -174,7 +174,27 @@ export function mountTerminalBar(ctx: AppContext): void {
     return { value, tz: c.tz };
   });
 
-  bar.append(form, keys, ticker, clocks);
+  // Signed-in user and sign-out.
+  const user = el('div', 'bdn-user');
+  const who = el('span', 'bdn-user-email', '');
+  const out = el('button', 'bdn-signout', 'LOG OUT');
+  out.type = 'button';
+  out.title = 'Sign out of BD Situation Intelligence';
+  out.addEventListener('click', () => {
+    out.disabled = true;
+    void import('@/services/bdsi-auth').then((m) => m.signOut());
+  });
+  user.append(who, out);
+  void import('@/services/bdsi-auth')
+    .then((m) => m.authClient().auth.getSession())
+    .then(({ data }) => {
+      const email = data.session?.user.email ?? '';
+      who.textContent = email;
+      who.title = email;
+    })
+    .catch(() => {});
+
+  bar.append(form, keys, ticker, clocks, user);
   header.after(bar);
 
   // The Markets panel only loads quotes once it is on screen. Until it does,

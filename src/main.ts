@@ -22,6 +22,12 @@ import { agentRefStorage } from '@/services/agent-ref';
 
 initPwaInstall();
 
+// BD Situation Intelligence: the dashboard needs a signed-in user. The server
+// checks page requests too, but the offline cache can serve this page without it.
+void import('@/services/bdsi-auth')
+  .then((m) => m.requireSignedIn())
+  .catch(() => location.replace('/login.html'));
+
 if (SITE_VARIANT === 'happy') {
   // Keeps happy-theme.css off other variants' eager CSS graph. On happy, the
   // stylesheet applies asynchronously, so a brief base-theme flash is possible.

@@ -1401,6 +1401,7 @@ export default defineConfig(({ mode }) => {
           mcpGrant: resolve(__dirname, 'mcp-grant.html'),
           verify: resolve(__dirname, 'verify.html'),
           desktopSignIn: resolve(__dirname, 'desktop-sign-in.html'),
+          login: resolve(__dirname, 'login.html'), // BD Situation Intelligence sign-in
         },
         output: {
           // onlyExplicitManualChunks keeps the panel clusters from forming

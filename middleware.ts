@@ -36,6 +36,8 @@ import {
 import { CHOKEPOINT_REGISTRY } from './src/config/chokepoint-registry';
 import { firstTouchSetCookie } from './shared/acquisition-source';
 import { next } from '@vercel/functions/middleware';
+import { authGate } from './middleware-auth-gate';
+import { GATED_PAGE_PATHS, isGatedHost } from './src/config/auth';
 
 type LiveTopicPage = NonNullable<ReturnType<typeof liveTopicPageForPath>>;
 
@@ -256,6 +258,16 @@ function withSetCookie(response: Response, setCookie: string): Response {
 // the fallback for desktop and self-hosted builds, which have no middleware.
 // A synchronous routing result stays synchronous.
 export default function middleware(request: Request) {
+  // BD Situation Intelligence: dashboard pages need a signed-in user.
+  const gateUrl = new URL(request.url);
+  if (GATED_PAGE_PATHS.has(gateUrl.pathname) && isGatedHost(request.headers.get('host') ?? gateUrl.hostname)) {
+    return authGate(request, gateUrl).then((redirect) => {
+      if (redirect) return redirect;
+      // Dotted page files never ran through the rest of this middleware.
+      if (gateUrl.pathname.includes('.')) return undefined;
+      return Promise.resolve(route(request)).then((resolved) => withFirstTouch(request, resolved));
+    });
+  }
   const response = route(request);
   return response instanceof Promise
     ? response.then((resolved) => withFirstTouch(request, resolved))
@@ -709,6 +721,11 @@ export const config = {
   // its extensionless relative imports.
   runtime: 'edge',
   matcher: [
+    // BD Situation Intelligence sign-in gate (dotted page files skip the catch-all below).
+    '/dashboard.html',
+    '/index.html',
+    '/settings.html',
+    '/live-channels.html',
     '/mcp',
     '/api/:path*',
     '/((?!api(?:/|$)|mcp(?:/|$)|.*\\.[^/]+$).*)',

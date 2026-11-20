@@ -120,9 +120,30 @@ run_seed() {
 
 ok=0 fail=0 skip=0 timedout=0
 
+# BDSI licence gates (CLAUDE.md §3.1). Seeders that pull Red-listed sources
+# (non-commercial terms) only run when every LICENSED_* flag they need is
+# 'true'. Prints the missing flag, or nothing when the seeder may run.
+licence_block() {
+  case "$1" in
+    # adsb.fi open data and the OpenSky API are non-commercial.
+    seed-military-flights.mjs) need="LICENSED_ADSBFI LICENSED_OPENSKY" ;;
+    *) need="" ;;
+  esac
+  for flag in $need; do
+    eval "val=\${$flag:-false}"
+    [ "$val" = "true" ] || { printf "%s" "$flag"; return; }
+  done
+}
+
 for f in "$SCRIPT_DIR"/seed-*.mjs; do
   name="$(basename "$f")"
   printf "→ %s ... " "$name"
+  blocked=$(licence_block "$name")
+  if [ -n "$blocked" ]; then
+    printf "SKIP (licence gate: %s is not true)\n" "$blocked"
+    skip=$((skip + 1))
+    continue
+  fi
   output=$(run_seed "$f")
   rc=$?
   last=$(echo "$output" | tail -1)

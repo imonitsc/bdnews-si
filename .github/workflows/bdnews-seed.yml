@@ -30,8 +30,14 @@ jobs:
       EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
       FINNHUB_API_KEY: ${{ secrets.FINNHUB_API_KEY }}
       ALPHA_VANTAGE_API_KEY: ${{ secrets.ALPHA_VANTAGE_API_KEY }}
-      ACLED_EMAIL: ${{ secrets.ACLED_EMAIL }}
-      ACLED_PASSWORD: ${{ secrets.ACLED_PASSWORD }}
+      # ACLED needs a commercial / public-sector licence (CLAUDE.md §3.1, Red).
+      # Credentials reach the seeders only when the repo variable
+      # LICENSED_ACLED is 'true'; otherwise ACLED stays off and GDELT is used.
+      LICENSED_ACLED: ${{ vars.LICENSED_ACLED || 'false' }}
+      LICENSED_ADSBFI: ${{ vars.LICENSED_ADSBFI || 'false' }}
+      LICENSED_OPENSKY: ${{ vars.LICENSED_OPENSKY || 'false' }}
+      ACLED_EMAIL: ${{ vars.LICENSED_ACLED == 'true' && secrets.ACLED_EMAIL || '' }}
+      ACLED_PASSWORD: ${{ vars.LICENSED_ACLED == 'true' && secrets.ACLED_PASSWORD || '' }}
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
       UCDP_ACCESS_TOKEN: ${{ secrets.UCDP_ACCESS_TOKEN }}
       OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}

@@ -42,10 +42,24 @@ jobs:
           cache: npm
       - name: Check Redis secrets
         run: |
-          if [ -z "$UPSTASH_REDIS_REST_URL" ] || [ -z "$UPSTASH_REDIS_REST_TOKEN" ]; then
+          # Tolerate values pasted with quotes, spaces or a trailing newline
+          # (for example copied straight from a .env snippet).
+          clean() { printf '%s' "$1" | tr -d "\"' \r\n\t"; }
+          url=$(clean "$UPSTASH_REDIS_REST_URL"); token=$(clean "$UPSTASH_REDIS_REST_TOKEN")
+          url=${url#UPSTASH_REDIS_KV_REST_API_URL=}; url=${url#UPSTASH_REDIS_REST_URL=}
+          token=${token#UPSTASH_REDIS_KV_REST_API_TOKEN=}; token=${token#UPSTASH_REDIS_REST_TOKEN=}
+          if [ -z "$url" ] || [ -z "$token" ]; then
             echo "::error::Add UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN as repository secrets."
             exit 1
           fi
+          case "$url" in
+            https://*) ;;
+            *) echo "::error::UPSTASH_REDIS_REST_URL must be the REST URL starting with https:// (got ${#url} characters that do not start with https://)."; exit 1 ;;
+          esac
+          echo "::add-mask::$url"
+          echo "::add-mask::$token"
+          echo "UPSTASH_REDIS_REST_URL=$url" >> "$GITHUB_ENV"
+          echo "UPSTASH_REDIS_REST_TOKEN=$token" >> "$GITHUB_ENV"
       - run: npm ci --no-audit --no-fund
       - name: Run seeders
         run: ./scripts/run-seeders.sh

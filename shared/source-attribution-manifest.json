@@ -14080,9 +14080,6 @@
       "status": "terms-review",
       "references": [
         {
-          "path": "api/bd-markets.js"
-        },
-        {
           "path": "scripts/lib/food-prices-adapters/tcb.mjs"
         }
       ]

@@ -6,6 +6,7 @@
 //   - Bangladesh Bank:      https://www.bb.org.bd/en/index.php/econdata/exchangerate (HTML table)
 //   - TCB:                  https://tcb.gov.bd/pages/daily-rmps → latest daily .xlsx
 import { readFirstSheetRows } from './_xlsx-lite.js';
+import { getTextWithAiaRepair } from './_aia-fetch.js';
 
 // Node.js runtime: some Bangladeshi government hosts fail from the Edge runtime's fetch,
 // and Node reports the underlying network error.
@@ -241,9 +242,13 @@ export function parseTcbRows(rows) {
 }
 
 async function loadBazaar() {
-  const page = await fetchWithTimeout('https://tcb.gov.bd/pages/daily-rmps', { headers: { accept: 'text/html' } }, 15_000);
-  if (!page.ok) throw new Error(`bazaar: HTTP ${page.status}`);
-  const listing = await page.text();
+  // tcb.gov.bd serves an incomplete certificate chain; repair it the way browsers do.
+  const page = await getTextWithAiaRepair('https://tcb.gov.bd/pages/daily-rmps', {
+    headers: { accept: 'text/html', 'user-agent': UA },
+    timeoutMs: 15_000,
+  });
+  if (page.status !== 200) throw new Error(`bazaar: HTTP ${page.status}`);
+  const listing = page.text;
   const file = findLatestTcbFile(listing);
   if (!file) {
     const title = /<title>([^<]{0,80})/i.exec(listing)?.[1] ?? '';

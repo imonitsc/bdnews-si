@@ -5,8 +5,8 @@ import type { Screen } from '../shell';
 import { h, dhakaTime, stateBox } from '../dom';
 import { authClient } from '@/services/bdsi-auth';
 
-interface AskSource { n: number; kind: 'data' | 'news'; title: string; source: string; url: string; time: number | null }
-interface AskAnswer {
+export interface AskSource { n: number; kind: 'data' | 'news'; title: string; source: string; url: string; time: number | null }
+export interface AskAnswer {
   question: string; scope: string; answer: string;
   points: Array<{ text: string; sources: number[] }>;
   unknown: string[]; followups: string[]; sources: AskSource[];
@@ -37,13 +37,13 @@ const ERRORS: Record<string, string> = {
   question_too_long: 'Please shorten the question (600 characters at most).',
 };
 
-async function ask(question: string, scope: string): Promise<AskAnswer> {
+export async function ask(question: string, scope: string, history: Array<{ q: string; a: string }> = []): Promise<AskAnswer> {
   const { data } = await authClient().auth.getSession();
   const token = data.session?.access_token;
   const r = await fetch('/api/bd-ask', {
     method: 'POST',
     headers: { 'content-type': 'application/json', ...(token ? { authorization: `Bearer ${token}` } : {}) },
-    body: JSON.stringify({ question, scope }),
+    body: JSON.stringify(history.length ? { question, scope, history } : { question, scope }),
     signal: AbortSignal.timeout(70_000),
   });
   const j = await r.json().catch(() => ({}));
@@ -52,7 +52,7 @@ async function ask(question: string, scope: string): Promise<AskAnswer> {
 }
 
 /** Render text with [n] markers turned into links to the source list. */
-function cited(text: string, sources: AskSource[]): Node[] {
+export function cited(text: string, sources: AskSource[]): Node[] {
   const out: Node[] = [];
   let last = 0;
   for (const m of text.matchAll(/\[(\d{1,2})\]/g)) {

@@ -58,3 +58,24 @@ describe('ASK: parsing answers', () => {
     assert.equal(r.answer, 'No JSON here');
   });
 });
+
+describe('ASK: chat history', async () => {
+  const { sanitizeHistory } = await import('../api/bd-ask.js');
+  it('keeps the last four complete turns, trimmed', () => {
+    const turns = Array.from({ length: 6 }, (_, i) => ({ q: `q${i}`, a: `a${i}` }));
+    const out = sanitizeHistory([...turns, { q: 'no answer' }, 'junk']);
+    assert.equal(out.length, 4);
+    assert.deepEqual(out.map((t) => t.q), ['q2', 'q3', 'q4', 'q5']);
+  });
+  it('caps lengths and ignores non-arrays', () => {
+    assert.deepEqual(sanitizeHistory('x'), []);
+    const [t] = sanitizeHistory([{ q: 'x'.repeat(999), a: 'y'.repeat(9999) }]);
+    assert.equal(t.q.length, 300);
+    assert.equal(t.a.length, 800);
+  });
+  it('labels history as context, not a source', () => {
+    const { user } = buildPrompt('and today?', [{ n: 1, title: 'T', source: 'S', text: 'x' }], '2026-11-21T00:00:00Z', [{ q: 'how was DSEX?', a: 'Down [1].' }]);
+    assert.match(user, /EARLIER IN THIS CONVERSATION/);
+    assert.ok(user.indexOf('EARLIER') < user.indexOf('QUESTION'));
+  });
+});

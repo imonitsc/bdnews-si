@@ -1,5 +1,5 @@
 // BD Situation Intelligence: ASK — the AI analyst.
-//   POST /api/bd-ask  { question, scope? }   (Authorization: Bearer <Supabase access token>)
+//   POST /api/bd-ask  { question, scope?, history? }   (Authorization: Bearer <Supabase access token>)
 //   → { answer, points: [{ text, sources: [n] }], unknown: [], followups: [], sources: [...], model, generatedAt }
 //
 // Claude answers ONLY from BDSI's own data, gathered here on every request:
@@ -142,7 +142,16 @@ export function pickHeadlines(digest, scope = 'all', limit = 40) {
   return [...match, ...rest].slice(0, limit);
 }
 
-export function buildPrompt(question, sources, nowIso) {
+/** Earlier turns of a CHAT conversation: at most 4, trimmed. Context only, never a source. Pure. */
+export function sanitizeHistory(history) {
+  if (!Array.isArray(history)) return [];
+  return history.slice(-20)
+    .map((t) => ({ q: typeof t?.q === 'string' ? t.q.trim().slice(0, 300) : '', a: typeof t?.a === 'string' ? t.a.trim().slice(0, 800) : '' }))
+    .filter((t) => t.q && t.a)
+    .slice(-4);
+}
+
+export function buildPrompt(question, sources, nowIso, history = []) {
   const system = [
     'You are the BDSI Analyst for BD Situation Intelligence, a Bangladesh-focused data terminal.',
     `Today is ${nowIso.slice(0, 10)} (UTC). Times in your answer are Dhaka time when you state them.`,
@@ -152,7 +161,10 @@ export function buildPrompt(question, sources, nowIso) {
     'Reply with a single JSON object and nothing else:',
     '{"answer": "1-3 sentence direct answer with citations", "points": [{"text": "supporting point", "sources": [n, ...]}], "unknown": ["what the sources cannot confirm"], "followups": ["up to 3 short follow-up questions"]}',
   ].join('\n');
-  const user = `SOURCES\n${sources.map((s) => `[${s.n}] ${s.title} — ${s.source}\n${s.text}`).join('\n\n')}\n\nQUESTION\n${question}`;
+  const earlier = history.length
+    ? `\n\nEARLIER IN THIS CONVERSATION (context for follow-up questions only; it is not a source and its citation numbers may not match the SOURCES above)\n${history.map((t) => `Q: ${t.q}\nA: ${t.a}`).join('\n\n')}`
+    : '';
+  const user = `SOURCES\n${sources.map((s) => `[${s.n}] ${s.title} — ${s.source}\n${s.text}`).join('\n\n')}${earlier}\n\nQUESTION\n${question}`;
   return { system, user };
 }
 
@@ -212,6 +224,7 @@ export default async function handler(req, res) {
   if (!question) return json(res, 400, { error: 'empty_question' });
   if (question.length > MAX_QUESTION) return json(res, 400, { error: 'question_too_long', max: MAX_QUESTION });
   const scope = SCOPES.includes(body?.scope) ? body.scope : 'all';
+  const history = sanitizeHistory(body?.history);
 
   if (!(await underLimit(user.id))) return json(res, 429, { error: 'rate_limited', limitPerHour: HOURLY_LIMIT });
 
@@ -226,7 +239,7 @@ export default async function handler(req, res) {
   const nowIso = new Date().toISOString();
   let result;
   try {
-    result = await callClaude(buildPrompt(question, sources, nowIso));
+    result = await callClaude(buildPrompt(question, sources, nowIso, history));
   } catch (e) {
     return json(res, 502, { error: 'ai_unreachable', detail: String(e?.message || e).slice(0, 120) });
   }

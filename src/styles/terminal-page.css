@@ -220,3 +220,16 @@ button { font: inherit; }
 .tp-short { max-height: 260px; }
 .tp-nc { margin: 0; padding-left: 16px; font-size: 12px; display: flex; flex-direction: column; gap: 3px; }
 .tp-legend { margin: 4px 0 0; font-size: 11px; }
+
+/* CHAT */
+.tp-chat { display: flex; flex-direction: column; gap: 8px; max-width: 980px; }
+.tp-chat-log { border: 1px solid #222; background: #050505; padding: 10px; min-height: 320px; max-height: calc(100vh - 300px); overflow-y: auto; display: flex; flex-direction: column; gap: 14px; }
+.tp-chat-you p { color: var(--tp-yellow); margin: 2px 0 0; white-space: pre-wrap; }
+.tp-chat-ai { border-left: 2px solid var(--tp-amber); padding-left: 10px; margin-top: 6px; }
+.tp-chat-ai p, .tp-chat-ai li { line-height: 1.45; }
+.tp-chat-bar { display: flex; gap: 8px; align-items: stretch; }
+.tp-chat-ctl { display: flex; flex-direction: column; gap: 4px; }
+.tp-select { background: #000; color: var(--tp-amber); border: 1px solid #333; font: 12px 'IBM Plex Mono', monospace; min-height: 26px; }
+.tp-btn-ghost { background: none; color: var(--tp-muted); border: 1px solid #333; }
+.tp-src { font-size: 12px; padding-left: 20px; }
+.tp-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }

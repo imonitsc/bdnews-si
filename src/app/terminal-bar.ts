@@ -4,7 +4,7 @@
 import type { AppContext } from '@/app/app-context';
 import type { MarketData } from '@/types';
 
-import { FKEY_COMMANDS, COMMANDS, parseCommand, helpLine, type TerminalCommandDef } from '@/config/terminal-commands';
+import { FKEY_COMMANDS, COMMANDS, parseCommand, helpLine, TERMINAL_ROUTES, type TerminalCommandDef } from '@/config/terminal-commands';
 
 const BAR_ID = 'bdnTerminalBar';
 
@@ -175,12 +175,8 @@ export function mountTerminalBar(ctx: AppContext): void {
           : `UNKNOWN: ${result.input} · type HELP <GO>`, 'err');
         return;
       case 'ticker': {
-        const q = bdQuotes.find((m) => m.symbol === result.code) ?? tickerQuotes.get(result.code);
-        const px = q?.price != null ? ` ${formatPrice(q.price)}${q.change != null ? ` (${q.change >= 0 ? '+' : ''}${q.change.toFixed(2)}%)` : ''}` : '';
-        if (jumpTo('bd-dse', status)) {
-          setStatus(status, `${result.code}${px} · full stock pages are planned (phase 1)`, 'info');
-          input.value = '';
-        }
+        // Full stock pages live in the terminal app.
+        window.location.assign(`/terminal#/stock/${encodeURIComponent(result.code)}`);
         return;
       }
       case 'run': {
@@ -192,6 +188,10 @@ export function mountTerminalBar(ctx: AppContext): void {
           if (jumpTo(action.target, status)) input.value = '';
         } else if (action.type === 'help') {
           showHelp(null);
+        } else if (TERMINAL_ROUTES[command.mnemonic]?.kind === 'screen') {
+          // Built as a terminal screen: open it there.
+          const t = TERMINAL_ROUTES[command.mnemonic];
+          if (t?.kind === 'screen') window.location.assign(`/terminal#/${t.screen}`);
         } else {
           const note = `${command.mnemonic}: ${command.description} · planned, phase ${action.phase}`;
           if (action.fallback && jumpTo(action.fallback, status)) input.value = '';

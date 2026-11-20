@@ -22750,7 +22750,13 @@
           "path": "src/embed/panels/fear-greed.ts"
         },
         {
+          "path": "src/terminal/bay-map.ts"
+        },
+        {
           "path": "src/terminal/risk-map.ts"
+        },
+        {
+          "path": "src/terminal/screens/economy.ts"
         },
         {
           "path": "src/terminal/screens/stock.ts"

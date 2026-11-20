@@ -110,6 +110,8 @@ const SOURCE_DOMAIN_MATCHERS = [
 // Keep ambiguous structured providers explicit so a new unmatched provider
 // fails the build instead of silently becoming "geopolitics".
 const SOURCE_DOMAIN_OVERRIDES = new Map([
+  ['api.ioda.inetintel.cc.gatech.edu', 'infrastructure'], // BDSI: IODA internet outages
+  ['ioda.inetintel.cc.gatech.edu', 'infrastructure'], // BDSI: IODA dashboard links
   ['fawazahmed0 currency-api', 'finance'],
   ['ammancity.gov.jo', 'finance'],
   ['data.1212.mn', 'finance'],
@@ -236,6 +238,8 @@ const SOURCE_DOMAIN_OVERRIDES = new Map([
 // as the visible provider title.
 const SOURCE_NAME_OVERRIDES = new Map([
   ['hormuz.data-tracking.net', 'UK Maritime Trade Operations (UKMTO) via hormuz.data-tracking.net'],
+  ['api.ioda.inetintel.cc.gatech.edu', 'IODA, Georgia Tech'], // BDSI
+  ['ioda.inetintel.cc.gatech.edu', 'IODA, Georgia Tech'], // BDSI
   ['acleddata.com', 'ACLED'],
   ['factchecktools.googleapis.com', 'Google Fact Check Tools API'],
   ['adsb.lol', 'ADSB.lol'],

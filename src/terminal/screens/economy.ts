@@ -10,7 +10,7 @@ import { unitEn, type BdMarkets } from '@/services/bd-markets';
 
 interface IndexDay { date: string; dsex: number; dses: number; ds30: number; trades: number | null; volume: number | null; turnoverMn: number | null }
 
-const ECON_NEWS = /\b(econom|inflation|gdp|export|import|remittance|reserve|budget|imf|world bank|adb|bangladesh bank|central bank|interest rate|policy rate|repo|treasury|t-bill|bond|tax|vat|revenue|tariff|trade deficit|dollar|taka|exchange rate|lc |letter of credit)|অর্থনীতি|মূল্যস্ফীতি|রপ্তানি|আমদানি|রেমিট্যান্স|রিজার্ভ|বাজেট|বাংলাদেশ ব্যাংক|ডলার|টাকা/i;
+const ECON_NEWS = /\b(econom|inflation|gdp|export|import|remittance|reserve|budget|imf|world bank|adb|bangladesh bank|central bank|interest rate|policy rate|repo|treasury|t-bill|bond|tax|vat|revenue|tariff|trade deficit|dollar|taka|exchange rate|lc |letter of credit)|অর্থনীতি|মূল্যস্ফীতি|রপ্তানি|আমদানি|রেমিট্যান্স|রিজার্ভ|বাজেট|বাংলাদেশ ব্যাংক|ডলার|টাকার মান|মুদ্রাস্ফীতি|শুল্ক|রাজস্ব/i;
 
 function sparkline(values: number[], label: string): SVGSVGElement | HTMLElement {
   if (values.length < 2) return h('span', { class: 'tp-muted' }, '—');

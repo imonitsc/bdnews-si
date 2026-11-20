@@ -4,25 +4,7 @@
 import type { AppContext } from '@/app/app-context';
 import type { MarketData } from '@/types';
 
-interface TerminalCommand {
-  code: string;
-  label: string;
-  target: string; // panel key, or 'map'
-  aliases?: string[];
-}
-
-export const TERMINAL_COMMANDS: readonly TerminalCommand[] = [
-  { code: 'BD', label: 'BD NEWS', target: 'bangladesh', aliases: ['BDN', 'NEWS', 'N'] },
-  { code: 'TV', label: 'LIVE TV', target: 'live-news', aliases: ['LIVE'] },
-  { code: 'DSE', label: 'DSE', target: 'bd-dse', aliases: ['DSEX', 'STOCKS', 'SHARE'] },
-  { code: 'TAKA', label: 'TAKA', target: 'bd-taka', aliases: ['BDT', 'FX', 'USDBDT'] },
-  { code: 'BAZAR', label: 'BAZAR', target: 'bd-bazaar', aliases: ['BAZAAR', 'TCB', 'PRICES'] },
-  { code: 'MAP', label: 'MAP', target: 'map', aliases: ['GEO'] },
-  { code: 'MKT', label: 'WORLD MKTS', target: 'markets', aliases: ['MKTS', 'EQ'] },
-  { code: 'WRLD', label: 'WORLD', target: 'politics', aliases: ['WORLD', 'W'] },
-  { code: 'AI', label: 'INSIGHTS', target: 'insights', aliases: ['INS'] },
-  { code: 'RISK', label: 'RISK', target: 'cii', aliases: ['CII'] },
-];
+import { FKEY_COMMANDS, COMMANDS, parseCommand, helpLine, type TerminalCommandDef } from '@/config/terminal-commands';
 
 const BAR_ID = 'bdnTerminalBar';
 
@@ -33,22 +15,22 @@ function el<K extends keyof HTMLElementTagNameMap>(tag: K, cls?: string, text?: 
   return node;
 }
 
-export function resolveTerminalCommand(input: string): TerminalCommand | null {
-  const q = input.trim().toUpperCase().replace(/\s*<?GO>?$/, '').trim();
-  if (!q) return null;
-  return TERMINAL_COMMANDS.find(c => c.code === q || c.aliases?.includes(q)) ?? null;
-}
-
 function findTarget(target: string): HTMLElement | null {
   if (target === 'map') return document.getElementById('mapSection');
   return document.querySelector<HTMLElement>(`.panel[data-panel="${CSS.escape(target)}"]`);
 }
 
+function setStatus(status: HTMLElement, text: string, state: 'err' | 'info' | '' = ''): void {
+  status.textContent = text;
+  status.title = text;
+  if (state) status.dataset.state = state;
+  else delete status.dataset.state;
+}
+
 function jumpTo(target: string, status: HTMLElement): boolean {
   const node = findTarget(target);
   if (!node) {
-    status.textContent = 'PANEL NOT ON THIS SCREEN';
-    status.dataset.state = 'err';
+    setStatus(status, 'PANEL NOT ON THIS SCREEN · add it from Settings → Panels', 'err');
     return false;
   }
   node.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -115,6 +97,8 @@ export function mountTerminalBar(ctx: AppContext): void {
   const header = ctx.container.querySelector('.header');
   if (!header) return;
 
+  const knownTickers = new Set<string>();
+  const tickerQuotes = new Map<string, MarketData>();
   const bar = el('div', 'bdn-terminal-bar');
   bar.id = BAR_ID;
   bar.setAttribute('role', 'toolbar');
@@ -129,32 +113,107 @@ export function mountTerminalBar(ctx: AppContext): void {
   input.type = 'text';
   input.autocomplete = 'off';
   input.spellcheck = false;
-  input.placeholder = 'BD <GO>';
-  input.setAttribute('aria-label', 'Command, for example BD, TV, MKT or MAP');
+  input.placeholder = 'HELP <GO>';
+  input.setAttribute('aria-label', 'Command, for example BD, DSE, FX or HELP');
   const go = el('button', 'bdn-go', 'GO');
   go.type = 'submit';
   const status = el('span', 'bdn-cmd-status');
   status.setAttribute('role', 'status');
   form.append(prompt, input, go, status);
+  // Autocomplete: every mnemonic with its description (native datalist, keyboard friendly).
+  const list = el('datalist');
+  list.id = 'bdnCmdList';
+  for (const c of COMMANDS) {
+    const opt = el('option');
+    opt.value = c.mnemonic;
+    opt.label = c.description;
+    list.append(opt);
+  }
+  input.setAttribute('list', list.id);
+  form.append(list);
+
+  // HELP overlay
+  const help = el('div', 'bdn-help');
+  help.id = 'bdnHelp';
+  help.hidden = true;
+  help.setAttribute('role', 'dialog');
+  help.setAttribute('aria-label', 'Terminal commands');
+  const closeHelp = () => { help.hidden = true; };
+  const showHelp = (topic: TerminalCommandDef | null) => {
+    help.replaceChildren();
+    const head = el('div', 'bdn-help-head', topic ? `HELP ${topic.mnemonic}` : 'FUNCTIONS · type a mnemonic and press Enter (<GO>) · Esc closes');
+    const close = el('button', 'bdn-help-close', '✕');
+    close.type = 'button';
+    close.setAttribute('aria-label', 'Close help');
+    close.addEventListener('click', closeHelp);
+    head.append(close);
+    help.append(head);
+    const rows = el('div', 'bdn-help-rows');
+    for (const c of topic ? [topic] : COMMANDS) {
+      const row = el('div', `bdn-help-row${c.action.type === 'planned' ? ' planned' : ''}`, helpLine(c));
+      rows.append(row);
+    }
+    help.append(rows);
+    help.hidden = false;
+  };
+
   form.addEventListener('submit', (e) => {
     e.preventDefault();
-    const cmd = resolveTerminalCommand(input.value);
-    if (!cmd) {
-      status.textContent = input.value.trim() ? 'UNKNOWN COMMAND' : '';
-      status.dataset.state = 'err';
-      return;
+    const result = parseCommand(input.value, knownTickers);
+    switch (result.kind) {
+      case 'empty':
+        setStatus(status, '');
+        return;
+      case 'help':
+        showHelp(result.topic);
+        setStatus(status, result.unknownTopic ? `NO FUNCTION ${result.unknownTopic}` : '', result.unknownTopic ? 'err' : '');
+        input.value = '';
+        return;
+      case 'unknown':
+        setStatus(status, result.suggestions.length
+          ? `UNKNOWN: ${result.input} · did you mean ${result.suggestions.join(', ')}?`
+          : `UNKNOWN: ${result.input} · type HELP <GO>`, 'err');
+        return;
+      case 'ticker': {
+        const q = bdQuotes.find((m) => m.symbol === result.code) ?? tickerQuotes.get(result.code);
+        const px = q?.price != null ? ` ${formatPrice(q.price)}${q.change != null ? ` (${q.change >= 0 ? '+' : ''}${q.change.toFixed(2)}%)` : ''}` : '';
+        if (jumpTo('bd-dse', status)) {
+          setStatus(status, `${result.code}${px} · full stock pages are planned (phase 1)`, 'info');
+          input.value = '';
+        }
+        return;
+      }
+      case 'run': {
+        const { command } = result;
+        const action = command.action;
+        if (action.type === 'map') {
+          if (jumpTo('map', status)) input.value = '';
+        } else if (action.type === 'panel') {
+          if (jumpTo(action.target, status)) input.value = '';
+        } else if (action.type === 'help') {
+          showHelp(null);
+        } else {
+          const note = `${command.mnemonic}: ${command.description} · planned, phase ${action.phase}`;
+          if (action.fallback && jumpTo(action.fallback, status)) input.value = '';
+          setStatus(status, action.fallback ? `${note} · showing nearest view` : note, 'info');
+        }
+        return;
+      }
     }
-    if (jumpTo(cmd.target, status)) input.value = '';
   });
 
   // Function keys
   const keys = el('div', 'bdn-fkeys');
-  TERMINAL_COMMANDS.forEach((cmd, i) => {
+  const runFkey = (cmd: TerminalCommandDef) => {
+    if (cmd.action.type === 'map') jumpTo('map', status);
+    else if (cmd.action.type === 'panel') jumpTo(cmd.action.target, status);
+  };
+  FKEY_COMMANDS.forEach((cmd, i) => {
     const b = el('button', 'bdn-fkey');
     b.type = 'button';
-    b.title = `${cmd.code} <GO>`;
-    b.append(el('span', 'bdn-fkey-n', `F${i + 1}`), el('span', 'bdn-fkey-l', cmd.label));
-    b.addEventListener('click', () => jumpTo(cmd.target, status));
+    b.title = `${cmd.mnemonic} <GO> · ${cmd.description}`;
+    b.append(el('span', 'bdn-fkey-n', `F${i + 1}`), el('span', 'bdn-fkey-l', cmd.fkeyLabel ?? cmd.mnemonic));
+    b.addEventListener('click', () => runFkey(cmd));
     keys.append(b);
   });
 
@@ -196,6 +255,7 @@ export function mountTerminalBar(ctx: AppContext): void {
 
   bar.append(form, keys, ticker, clocks, user);
   header.after(bar);
+  bar.after(help);
 
   // The Markets panel only loads quotes once it is on screen. Until it does,
   // the ticker fetches the default symbols itself.
@@ -226,6 +286,14 @@ export function mountTerminalBar(ctx: AppContext): void {
     try {
       const { fetchBdMarkets } = await import('@/services/bd-markets');
       const d = await fetchBdMarkets();
+      // DSE codes we have prices for (today's movers), so GP <GO> resolves when listed.
+      if (d.dse && !d.dse.error) {
+        for (const m of [...d.dse.gainers, ...d.dse.losers]) {
+          if (!m.code) continue;
+          knownTickers.add(m.code.toUpperCase());
+          tickerQuotes.set(m.code.toUpperCase(), { symbol: m.code, name: m.code, display: m.code, price: m.ltp, change: m.percent });
+        }
+      }
       const out: MarketData[] = [];
       for (const i of d.dse && !d.dse.error ? d.dse.indices : []) {
         out.push({ symbol: i.key, name: i.key, display: i.key, price: i.value, change: i.percent });
@@ -255,6 +323,21 @@ export function mountTerminalBar(ctx: AppContext): void {
     if ((e.key === '/' && !typing) || (e.ctrlKey && e.key.toLowerCase() === 'g')) {
       e.preventDefault();
       input.focus();
+      return;
+    }
+    if (e.key === 'Escape' && !help.hidden) {
+      closeHelp();
+      return;
+    }
+    // F1–F10 run the function keys (browser F5 reload and F11/F12 untouched).
+    const fn = /^F(\d{1,2})$/.exec(e.key);
+    if (fn && !e.ctrlKey && !e.altKey && !e.metaKey) {
+      const n = Number(fn[1]);
+      const cmd = n !== 5 ? FKEY_COMMANDS[n - 1] : undefined;
+      if (cmd) {
+        e.preventDefault();
+        runFkey(cmd);
+      }
     }
   };
   document.addEventListener('keydown', onKey);
@@ -264,5 +347,6 @@ export function mountTerminalBar(ctx: AppContext): void {
     window.clearInterval(bdTimer);
     window.clearTimeout(firstFetch);
     document.removeEventListener('keydown', onKey);
+    help.remove();
   };
 }

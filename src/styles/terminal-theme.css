@@ -172,7 +172,7 @@ body, body *:not(svg):not(svg *) { font-family: var(--font-mono); }
   cursor: pointer;
 }
 .bdn-go:hover { background: #12b24c; }
-.bdn-cmd-status { color: var(--bdn-down, #ff4040); font-size: 11px; white-space: nowrap; }
+.bdn-cmd-status { color: var(--bdn-down, #ff4040); font-size: 11px; white-space: nowrap; max-width: 38vw; overflow: hidden; text-overflow: ellipsis; }
 .bdn-cmd-status:empty { display: none; }
 
 .bdn-fkeys {
@@ -351,3 +351,36 @@ body, body *:not(svg):not(svg *) { font-family: var(--font-mono); }
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
+
+/* BDSI: command line help overlay and info status (src/app/terminal-bar.ts). */
+.bdn-cmd-status[data-state='info'] { color: var(--bdn-amber, #ffa31a); }
+.bdn-help {
+  position: fixed;
+  top: 84px;
+  left: 8px;
+  z-index: 1200;
+  width: min(760px, calc(100vw - 16px));
+  max-height: 60vh;
+  overflow-y: auto;
+  background: #000;
+  border: 1px solid var(--bdn-amber, #ffa31a);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  font-size: 12px;
+}
+.bdn-help[hidden] { display: none; }
+.bdn-help-head {
+  position: sticky;
+  top: 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 8px;
+  background: var(--bdn-amber, #ffa31a);
+  color: #000;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.bdn-help-close { background: none; border: 0; color: #000; font: inherit; cursor: pointer; }
+.bdn-help-close:focus-visible { outline: 2px solid #000; }
+.bdn-help-row { padding: 4px 8px; border-bottom: 1px solid #1d1d1d; color: #e8e8e8; }
+.bdn-help-row.planned { color: #8a8a8a; }

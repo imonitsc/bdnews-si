@@ -241,3 +241,11 @@
 
 /* Light theme: plainer strip that still reads. */
 :root[data-theme="light"] .bdn-terminal-bar { background: #111; }
+
+/* Fixed desktop banners assume a 40px header; move them below the command strip. */
+@media (min-width: 769px) {
+  body:has(#bdnTerminalBar) .breaking-news-container,
+  body:has(#bdnTerminalBar) .critical-posture-banner {
+    top: 80px;
+  }
+}

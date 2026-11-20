@@ -97,7 +97,7 @@ export function openIosInstallSheet(): void {
   const heading = document.createElement('div');
   const brand = document.createElement('div');
   brand.className = 'pwa-install-brand';
-  brand.textContent = 'bdnews SI';
+  brand.textContent = 'BD SI';
   const title = document.createElement('h2');
   title.id = 'pwa-install-title';
   title.textContent = t('pwaInstall.title');

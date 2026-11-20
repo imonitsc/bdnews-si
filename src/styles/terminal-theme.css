@@ -257,3 +257,11 @@
 .logo-mobile.bdn-logo svg { height: 16px; }
 :root:not([data-theme="light"]) .header .bdn-logo { color: #fff; letter-spacing: 0; }
 :root[data-theme="light"] .header .bdn-logo { color: #000; }
+
+/* Compact footer: smaller credit and licence line. */
+.site-footer { height: 22px; max-height: 22px; }
+.site-footer,
+.site-footer-meta,
+.site-footer-version,
+.site-footer-copy { font-size: calc(9px * var(--wm-panel-effective-scale, 1)); }
+.site-footer-copy a { text-decoration: underline; text-underline-offset: 2px; }

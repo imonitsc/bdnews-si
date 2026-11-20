@@ -1,11 +1,11 @@
-// bdnews Situation Intelligence: brand and regional defaults for this deployment.
+// BD Situation Intelligence: brand and regional defaults for this deployment.
 // This deployment is a modified version of World Monitor (https://github.com/koala73/worldmonitor),
 // licensed AGPL-3.0-only. Keep the attribution and source links below visible on the site.
 
 export const BRAND = {
-  name: 'bdnews Situation Intelligence',
-  shortName: 'bdnews SI',
-  logoText: 'BDNEWS SI',
+  name: 'BD Situation Intelligence',
+  shortName: 'BD SI',
+  logoText: 'BD SI',
   tagline: 'Live news, markets & risk for Bangladesh',
   siteUrl: 'https://bdnews.si',
   sourceRepoUrl: 'https://github.com/imonitsc/bdnews-si',

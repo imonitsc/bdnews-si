@@ -61,7 +61,7 @@ export function renderBootFailureScreen(error: unknown): void {
   const brand = styled(
     'p',
     'display:flex;align-items:center;gap:8px;margin:0 0 36px;font-size:15px;font-weight:700;',
-    'bdnews SI',
+    'BD SI',
   );
   brand.prepend(
     styled('span', 'width:10px;height:10px;border-radius:2px;background:#4ade80;flex:none;'),

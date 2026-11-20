@@ -15,12 +15,12 @@ export interface VariantMeta {
 
 export const VARIANT_META: { full: VariantMeta; [k: string]: VariantMeta } = {
   full: {
-    title: 'bdnews Situation Intelligence: Live Bangladesh News, Markets & Risk',
+    title: 'BD Situation Intelligence: Live Bangladesh News, Markets & Risk',
     description: 'Live situation intelligence for Bangladesh and South Asia: breaking news, live TV, markets, protests, floods, cyclones and AI briefings on one map.',
     keywords: 'Bangladesh news, Bangladesh live news, Dhaka, South Asia, Bangladesh situation, BD news live, AI intelligence, AI-powered dashboard, global intelligence, geopolitical dashboard, world news, market data, military bases, nuclear facilities, undersea cables, conflict zones, real-time monitoring, situation awareness, OSINT, flight tracking, AIS ships, earthquake monitor, protest tracker, power outages, oil prices, government spending, polymarket predictions',
     url: `${BRAND.siteUrl}/`,
-    siteName: 'bdnews Situation Intelligence',
-    shortName: 'bdnews SI',
+    siteName: 'BD Situation Intelligence',
+    shortName: 'BD SI',
     subject: 'AI-Powered Global Intelligence and Situation Awareness',
     classification: 'AI Intelligence Dashboard, OSINT Tool, News Aggregator',
     categories: ['news', 'productivity'],

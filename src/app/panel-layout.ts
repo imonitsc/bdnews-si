@@ -1531,8 +1531,7 @@ export class PanelLayoutManager implements AppModule {
       <footer class="site-footer" aria-label="${BRAND.shortName} status">
         <span class="site-footer-meta">
           <span class="site-footer-version">v${__APP_VERSION__}</span>
-          <span class="site-footer-copy">&copy; ${new Date().getFullYear()} ${BRAND.name} · <a href="${BRAND.upstreamRepoUrl}" target="_blank" rel="noopener">Based on ${BRAND.upstreamName}</a> · <a href="${BRAND.sourceRepoUrl}" target="_blank" rel="noopener">Source code (AGPL-3.0)</a></span>
-          ${this.ctx.isDesktopApp ? '' : `<span id="footerDownloadMount"></span>`}
+          <span class="site-footer-copy">&copy; ${new Date().getFullYear()} ${BRAND.name} · Built with the help of the open-source <a href="${BRAND.upstreamRepoUrl}" target="_blank" rel="noopener">${BRAND.upstreamName}</a> project · Licensed under <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener license">GNU AGPL-3.0</a> · <a href="${BRAND.sourceRepoUrl}" target="_blank" rel="noopener">Source code</a></span>
         </span>
       </footer>
     `, "legacy direct innerHTML migration"));

@@ -22775,9 +22775,6 @@
           "path": "src/config/schema-graph-ids.ts"
         },
         {
-          "path": "src/config/variant-meta.ts"
-        },
-        {
           "path": "src/embed/embed-url.ts"
         },
         {

@@ -22,3 +22,11 @@ and is distributed under the same licence (see `LICENSE`).
 - worldmonitor.app edition switcher, sibling-edition pages and Pro upsell banner turned off
   (`src/app/panel-layout.ts`, `vite.config.ts`, `src/App.ts`).
 - `/` on bdnews.si serves the dashboard (`vercel.json`).
+- Build: `scripts/generate-public-product-facts.mjs` no longer restates upstream product facts into
+  `index.html`; the sibling-edition dashboard pages are skipped in `vite.config.ts`.
+
+## Deploying
+
+Vercel project with the repository's `vercel.json` (build command `npm run build:full`), plus an
+Upstash Redis database (`UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`) and the data seeders
+running on a schedule. See `SELF_HOSTING.md` for the data seeders and optional API keys.

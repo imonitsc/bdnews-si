@@ -355,9 +355,7 @@ const RESTATED_FACT_PHRASES = new Map([
     { pattern: /\b\d+ live-AIS maritime chokepoints\b/g, occurrences: 1, keys: ['chokepoints'] },
     { pattern: /\b\d+ subsea cables\b/g, occurrences: 1, keys: ['submarineCables'] },
   ]],
-  ['index.html', [
-    { pattern: /\b\d+ news and OSINT feed hosts from \d+ attributed providers across \d+ observed source hosts\b/g, occurrences: 1, keys: ['feeds', 'providers', 'sourceHosts'] },
-  ]],
+  // bdnews SI: index.html carries its own copy, so it is not restated here.
   ['ARCHITECTURE.md', [{ pattern: /\b\d+ observed source hosts\b/g, occurrences: 1, keys: ['sourceHosts'] }]],
   ['public/llms-full.txt', [PROVIDERS_ACROSS_HOSTS]],
   ['public/llms.txt', [{ pattern: /\b\d+ crisis trackers\b/g, occurrences: 1, keys: ['crisisTrackers'] }]],
@@ -387,7 +385,6 @@ function restateFacts(path, source) {
 }
 
 const applicationJsonLdGroups = new Map([
-  ['index.html', ['free', 'pro']],
   ['pro-test/welcome.html', ['free', 'pro']],
   ['pro-test/index.html', null],
 ]);

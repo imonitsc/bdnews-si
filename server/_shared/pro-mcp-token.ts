@@ -125,8 +125,8 @@ function negCacheKey(tokenId: string): string {
 }
 
 async function readNegCache(tokenId: string): Promise<boolean> {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const url = (process.env.UPSTASH_REDIS_REST_URL || process.env.UPSTASH_REDIS_KV_REST_API_URL);
+  const token = (process.env.UPSTASH_REDIS_REST_TOKEN || process.env.UPSTASH_REDIS_KV_REST_API_TOKEN);
   if (!url || !token) return false;
   try {
     const resp = await fetch(`${url}/get/${encodeURIComponent(negCacheKey(tokenId))}`, {
@@ -145,8 +145,8 @@ async function readNegCache(tokenId: string): Promise<boolean> {
 }
 
 async function writeNegCache(tokenId: string): Promise<void> {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const url = (process.env.UPSTASH_REDIS_REST_URL || process.env.UPSTASH_REDIS_KV_REST_API_URL);
+  const token = (process.env.UPSTASH_REDIS_REST_TOKEN || process.env.UPSTASH_REDIS_KV_REST_API_TOKEN);
   if (!url || !token) return;
   try {
     await fetch(

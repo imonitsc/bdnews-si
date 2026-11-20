@@ -38,8 +38,8 @@ const CONVEX_SITE_URL =
   process.env.CONVEX_SITE_URL ??
   (process.env.CONVEX_URL ?? '').replace('.convex.cloud', '.convex.site');
 const CONVEX_TENANT_RELAY_SECRET = process.env.CONVEX_TENANT_RELAY_SECRET ?? '';
-const UPSTASH_URL = process.env.UPSTASH_REDIS_REST_URL ?? '';
-const UPSTASH_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN ?? '';
+const UPSTASH_URL = (process.env.UPSTASH_REDIS_REST_URL || process.env.UPSTASH_REDIS_KV_REST_API_URL) ?? '';
+const UPSTASH_TOKEN = (process.env.UPSTASH_REDIS_REST_TOKEN || process.env.UPSTASH_REDIS_KV_REST_API_TOKEN) ?? '';
 
 // Per-user write budget for the POST mutations. 30/min is far above any
 // settings-UI cadence (one action per click) and well under what a scripted

@@ -201,8 +201,8 @@ function billingVerificationPage(
 // ---------------------------------------------------------------------------
 
 async function rawRedisGetDel(key: string): Promise<unknown | null> {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const url = (process.env.UPSTASH_REDIS_REST_URL || process.env.UPSTASH_REDIS_KV_REST_API_URL);
+  const token = (process.env.UPSTASH_REDIS_REST_TOKEN || process.env.UPSTASH_REDIS_KV_REST_API_TOKEN);
   if (!url || !token) throw new Error('Redis not configured');
   const resp = await fetch(`${url}/getdel/${encodeURIComponent(key)}`, {
     headers: { Authorization: `Bearer ${token}` },
@@ -219,8 +219,8 @@ async function rawRedisGetDel(key: string): Promise<unknown | null> {
 }
 
 async function rawRedisGet(key: string): Promise<unknown | null> {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const url = (process.env.UPSTASH_REDIS_REST_URL || process.env.UPSTASH_REDIS_KV_REST_API_URL);
+  const token = (process.env.UPSTASH_REDIS_REST_TOKEN || process.env.UPSTASH_REDIS_KV_REST_API_TOKEN);
   if (!url || !token) throw new Error('Redis not configured');
   const resp = await fetch(`${url}/get/${encodeURIComponent(key)}`, {
     headers: { Authorization: `Bearer ${token}` },
@@ -237,8 +237,8 @@ async function rawRedisGet(key: string): Promise<unknown | null> {
 }
 
 async function rawRedisSetEx(key: string, value: unknown, ttlSeconds: number): Promise<boolean> {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const url = (process.env.UPSTASH_REDIS_REST_URL || process.env.UPSTASH_REDIS_KV_REST_API_URL);
+  const token = (process.env.UPSTASH_REDIS_REST_TOKEN || process.env.UPSTASH_REDIS_KV_REST_API_TOKEN);
   if (!url || !token) return false;
   try {
     const resp = await fetch(`${url}/pipeline`, {

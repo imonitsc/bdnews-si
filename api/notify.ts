@@ -188,8 +188,8 @@ export default async function handler(req: Request): Promise<Response> {
     return jsonResponse({ error: 'payload must be an object' }, 400, cors);
   }
 
-  const upstashUrl = process.env.UPSTASH_REDIS_REST_URL;
-  const upstashToken = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const upstashUrl = (process.env.UPSTASH_REDIS_REST_URL || process.env.UPSTASH_REDIS_KV_REST_API_URL);
+  const upstashToken = (process.env.UPSTASH_REDIS_REST_TOKEN || process.env.UPSTASH_REDIS_KV_REST_API_TOKEN);
 
   if (!upstashUrl || !upstashToken) {
     return jsonResponse({ error: 'Service unavailable' }, 503, cors);

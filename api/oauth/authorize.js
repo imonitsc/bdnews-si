@@ -50,8 +50,8 @@ export function resolveAuthorizationIssuer(req) {
 let _rl = null;
 async function getRatelimit() {
   if (_rl) return _rl;
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const url = (process.env.UPSTASH_REDIS_REST_URL || process.env.UPSTASH_REDIS_KV_REST_API_URL);
+  const token = (process.env.UPSTASH_REDIS_REST_TOKEN || process.env.UPSTASH_REDIS_KV_REST_API_TOKEN);
   if (!url || !token) return null;
   const { Ratelimit, Redis } = await loadUpstashRatelimit();
   _rl = new Ratelimit({
@@ -74,8 +74,8 @@ function escapeHtml(str) {
 
 // Atomic GETDEL — returns null on genuine key-miss; throws on transport/HTTP failure.
 async function redisGetDel(key) {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const url = (process.env.UPSTASH_REDIS_REST_URL || process.env.UPSTASH_REDIS_KV_REST_API_URL);
+  const token = (process.env.UPSTASH_REDIS_REST_TOKEN || process.env.UPSTASH_REDIS_KV_REST_API_TOKEN);
   if (!url || !token) throw new Error('Redis not configured');
   const resp = await fetch(`${url}/getdel/${encodeURIComponent(key)}`, {
     headers: { Authorization: `Bearer ${token}` },
@@ -90,8 +90,8 @@ async function redisGetDel(key) {
 // Returns null on genuine key-miss; throws on transport/HTTP failure
 // so callers can distinguish "key not found" from "storage unavailable".
 async function redisGet(key) {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const url = (process.env.UPSTASH_REDIS_REST_URL || process.env.UPSTASH_REDIS_KV_REST_API_URL);
+  const token = (process.env.UPSTASH_REDIS_REST_TOKEN || process.env.UPSTASH_REDIS_KV_REST_API_TOKEN);
   if (!url || !token) throw new Error('Redis not configured');
   const resp = await fetch(`${url}/get/${encodeURIComponent(key)}`, {
     headers: { Authorization: `Bearer ${token}` },
@@ -112,8 +112,8 @@ function resolveClient(client_id) {
 }
 
 async function redisSet(key, value, exSeconds) {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const url = (process.env.UPSTASH_REDIS_REST_URL || process.env.UPSTASH_REDIS_KV_REST_API_URL);
+  const token = (process.env.UPSTASH_REDIS_REST_TOKEN || process.env.UPSTASH_REDIS_KV_REST_API_TOKEN);
   if (!url || !token) return false;
   try {
     const resp = await fetch(`${url}/pipeline`, {

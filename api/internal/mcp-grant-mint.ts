@@ -130,8 +130,8 @@ interface ClientData {
 // ---------------------------------------------------------------------------
 
 async function rawRedisGet(key: string): Promise<unknown | null> {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const url = (process.env.UPSTASH_REDIS_REST_URL || process.env.UPSTASH_REDIS_KV_REST_API_URL);
+  const token = (process.env.UPSTASH_REDIS_REST_TOKEN || process.env.UPSTASH_REDIS_KV_REST_API_TOKEN);
   if (!url || !token) throw new Error('Redis not configured');
   const resp = await fetch(`${url}/get/${encodeURIComponent(key)}`, {
     headers: { Authorization: `Bearer ${token}` },
@@ -144,8 +144,8 @@ async function rawRedisGet(key: string): Promise<unknown | null> {
 }
 
 async function rawRedisSetEx(key: string, value: unknown, ttlSeconds: number): Promise<boolean> {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const url = (process.env.UPSTASH_REDIS_REST_URL || process.env.UPSTASH_REDIS_KV_REST_API_URL);
+  const token = (process.env.UPSTASH_REDIS_REST_TOKEN || process.env.UPSTASH_REDIS_KV_REST_API_TOKEN);
   if (!url || !token) return false;
   try {
     const resp = await fetch(`${url}/pipeline`, {
@@ -172,8 +172,8 @@ async function rawRedisSetEx(key: string, value: unknown, ttlSeconds: number): P
  * on NX-collision. We check string equality on the result.
  */
 async function rawRedisSetNxEx(key: string, value: unknown, ttlSeconds: number): Promise<boolean> {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const url = (process.env.UPSTASH_REDIS_REST_URL || process.env.UPSTASH_REDIS_KV_REST_API_URL);
+  const token = (process.env.UPSTASH_REDIS_REST_TOKEN || process.env.UPSTASH_REDIS_KV_REST_API_TOKEN);
   if (!url || !token) return false;
   try {
     const resp = await fetch(`${url}/pipeline`, {

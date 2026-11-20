@@ -137,8 +137,8 @@ function errMessage(err: unknown): string {
 }
 
 export async function checkProbe(spec: ProbeSpec): Promise<ProbeResult> {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const url = (process.env.UPSTASH_REDIS_REST_URL || process.env.UPSTASH_REDIS_KV_REST_API_URL);
+  const token = (process.env.UPSTASH_REDIS_REST_TOKEN || process.env.UPSTASH_REDIS_KV_REST_API_TOKEN);
   if (!url || !token) return { key: spec.key, shape: spec.shape, pass: false, reason: 'no-redis-creds' };
 
   let resp: Response;

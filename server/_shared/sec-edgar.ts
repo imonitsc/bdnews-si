@@ -238,8 +238,8 @@ export function __setCikMapMemoForTests(
  * most cold starts and report a healthy registry as unavailable.
  */
 async function readCikRegistry(): Promise<{ data: unknown; sourceFetchedAt: number } | null> {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const url = (process.env.UPSTASH_REDIS_REST_URL || process.env.UPSTASH_REDIS_KV_REST_API_URL);
+  const token = (process.env.UPSTASH_REDIS_REST_TOKEN || process.env.UPSTASH_REDIS_KV_REST_API_TOKEN);
   // No Upstash configured (local/dev or the sidecar runtime): fall back to the
   // shared reader, which knows about those modes.
   if (!url || !token) {

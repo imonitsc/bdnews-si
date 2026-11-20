@@ -32,8 +32,8 @@ const REDIS_READ_TIMEOUT_MS = 5_000;
  * no_package per the D5 taxonomy.
  */
 async function redisGetThrowing(key: string): Promise<string | null> {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const url = (process.env.UPSTASH_REDIS_REST_URL || process.env.UPSTASH_REDIS_KV_REST_API_URL);
+  const token = (process.env.UPSTASH_REDIS_REST_TOKEN || process.env.UPSTASH_REDIS_KV_REST_API_TOKEN);
   if (!url || !token) throw new Error('Redis credentials not configured');
   // User-Agent required by AGENTS.md convention on all server-side fetches
   // (Greptile P2 review on PR #3811).

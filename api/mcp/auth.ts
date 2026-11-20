@@ -79,8 +79,8 @@ let mcpAnonRatelimit: Ratelimit | null = null;
 
 function getMcpRatelimit(): Ratelimit | null {
   if (mcpRatelimit) return mcpRatelimit;
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const url = (process.env.UPSTASH_REDIS_REST_URL || process.env.UPSTASH_REDIS_KV_REST_API_URL);
+  const token = (process.env.UPSTASH_REDIS_REST_TOKEN || process.env.UPSTASH_REDIS_KV_REST_API_TOKEN);
   if (!url || !token) return null;
   mcpRatelimit = new Ratelimit({
     redis: new Redis(upstashRedisOptions(url, token, { retry: false })),
@@ -126,8 +126,8 @@ export function resolveMcpBurstPerMinute(planBurst?: number | null): number {
 function getMcpProMinRatelimit(perMinute: number): Ratelimit | null {
   const existing = mcpProMinRatelimits.get(perMinute);
   if (existing) return existing;
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const url = (process.env.UPSTASH_REDIS_REST_URL || process.env.UPSTASH_REDIS_KV_REST_API_URL);
+  const token = (process.env.UPSTASH_REDIS_REST_TOKEN || process.env.UPSTASH_REDIS_KV_REST_API_TOKEN);
   if (!url || !token) return null;
   const limiter = new Ratelimit({
     redis: new Redis(upstashRedisOptions(url, token, { retry: false })),
@@ -141,8 +141,8 @@ function getMcpProMinRatelimit(perMinute: number): Ratelimit | null {
 
 function getMcpAnonRatelimit(): Ratelimit | null {
   if (mcpAnonRatelimit) return mcpAnonRatelimit;
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const url = (process.env.UPSTASH_REDIS_REST_URL || process.env.UPSTASH_REDIS_KV_REST_API_URL);
+  const token = (process.env.UPSTASH_REDIS_REST_TOKEN || process.env.UPSTASH_REDIS_KV_REST_API_TOKEN);
   if (!url || !token) return null;
   mcpAnonRatelimit = new Ratelimit({
     redis: new Redis(upstashRedisOptions(url, token, { retry: false })),
@@ -1092,8 +1092,8 @@ let freeTierEdgeProofReported = false;
 
 function getMcpFreeTierRatelimit(): Ratelimit | null {
   if (mcpFreeTierRatelimit) return mcpFreeTierRatelimit;
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const url = (process.env.UPSTASH_REDIS_REST_URL || process.env.UPSTASH_REDIS_KV_REST_API_URL);
+  const token = (process.env.UPSTASH_REDIS_REST_TOKEN || process.env.UPSTASH_REDIS_KV_REST_API_TOKEN);
   if (!url || !token) return null;
   mcpFreeTierRatelimit = new Ratelimit({
     redis: new Redis(upstashRedisOptions(url, token, { retry: false })),

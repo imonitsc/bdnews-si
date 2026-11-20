@@ -129,8 +129,8 @@ export async function readJsonBatchFromUpstashWithStatus(keys, timeoutMs = 3_000
 }
 
 export async function readJsonFromUpstash(key, timeoutMs = 3_000, raw = false) {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const url = (process.env.UPSTASH_REDIS_REST_URL || process.env.UPSTASH_REDIS_KV_REST_API_URL);
+  const token = (process.env.UPSTASH_REDIS_REST_TOKEN || process.env.UPSTASH_REDIS_KV_REST_API_TOKEN);
   if (!url || !token) return null;
 
   const resp = await fetch(`${url}/get/${encodeURIComponent(raw ? key : applyRedisKeyPrefix(key))}`, {
@@ -172,8 +172,8 @@ export async function readJsonFromUpstash(key, timeoutMs = 3_000, raw = false) {
  * @returns {Promise<unknown | null>}
  */
 export async function readRawJsonFromUpstash(key, timeoutMs = 3_000, raw = false) {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const url = (process.env.UPSTASH_REDIS_REST_URL || process.env.UPSTASH_REDIS_KV_REST_API_URL);
+  const token = (process.env.UPSTASH_REDIS_REST_TOKEN || process.env.UPSTASH_REDIS_KV_REST_API_TOKEN);
   if (!url || !token) {
     throw new Error('readRawJsonFromUpstash: UPSTASH_REDIS_REST_URL/TOKEN not configured');
   }
@@ -201,8 +201,8 @@ export async function readRawJsonFromUpstash(key, timeoutMs = 3_000, raw = false
 
 /** Returns Redis credentials or null if not configured. */
 export function getRedisCredentials() {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const url = (process.env.UPSTASH_REDIS_REST_URL || process.env.UPSTASH_REDIS_KV_REST_API_URL);
+  const token = (process.env.UPSTASH_REDIS_REST_TOKEN || process.env.UPSTASH_REDIS_KV_REST_API_TOKEN);
   if (!url || !token) return null;
   return { url, token };
 }

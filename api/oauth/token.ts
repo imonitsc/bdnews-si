@@ -113,8 +113,8 @@ const OAUTH_RATE_LIMIT_KEY_PATTERN = /rl:oauth-token:(?:cid|cred|ip):[^"\\]+/g;
 function getRatelimit(): TokenRateLimiter | null {
   if (_rlOverride !== undefined) return _rlOverride;
   if (_rl) return _rl;
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const url = (process.env.UPSTASH_REDIS_REST_URL || process.env.UPSTASH_REDIS_KV_REST_API_URL);
+  const token = (process.env.UPSTASH_REDIS_REST_TOKEN || process.env.UPSTASH_REDIS_KV_REST_API_TOKEN);
   if (!url || !token) return null;
   _rl = new Ratelimit({
     redis: new Redis(upstashRedisOptions(url, token)),
@@ -215,8 +215,8 @@ async function validateSecret(secret: string | null | undefined): Promise<boolea
 // ---------------------------------------------------------------------------
 
 async function rawRedisPipeline(commands: PipelineCommand[]): Promise<PipelineResult[] | null> {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const url = (process.env.UPSTASH_REDIS_REST_URL || process.env.UPSTASH_REDIS_KV_REST_API_URL);
+  const token = (process.env.UPSTASH_REDIS_REST_TOKEN || process.env.UPSTASH_REDIS_KV_REST_API_TOKEN);
   if (!url || !token) return null;
   try {
     const resp = await fetch(`${url}/pipeline`, {
@@ -238,8 +238,8 @@ async function rawRedisPipeline(commands: PipelineCommand[]): Promise<PipelineRe
  * "expired/used" from "storage unavailable".
  */
 async function rawRedisGetDel(key: string): Promise<unknown | null> {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const url = (process.env.UPSTASH_REDIS_REST_URL || process.env.UPSTASH_REDIS_KV_REST_API_URL);
+  const token = (process.env.UPSTASH_REDIS_REST_TOKEN || process.env.UPSTASH_REDIS_KV_REST_API_TOKEN);
   if (!url || !token) throw new Error('Redis not configured');
   const resp = await fetch(`${url}/getdel/${encodeURIComponent(key)}`, {
     headers: { Authorization: `Bearer ${token}` },
@@ -257,8 +257,8 @@ async function rawRedisGetDel(key: string): Promise<unknown | null> {
 
 /** Returns null on genuine key-miss; throws on transport/HTTP failure. */
 async function rawRedisGet(key: string): Promise<unknown | null> {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const url = (process.env.UPSTASH_REDIS_REST_URL || process.env.UPSTASH_REDIS_KV_REST_API_URL);
+  const token = (process.env.UPSTASH_REDIS_REST_TOKEN || process.env.UPSTASH_REDIS_KV_REST_API_TOKEN);
   if (!url || !token) throw new Error('Redis not configured');
   const resp = await fetch(`${url}/get/${encodeURIComponent(key)}`, {
     headers: { Authorization: `Bearer ${token}` },

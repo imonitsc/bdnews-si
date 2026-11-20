@@ -30,7 +30,7 @@ async function loadTrackedAircraft(): Promise<{ set: ReadonlySet<string> | null;
   // No Redis configured at all (local runs without a seed) is an absence, not
   // a failed read. The desktop sidecar reads through its own cache instead.
   const redisConfigured = process.env.LOCAL_API_MODE === 'tauri-sidecar'
-    || Boolean(process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN);
+    || Boolean((process.env.UPSTASH_REDIS_REST_URL || process.env.UPSTASH_REDIS_KV_REST_API_URL) && (process.env.UPSTASH_REDIS_REST_TOKEN || process.env.UPSTASH_REDIS_KV_REST_API_TOKEN));
   if (!redisConfigured) return { set: null, ttlMs: TRACKED_SET_TTL_MS };
 
   const set = new Set<string>();

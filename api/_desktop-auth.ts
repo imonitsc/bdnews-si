@@ -95,8 +95,8 @@ export function logDesktopAuthEvent(event: DesktopAuthAuditEvent): void {
 // Raw (unprefixed) Upstash REST, like the `oauth:*` keys: the record must be
 // visible to every deployment that serves /api/desktop-auth/token.
 function redisConfig(): { url: string; token: string } {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const url = (process.env.UPSTASH_REDIS_REST_URL || process.env.UPSTASH_REDIS_KV_REST_API_URL);
+  const token = (process.env.UPSTASH_REDIS_REST_TOKEN || process.env.UPSTASH_REDIS_KV_REST_API_TOKEN);
   if (!url || !token) throw new Error('Redis not configured');
   return { url, token };
 }

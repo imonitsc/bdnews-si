@@ -21,8 +21,8 @@ import { createChannelOAuthState } from '../../../server/_shared/channel-oauth-s
 
 const DISCORD_CLIENT_ID = process.env.DISCORD_CLIENT_ID ?? '';
 const DISCORD_REDIRECT_URI = process.env.DISCORD_REDIRECT_URI ?? '';
-const UPSTASH_URL = process.env.UPSTASH_REDIS_REST_URL ?? '';
-const UPSTASH_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN ?? '';
+const UPSTASH_URL = (process.env.UPSTASH_REDIS_REST_URL || process.env.UPSTASH_REDIS_KV_REST_API_URL) ?? '';
+const UPSTASH_TOKEN = (process.env.UPSTASH_REDIS_REST_TOKEN || process.env.UPSTASH_REDIS_KV_REST_API_TOKEN) ?? '';
 
 export default async function handler(req: Request, ctx?: { waitUntil: (p: Promise<unknown>) => void }): Promise<Response> {
   const corsHeaders = getCorsHeaders(req) as Record<string, string>;

@@ -145,8 +145,8 @@ async function splitEntries(entries) {
 }
 
 export async function readSuppressionSnapshot(fetchImpl = (...args) => globalThis.fetch(...args)) {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const url = (process.env.UPSTASH_REDIS_REST_URL || process.env.UPSTASH_REDIS_KV_REST_API_URL);
+  const token = (process.env.UPSTASH_REDIS_REST_TOKEN || process.env.UPSTASH_REDIS_KV_REST_API_TOKEN);
   if (!url || !token) {
     warnUnavailable('missing-credentials', 'source=upstash-smembers');
     return { readable: false, entries: null };

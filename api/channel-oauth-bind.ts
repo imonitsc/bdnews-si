@@ -37,8 +37,8 @@ export default async function handler(req: Request): Promise<Response> {
   const token = new URLSearchParams(body).get('token');
   if (!token) return errorResponse('Connection does not match this browser.', 403);
   const key = `wm:${provider}:oauth:launch:${stateToken}`;
-  const redisUrl = process.env.UPSTASH_REDIS_REST_URL;
-  const redisToken = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const redisUrl = (process.env.UPSTASH_REDIS_REST_URL || process.env.UPSTASH_REDIS_KV_REST_API_URL);
+  const redisToken = (process.env.UPSTASH_REDIS_REST_TOKEN || process.env.UPSTASH_REDIS_KV_REST_API_TOKEN);
   if (!redisUrl || !redisToken) return errorResponse('Connection service unavailable. Try again.', 503);
   const res = await fetch(`${redisUrl}/get/${encodeURIComponent(key)}`, {
     headers: { Authorization: `Bearer ${redisToken}`, 'User-Agent': 'worldmonitor-edge/1.0' },

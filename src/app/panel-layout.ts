@@ -4104,7 +4104,8 @@ export class PanelLayoutManager implements AppModule {
     } else {
       allOrder = [...defaultOrder];
 
-      if (SITE_VARIANT !== 'happy') {
+      // BDSI: the full variant keeps its grouped order (Bangladesh first), so Live News is not hoisted.
+      if (SITE_VARIANT !== 'happy' && SITE_VARIANT !== 'full') {
         const liveNewsIdx = allOrder.indexOf('live-news');
         if (liveNewsIdx > 0) {
           allOrder.splice(liveNewsIdx, 1);

@@ -39,7 +39,8 @@ const EXPECTED_VARIANT_PANEL_SNAPSHOTS: Record<DashboardVariant, {
   enabledCount: number;
   enabledSha256: string;
 }> = {
-  full: { enabledCount: 89, enabledSha256: 'b9949759b79d8104813de883264833eeb63e04604d7588d08912a41c19aa98b5' },
+  // BDSI: grouped Bangladesh-first dashboard, webcams removed (src/config/bdsi-dashboard.ts).
+  full: { enabledCount: 48, enabledSha256: '2a454eed8b5d80c846bc9db5be8b2069a9c17bf14013c53105c0dee23ce67b5e' },
   tech: { enabledCount: 38, enabledSha256: 'de9f78179aa2c75301883511ad0bab48fc67cba5cd4eb4445906abf17458a290' },
   finance: { enabledCount: 60, enabledSha256: 'e9cbe30455e107add242019de29d44335abf9da2a8a44c9c204076ed279bcfe8' },
   commodity: { enabledCount: 33, enabledSha256: 'b534510a2e814392e3966beb211e300e75a2b33f05c283613dd4f6cee50ddfe0' },
@@ -52,7 +53,7 @@ const EXPECTED_VARIANT_DEFAULT_SNAPSHOTS: Record<DashboardVariant, {
   enabled: number;
   sha256: string;
 }> = {
-  full: { total: 119, enabled: 89, sha256: '27b163c1f57abf8b46c3137c26f1257e357a96796308f4c010301b187566f5b6' },
+  full: { total: 117, enabled: 48, sha256: 'd0d578db7052c0c082e3ec9c9fd0770169690c156cfe5e088412b55201ebd4a9' },
   tech: { total: 41, enabled: 38, sha256: '43d7c788ff599baae171f7f46532653370e03ca4d322a8e6614f9f0a1cee5045' },
   finance: { total: 69, enabled: 60, sha256: 'bb4ad5038f29080ee1631ebce59596da8ef9ae6f88932f0a4e06b1087be141b7' },
   commodity: { total: 36, enabled: 33, sha256: 'cc9e0b178dec33dff354a1eea95b5b215302fc7ce685b3d92b82a356df6d6bee' },
@@ -252,7 +253,7 @@ describe('WebMCP live dashboard bindings', () => {
     }
     const ids = pages.flatMap((page) => page.panels.map((panel) => panel.id));
     assert.equal(new Set(ids).size, entitled.total);
-    assert.ok(ids.includes('windy-webcams'));
+    assert.ok(ids.includes('science'));
 
     const gatedPages = [];
     let gatedCursor: string | null = null;

@@ -109,3 +109,11 @@ Data notes:
 - The seed job archives daily closes and index values to Redis (`scripts/bdsi-archive-dse.mjs`), which is what draws the stock charts. Charts grow one session per trading day.
 - `/api/bd-ask` needs `ANTHROPIC_API_KEY` in Vercel. 20 questions per user per hour.
 - Typing a ticker or a built command in the dashboard command bar now opens the terminal screen.
+
+## Dashboard tidy-up (2026-11-21)
+
+`/dashboard` now opens with about 40 panels in fixed groups instead of ~90: Bangladesh, Security and risk, World news, Markets and economy, Hazards and climate, Analysis. Groups live in `src/config/bdsi-dashboard.ts`. Every other panel is off but can be switched on in Settings → Panels.
+
+- Live webcam panels (Live Webcams, Windy) and the webcams map layer are removed.
+- Saved dashboards are switched to the new layout once (`bdsi-dashboard-layout-v1`); bump the key to re-apply after changing the groups.
+- Live News no longer jumps to the top on the full variant, so Bangladesh stays first.

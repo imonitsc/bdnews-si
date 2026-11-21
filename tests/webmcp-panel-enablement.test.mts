@@ -80,7 +80,7 @@ function evaluate(overrides: {
 }) {
   const variant = overrides.variant ?? 'full';
   return evaluateSetPanelEnabled({
-    panelId: overrides.panelId ?? 'windy-webcams',
+    panelId: overrides.panelId ?? 'science',
     enabled: overrides.enabled ?? true,
     panelSettings: overrides.panelSettings ?? cloneSettings(variant),
     variant,
@@ -111,12 +111,12 @@ describe('evaluateSetPanelEnabled', () => {
 
   it('enables a native disabled panel', () => {
     const panelSettings = settingsWithFreeSlots('full');
-    assert.equal(panelSettings['windy-webcams']?.enabled, false);
-    const result = evaluate({ panelSettings, panelId: 'windy-webcams', enabled: true });
+    assert.equal(panelSettings['science']?.enabled, false);
+    const result = evaluate({ panelSettings, panelId: 'science', enabled: true });
     assert.deepEqual(result, {
       ok: true,
       status: 'applied',
-      panelId: 'windy-webcams',
+      panelId: 'science',
       requestedEnabled: true,
       effectiveEnabled: true,
       changed: true,
@@ -140,7 +140,7 @@ describe('evaluateSetPanelEnabled', () => {
     const panelSettings = cloneSettings('full');
     const stillOff = evaluate({
       panelSettings,
-      panelId: 'windy-webcams',
+      panelId: 'science',
       enabled: false,
     });
     assert.equal(stillOff.ok, true);
@@ -244,10 +244,10 @@ describe('evaluateSetPanelEnabled', () => {
   });
 
   it('refuses a free-tier enable that would exceed the panel cap', () => {
-    const panelSettings = settingsAtFreeCap('full', 'windy-webcams');
+    const panelSettings = settingsAtFreeCap('full', 'science');
     const result = evaluate({
       panelSettings,
-      panelId: 'windy-webcams',
+      panelId: 'science',
       enabled: true,
       isPro: false,
     });
@@ -271,10 +271,10 @@ describe('evaluateSetPanelEnabled', () => {
   });
 
   it('lets a Pro session enable past the free-tier cap', () => {
-    const panelSettings = settingsAtFreeCap('full', 'windy-webcams');
+    const panelSettings = settingsAtFreeCap('full', 'science');
     const result = evaluate({
       panelSettings,
-      panelId: 'windy-webcams',
+      panelId: 'science',
       enabled: true,
       isPro: true,
     });
@@ -296,8 +296,8 @@ describe('evaluateSetPanelEnabled', () => {
 
   it('treats a catalog panel missing from settings as currently disabled', () => {
     const panelSettings = settingsWithFreeSlots('full');
-    delete panelSettings['windy-webcams'];
-    const result = evaluate({ panelSettings, panelId: 'windy-webcams', enabled: true });
+    delete panelSettings['science'];
+    const result = evaluate({ panelSettings, panelId: 'science', enabled: true });
     assert.equal(result.ok, true);
     assert.equal(result.changed, true);
     assert.equal(result.effectiveEnabled, true);
@@ -353,7 +353,7 @@ describe('applySetPanelEnabled', () => {
     const panelSettings = settingsWithFreeSlots('full');
     const result = applySetPanelEnabled(
       { panelSettings },
-      'windy-webcams',
+      'science',
       true,
       {
         variant: 'full',
@@ -370,7 +370,7 @@ describe('applySetPanelEnabled', () => {
     events.length = 0;
     applySetPanelEnabled(
       { panelSettings },
-      'windy-webcams',
+      'science',
       true,
       {
         variant: 'full',
@@ -388,7 +388,7 @@ describe('applySetPanelEnabled', () => {
     let beforeApplyCount = 0;
     const result = applySetPanelEnabled(
       { panelSettings: settingsWithFreeSlots('full') },
-      'windy-webcams',
+      'science',
       true,
       {
         variant: 'full',
@@ -428,7 +428,7 @@ describe('applySetPanelEnabled', () => {
       },
     };
     const panels = {
-      'windy-webcams': { fetchData: () => { fetchCount += 1; } },
+      'science': { fetchData: () => { fetchCount += 1; } },
     };
     const unifiedSettings = {
       refreshPanelToggles: () => {
@@ -438,15 +438,15 @@ describe('applySetPanelEnabled', () => {
 
     const first = applySetPanelEnabled(
       { panelSettings, panels, unifiedSettings },
-      'windy-webcams',
+      'science',
       true,
       deps,
     );
     assert.equal(first.changed, true);
-    assert.equal(panelSettings['windy-webcams']?.enabled, true);
-    assert.equal(panelSettings['windy-webcams']?.proGated, undefined);
+    assert.equal(panelSettings['science']?.enabled, true);
+    assert.equal(panelSettings['science']?.proGated, undefined);
     assert.equal(persistCalls.length, 1);
-    assert.equal(persistCalls[0]?.['windy-webcams']?.enabled, true);
+    assert.equal(persistCalls[0]?.['science']?.enabled, true);
     assert.equal(applyCount, 1);
     assert.equal(toggleCount, 1);
     assert.equal(fetchCount, 1);
@@ -455,7 +455,7 @@ describe('applySetPanelEnabled', () => {
 
     const repeat = applySetPanelEnabled(
       { panelSettings, panels, unifiedSettings },
-      'windy-webcams',
+      'science',
       true,
       deps,
     );
@@ -483,14 +483,14 @@ describe('applySetPanelEnabled', () => {
       {
         panelSettings,
         panels: {
-          'windy-webcams': {
+          'science': {
             fetchData: () => {
               throw new Error('fetch failed');
             },
           },
         },
       },
-      'windy-webcams',
+      'science',
       true,
       deps,
     );
@@ -498,17 +498,17 @@ describe('applySetPanelEnabled', () => {
     assert.equal(thrown.changed, true);
     assert.equal(persistCount, 1);
 
-    panelSettings['windy-webcams']!.enabled = false;
+    panelSettings['science']!.enabled = false;
     const rejected = applySetPanelEnabled(
       {
         panelSettings,
         panels: {
-          'windy-webcams': {
+          'science': {
             fetchData: () => Promise.reject(new Error('async fetch failed')),
           },
         },
       },
-      'windy-webcams',
+      'science',
       true,
       deps,
     );
@@ -545,7 +545,7 @@ describe('applySetPanelEnabled', () => {
     let toggleCount = 0;
     const result = applySetPanelEnabled(
       { panelSettings },
-      'windy-webcams',
+      'science',
       true,
       {
         variant: 'full',
@@ -559,20 +559,20 @@ describe('applySetPanelEnabled', () => {
     assert.deepEqual(result, {
       ok: false,
       status: 'denied',
-      panelId: 'windy-webcams',
+      panelId: 'science',
       requestedEnabled: true,
       effectiveEnabled: false,
       changed: false,
       reason: 'persist_failed',
       message: 'Dashboard panel change could not be saved.',
     });
-    assert.equal(panelSettings['windy-webcams']?.enabled, false);
+    assert.equal(panelSettings['science']?.enabled, false);
     assert.equal(applyCount, 0);
     assert.equal(toggleCount, 0);
   });
 
   it('does not persist entitlement, cap, or unknown refusals', () => {
-    const panelSettings = settingsAtFreeCap('full', 'windy-webcams');
+    const panelSettings = settingsAtFreeCap('full', 'science');
     let persistCount = 0;
     const deps = {
       variant: 'full',
@@ -588,12 +588,12 @@ describe('applySetPanelEnabled', () => {
 
     const cap = applySetPanelEnabled(
       { panelSettings },
-      'windy-webcams',
+      'science',
       true,
       deps,
     );
     assert.equal(cap.reason, 'panel_cap_exceeded');
-    assert.equal(panelSettings['windy-webcams']?.enabled, false);
+    assert.equal(panelSettings['science']?.enabled, false);
 
     const unknown = applySetPanelEnabled(
       { panelSettings },
@@ -646,11 +646,11 @@ describe('applySetPanelEnabled', () => {
   });
 
   it('shows the free-tier cap toast only when the cap blocks an enable', () => {
-    const panelSettings = settingsAtFreeCap('full', 'windy-webcams');
+    const panelSettings = settingsAtFreeCap('full', 'science');
     let toastCount = 0;
     applySetPanelEnabled(
       { panelSettings },
-      'windy-webcams',
+      'science',
       true,
       {
         variant: 'full',

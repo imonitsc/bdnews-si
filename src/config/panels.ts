@@ -1,5 +1,6 @@
 import type { PanelConfig, MapLayers, DataSourceId } from '@/types';
 import { BRAND } from './brand';
+import { organizeBdsiPanels } from './bdsi-dashboard';
 import { SITE_VARIANT } from './variant';
 // boundary-ignore: isDesktopRuntime is a pure env probe with no service dependencies
 import { isDesktopRuntime } from '@/services/runtime';
@@ -149,6 +150,9 @@ const FULL_PANELS: Record<string, PanelConfig> = {
   'geo-hubs': { name: 'Geopolitical Hubs', enabled: false, priority: 2 },
   'tech-hubs': { name: 'Hot Tech Hubs', enabled: false, priority: 2 },
 };
+
+// BDSI: grouped, Bangladesh-first dashboard; webcams removed (see bdsi-dashboard.ts).
+const BDSI_FULL_PANELS: Record<string, PanelConfig> = organizeBdsiPanels(FULL_PANELS);
 
 const FULL_MAP_LAYERS: MapLayers = {
   // bdnews SI: Bangladesh OSINT defaults (ships in the Bay of Bengal, protests, fires,
@@ -1187,7 +1191,7 @@ const ENERGY_MOBILE_MAP_LAYERS: MapLayers = {
 type PanelVariant = 'full' | 'tech' | 'finance' | 'commodity' | 'energy' | 'happy';
 
 const VARIANT_PANEL_CONFIGS: Record<PanelVariant, Record<string, PanelConfig>> = {
-  full: FULL_PANELS,
+  full: BDSI_FULL_PANELS,
   tech: TECH_PANELS,
   finance: FINANCE_PANELS,
   commodity: COMMODITY_PANELS,

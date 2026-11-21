@@ -33,6 +33,7 @@ import {
   FREE_MAX_SOURCES,
   countFreePanelCapUsage,
 } from '@/config';
+import { BDSI_REMOVED_PANELS, BDSI_DASHBOARD_LAYOUT_KEY, applyBdsiLayoutToSaved } from '@/config/bdsi-dashboard';
 import {
   sanitizeLayersForVariant,
   sanitizeLockedLayers,
@@ -1393,6 +1394,18 @@ export class App {
       }
       saveToStorage(STORAGE_KEYS.panels, panelSettings);
       localStorage.setItem(BDSI_OSINT_MIGRATION_KEY, 'done');
+    }
+
+    // bdnews SI: organised, Bangladesh-first dashboard (src/config/bdsi-dashboard.ts).
+    // Webcam panels and the webcams layer are not offered at all.
+    for (const key of BDSI_REMOVED_PANELS) delete panelSettings[key];
+    if (mapLayers.webcams) mapLayers = { ...mapLayers, webcams: false };
+    if (SITE_VARIANT === 'full' && storageAvailable && !localStorage.getItem(BDSI_DASHBOARD_LAYOUT_KEY)) {
+      panelSettings = applyBdsiLayoutToSaved(panelSettings, getInitialPanelSettingsForVariant(SITE_VARIANT));
+      saveToStorage(STORAGE_KEYS.panels, panelSettings);
+      // Drop the saved order so the grouped default order applies.
+      for (const orderKey of [PANEL_ORDER_KEY, PANEL_ORDER_KEY + '-bottom', PANEL_ORDER_KEY + '-bottom-set']) localStorage.removeItem(orderKey);
+      localStorage.setItem(BDSI_DASHBOARD_LAYOUT_KEY, 'done');
     }
 
     const initialUrlState: ParsedMapUrlState | null = parseMapUrlState(window.location.search, mapLayers);

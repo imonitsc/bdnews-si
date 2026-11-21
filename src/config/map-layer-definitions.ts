@@ -185,7 +185,8 @@ const VARIANT_LAYER_ORDER: Record<MapVariant, Array<keyof MapLayers>> = {
     'canadaRoads', 'canadaAlerts',
     'cyberThreats',
     'economic', 'minerals', 'gpsJamming',
-    'satellites', 'resilienceScore', 'sanctions', 'no2Activity', 'reservoirLevels', 'webcams',
+    'satellites', 'resilienceScore', 'sanctions', 'no2Activity', 'reservoirLevels',
+    // BDSI: no live webcams layer.
   ],
   tech: [
     'startupHubs', 'techHQs', 'accelerators', 'cloudRegions',

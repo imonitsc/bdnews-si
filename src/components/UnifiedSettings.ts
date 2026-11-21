@@ -1,4 +1,5 @@
 import { CANONICAL_FEEDS, INTEL_SOURCES, SOURCE_REGION_MAP } from '@/config/feeds';
+import { BRAND } from '@/config/brand';
 import { WEB_APP_ORIGIN } from '@/config/web-origin';
 import { openExternalUrl } from '@/services/external-navigation';
 import { THEATER_PRESETS, getTheaterPreset, getTheaterPresetEnableList, resolveTheaterPresetSources, type TheaterPreset } from '@/config/theater-presets';
@@ -1094,7 +1095,9 @@ export class UnifiedSettings {
     const user = getAuthState().user;
     return {
       signedIn: user !== null,
-      canSignIn: isClerkAuthEnabled(),
+      canSignIn: !BRAND.hideUpstreamPremiumPanels && isClerkAuthEnabled(),
+      // bdnews SI: no World Monitor accounts; sign-in to this site is handled by BDSI's own login.
+      upstreamAccounts: !BRAND.hideUpstreamPremiumPanels,
       isDesktopApp: this.config.isDesktopApp,
       embedAccess: hasEmbedAccessForAccount(user?.role),
       account: user ? { plan: this.accountPlanLabel(), email: user.email } : null,

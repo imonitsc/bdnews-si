@@ -15,6 +15,7 @@ import { bindMapControlDisclosure } from './map-control-disclosure';
  *  - Auto-rotate after 60 s of inactivity
  */
 
+import { BRAND } from '@/config/brand';
 import Globe from 'globe.gl';
 import { ukmtoIncidentLabel, type UkmtoMapIncident } from '../../shared/ukmto-incidents';
 import { isDesktopRuntime } from '@/services/runtime';
@@ -2349,7 +2350,9 @@ export class GlobeMap {
   }
 
   private createLayerToggles(): void {
-    const layerDefs = getLayersForVariant((SITE_VARIANT || 'full') as MapVariant, 'globe');
+    const layerDefs = getLayersForVariant((SITE_VARIANT || 'full') as MapVariant, 'globe')
+      // bdnews SI: World Monitor Pro layers ask for a World Monitor sign-in this deployment does not offer.
+      .filter(def => !(BRAND.hideUpstreamPremiumPanels && def.premium === 'locked'));
     const authState = getAuthState();
     const layers = layerDefs.map(def => ({
       key: def.key,

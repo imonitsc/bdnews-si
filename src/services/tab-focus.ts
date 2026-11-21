@@ -1,6 +1,7 @@
 import { normalizeScope, scopeEquals, type TabScope } from '../../shared/tab-scope';
 import { resolveScope } from '../../shared/tab-scope-resolve';
 import { hasTabFocusForAccount } from '@/services/entitlements';
+import { BRAND } from '@/config/brand';
 
 /**
  * Dashboard focus (#10453): the ACTIVE tab's scope, held here as the single
@@ -74,7 +75,8 @@ export function subscribeScope(listener: ScopeListener): () => void {
  * Business, Enterprise). Client-side only; see the module comment.
  */
 export function canSetFocus(): boolean {
-  return hasTabFocusForAccount();
+  // bdnews SI: focusing a tab on countries runs in the browser; no World Monitor plan is needed here.
+  return BRAND.hideUpstreamPremiumPanels || hasTabFocusForAccount();
 }
 
 /**

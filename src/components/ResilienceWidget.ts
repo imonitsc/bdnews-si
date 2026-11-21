@@ -5,6 +5,7 @@ import {
   onEntitlementVerificationChange,
 } from '@/services/entitlements';
 import { PanelGateReason, getPanelGateReason } from '@/services/panel-gating';
+import { BRAND } from '@/config/brand';
 import { loadStoredMissionPreset, onMissionPresetChange } from '@/services/mission-presets';
 import { trackProPreviewCta, trackProPreviewViewed } from '@/services/analytics';
 import { isProTierResolved } from '@/services/widget-store';
@@ -264,6 +265,12 @@ export class ResilienceWidget {
     }
 
     if (gateReason !== PanelGateReason.NONE) {
+      // bdnews SI: no World Monitor accounts here; the card says what is missing instead of asking for a sign-in.
+      if (BRAND.hideUpstreamPremiumPanels) {
+        const empty = this.makeEmpty('Resilience score is not available in this edition.');
+        empty.dataset.briefState = 'locked';
+        return h('div', { className: 'cdp-card-body' }, empty);
+      }
       return this.renderLocked(gateReason);
     }
 

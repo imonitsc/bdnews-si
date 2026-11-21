@@ -1,4 +1,5 @@
 import { h } from '@/utils/dom-utils';
+import { BRAND } from '@/config/brand';
 import { BRIEF_TOPICS, BRIEF_SECTIONS, type BriefTopic, type BriefSectionState, type BriefSectionId } from '../../shared/country-brief-sections';
 export { BRIEF_TOPICS, BRIEF_SECTIONS, type BriefTopic, type BriefSectionState, type BriefSectionId } from '../../shared/country-brief-sections';
 
@@ -15,6 +16,14 @@ export function briefSectionState(section: BriefSection): BriefSectionState {
   if (section.body.firstElementChild?.classList.contains('cdp-empty')
     || section.body.querySelector('[data-brief-state="unavailable"]')) return 'unavailable';
   return 'ready';
+}
+
+/** bdnews SI: World Monitor Pro sections need a World Monitor sign-in this deployment does not offer, so they are hidden. */
+function isHiddenProSection(section: BriefSection): boolean {
+  if (!BRAND.hideUpstreamPremiumPanels || briefSectionState(section) !== 'locked') return false;
+  const children = Array.from(section.body.children);
+  return children.length === 0
+    || children.every(child => child.matches('.cdp-pro-locked, [data-brief-state="locked"]'));
 }
 
 export function summarizeCountryBrief(brief: string): string {
@@ -109,7 +118,7 @@ export class CountryBriefPresentation {
     }
     for (const section of this.sections) {
       const topics: readonly BriefTopic[] = BRIEF_SECTIONS[section.id];
-      section.card.hidden = this.topic !== 'all' && !topics.includes(this.topic);
+      section.card.hidden = isHiddenProSection(section) || (this.topic !== 'all' && !topics.includes(this.topic));
       this.index.querySelector<HTMLElement>(`[data-section-link="${section.id}"]`)!.hidden = section.card.hidden;
     }
     this.index.hidden = this.topic === 'overview';
@@ -120,7 +129,14 @@ export class CountryBriefPresentation {
     const counts = { ready: 0, loading: 0, unavailable: 0, locked: 0 };
     for (const section of this.sections) {
       const state = briefSectionState(section);
-      counts[state]++;
+      if (isHiddenProSection(section)) {
+        section.card.hidden = true;
+        const link = this.index.querySelector<HTMLElement>(`[data-section-link="${section.id}"]`);
+        if (link) link.hidden = true;
+        continue;
+      }
+      // A section that is only partly Pro keeps its free content; its Pro notice is hidden by CSS.
+      counts[BRAND.hideUpstreamPremiumPanels && state === 'locked' ? 'ready' : state]++;
       section.card.dataset.loadState = state;
       section.card.setAttribute('aria-busy', String(state === 'loading'));
     }

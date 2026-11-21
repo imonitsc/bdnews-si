@@ -13,6 +13,11 @@ export interface SettingsFacts {
   readonly signedIn: boolean;
   /** isClerkAuthEnabled(). A build without a Clerk key offers no sign-in row. */
   readonly canSignIn: boolean;
+  /**
+   * False on deployments without World Monitor accounts (bdnews SI): the account card, notifications
+   * and developer pages, which all start with a World Monitor sign-in, are left out. Default true.
+   */
+  readonly upstreamAccounts?: boolean;
   readonly isDesktopApp: boolean;
   /** hasEmbedAccessForAccount(role). */
   readonly embedAccess: boolean;
@@ -161,8 +166,12 @@ export function sectionLabelKey(id: SettingsSectionId): string {
   return SECTIONS.get(id)?.labelKey ?? id;
 }
 
+/** Sections that only work with a World Monitor account. */
+const UPSTREAM_ACCOUNT_SECTIONS: ReadonlySet<string> = new Set(['account', 'notifications', 'api-keys', 'embeds', 'mcp-clients']);
+
 export function isAvailable(id: SettingsSectionId, f: SettingsFacts): boolean {
   const def = SECTIONS.get(id);
+  if (f.upstreamAccounts === false && UPSTREAM_ACCOUNT_SECTIONS.has(id)) return false;
   return def !== undefined && (def.available?.(f) ?? true);
 }
 
@@ -201,7 +210,7 @@ export function buildNav(f: SettingsFacts): readonly NavGroup[] {
           summary: def.summary?.(f) ?? null,
           keywordsKey: def.keywordsKey,
         });
-      } else if (def.whenUnavailable === 'sign-in-row' && f.canSignIn) {
+      } else if (def.whenUnavailable === 'sign-in-row' && f.canSignIn && f.upstreamAccounts !== false) {
         rows.push({ kind: 'sign-in' });
       }
     }

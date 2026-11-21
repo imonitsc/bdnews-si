@@ -1,4 +1,5 @@
 import { bindMapControlDisclosure } from './map-control-disclosure';
+import { BRAND } from '@/config/brand';
 import { MapDistanceControl } from './map-distance-control';
 import { createTimeoutSignal } from '@/services/timeout-signal';
 /**
@@ -6397,7 +6398,9 @@ export class DeckGLMap {
     const toggles = document.createElement('div');
     toggles.className = 'layer-toggles deckgl-layer-toggles';
 
-    const layerDefs = getLayersForVariant((SITE_VARIANT || 'full') as MapVariant, 'deck');
+    const layerDefs = getLayersForVariant((SITE_VARIANT || 'full') as MapVariant, 'deck')
+      // bdnews SI: World Monitor Pro layers ask for a World Monitor sign-in this deployment does not offer.
+      .filter(def => !(BRAND.hideUpstreamPremiumPanels && def.premium === 'locked'));
     const premiumUnlocked = hasPremiumAccess(getAuthState());
     const layerConfig = layerDefs.map(def => ({
       key: def.key,

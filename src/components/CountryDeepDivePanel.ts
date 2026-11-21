@@ -1,4 +1,5 @@
 import type { ListPipelinesResponse, ListStorageFacilitiesResponse, ListFuelShortagesResponse } from '@/generated/client/worldmonitor/supply_chain/v1/service_client';
+import { BRAND } from '@/config/brand';
 import type { CountryBriefSource } from '@/services/country-brief-source';
 import type { BriefTopic } from '../../shared/country-brief-sections';
 import type { CountrySignalCounts } from '@/types';
@@ -3512,12 +3513,14 @@ export class CountryDeepDivePanel implements CountryBriefPanel {
   public updateBrief(data: CountryIntelData): void {
     if (!this.briefBody || data.code !== this.currentCode) return;
     this.briefBody.replaceChildren();
-    if (data.accessNotice) {
+    // bdnews SI: World Monitor's sign-in and Pro prompts do not apply here; only "unavailable" is shown.
+    const accessNotice = BRAND.hideUpstreamPremiumPanels && data.accessNotice !== 'unavailable' ? undefined : data.accessNotice;
+    if (accessNotice) {
       const notice = this.el('div', 'cdp-brief-access');
-      const message = data.accessNotice === 'sign-in' ? 'premium.signInToUnlock'
-        : data.accessNotice === 'pro' ? 'premium.upgradeDesc' : 'countryBrief.briefUnavailable';
+      const message = accessNotice === 'sign-in' ? 'premium.signInToUnlock'
+        : accessNotice === 'pro' ? 'premium.upgradeDesc' : 'countryBrief.briefUnavailable';
       notice.append(this.el('p', 'panel-locked-desc', t(message)));
-      if (data.accessNotice === 'sign-in') {
+      if (accessNotice === 'sign-in') {
         const button = this.el('button', 'panel-locked-cta', t('auth.signIn'));
         button.type = 'button';
         button.addEventListener('click', () => {
@@ -3526,7 +3529,7 @@ export class CountryDeepDivePanel implements CountryBriefPanel {
             .catch(() => showToast(t('countryBrief.briefUnavailable')));
         });
         notice.append(button);
-      } else if (data.accessNotice === 'pro') {
+      } else if (accessNotice === 'pro') {
         const link = this.el('a', 'panel-locked-cta', t('premium.upgradeToPro'));
         link.href = '/pro#pricing';
         notice.append(link);
@@ -3719,7 +3722,7 @@ export class CountryDeepDivePanel implements CountryBriefPanel {
     });
     const evidenceButton = this.el('button', 'cdp-action-btn cdp-evidence-export-btn', 'Evidence') as HTMLButtonElement;
     evidenceButton.setAttribute('type', 'button');
-    evidenceButton.setAttribute('title', 'Export evidence bundle as Markdown (PRO)');
+    evidenceButton.setAttribute('title', BRAND.hideUpstreamPremiumPanels ? 'Export evidence bundle as Markdown' : 'Export evidence bundle as Markdown (PRO)');
     evidenceButton.addEventListener('click', async () => {
       if (evidenceButton.disabled) return;
       if (!this.canRequestPremium()) {

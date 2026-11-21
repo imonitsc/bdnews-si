@@ -14,6 +14,7 @@
  * gates that are correctly independent.
  */
 
+import { BRAND } from '@/config/brand';
 import type { AuthSession } from '../auth-state';
 import { getSubscription } from '../billing';
 import { deriveBillingUxState } from '../billing-state';
@@ -59,7 +60,9 @@ function readExportGateInputs(authState: AuthSession): ExportGateInputs {
   const entitlement = getEntitlementState();
   return {
     gateActive: isExportGateActive(),
-    desktopKeyPresent: getSecretState('WORLDMONITOR_API_KEY').present,
+    // bdnews SI: export and extra dashboard tabs run in the browser and need no World Monitor
+    // account, so they are open to every signed-in BDSI user (same path as a desktop key).
+    desktopKeyPresent: BRAND.hideUpstreamPremiumPanels || getSecretState('WORLDMONITOR_API_KEY').present,
     authPending: authState.isPending,
     signedIn: Boolean(authState.user),
     features: entitlement

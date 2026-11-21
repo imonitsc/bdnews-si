@@ -393,3 +393,20 @@ body, body *:not(svg):not(svg *) { font-family: var(--font-mono); }
 .bdsi-gtab.on { background: #ffb000; color: #000; border-color: #ffb000; }
 .bdsi-gtab[hidden] { display: none; }
 .panel.bdsi-gtab-off { display: none !important; }
+
+/* bdnews SI: World Monitor Pro needs World Monitor's own sign-in and billing, which this
+   deployment does not offer. Hide any upstream Pro badge, lock, preview or upgrade box that
+   is still rendered (panels, map popups, country brief, settings). Our own sign-in is separate. */
+.panel-pro-badge,
+.layer-pro-badge,
+.widget-pro-badge,
+.cdp-pro-locked,
+.sector-pro-gate,
+.pro-preview,
+.pro-banner-slot,
+.upgrade-pro-section,
+.upgrade-pro-cta,
+.upgrade-pro-cta-link,
+.resilience-widget__cta,
+.auth-signin-btn,
+.auth-signup-link { display: none !important; }

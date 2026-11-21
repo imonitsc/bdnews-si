@@ -118,3 +118,15 @@ Data notes:
 - Saved dashboards are switched to the new layout once (`bdsi-dashboard-layout-v1`); bump the key to re-apply after changing the groups.
 - Live News no longer jumps to the top on the full variant, so Bangladesh stays first.
 - A tab row under the command bar (BANGLADESH, SECURITY, WORLD, MARKETS, HAZARDS, ANALYSIS, OTHER, ALL) shows one group at a time; the map stays visible. The choice is remembered in the browser; F-keys and commands switch to the right tab before jumping to a panel. Code: `src/app/bdsi-group-tabs.ts`.
+
+## No World Monitor sign-in prompts (2026-11-21)
+
+World Monitor Pro features ask for a World Monitor account, which this deployment does not have (BDSI has its own login). With `BRAND.hideUpstreamPremiumPanels` on:
+
+- **Map**: locked Pro layers (Country Resilience; GPS Jamming and Middle East Strikes on desktop) are left out of the layer picker; no PRO badges.
+- **Country brief**: sections that are only a Pro lock are hidden and the "N Pro" count is gone; the "Sign in" / "Upgrade to Pro" notice above the brief is not shown (an "unavailable" notice still is). The resilience card says "not available in this edition" instead of asking for a sign-in.
+- **Export and dashboard tabs**: open to every BDSI user (they run in the browser; `src/services/gates/export.ts`).
+- **Tab focus**: allowed without a plan (`src/services/tab-focus.ts`; client-side only).
+- **Settings**: account, notifications, API keys, embeds and AI agents pages (all start with a World Monitor sign-in) are not listed (`upstreamAccounts` fact in `src/config/settings-sections.ts`).
+- **Command deck**: flight search hint no longer says "(PRO)".
+- **CSS safety net** in `src/styles/terminal-theme.css` hides any leftover upstream Pro badge, lock, preview, upgrade box or World Monitor sign-in button.

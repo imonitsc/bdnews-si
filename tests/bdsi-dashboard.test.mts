@@ -33,3 +33,18 @@ describe('BDSI dashboard layout', () => {
     assert.equal(BDSI_PANEL_GROUPS[0]!.label, 'Bangladesh');
   });
 });
+
+describe('BDSI dashboard tabs', async () => {
+  const { tabOfPanel, panelShownInTab } = await import('../src/config/bdsi-dashboard.ts');
+  it('maps panels to their group tab', () => {
+    assert.equal(tabOfPanel('bd-dse'), 'bd');
+    assert.equal(tabOfPanel('ucdp-events'), 'security');
+    assert.equal(tabOfPanel('crypto'), 'other');
+  });
+  it('shows the map on every tab and everything on ALL', () => {
+    assert.ok(panelShownInTab('map', 'markets'));
+    assert.ok(panelShownInTab('crypto', 'all'));
+    assert.ok(!panelShownInTab('crypto', 'bd'));
+    assert.ok(panelShownInTab('asia', 'world'));
+  });
+});

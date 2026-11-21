@@ -117,3 +117,4 @@ Data notes:
 - Live webcam panels (Live Webcams, Windy) and the webcams map layer are removed.
 - Saved dashboards are switched to the new layout once (`bdsi-dashboard-layout-v1`); bump the key to re-apply after changing the groups.
 - Live News no longer jumps to the top on the full variant, so Bangladesh stays first.
+- A tab row under the command bar (BANGLADESH, SECURITY, WORLD, MARKETS, HAZARDS, ANALYSIS, OTHER, ALL) shows one group at a time; the map stays visible. The choice is remembered in the browser; F-keys and commands switch to the right tab before jumping to a panel. Code: `src/app/bdsi-group-tabs.ts`.

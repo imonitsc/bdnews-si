@@ -384,3 +384,12 @@ body, body *:not(svg):not(svg *) { font-family: var(--font-mono); }
 .bdn-help-close:focus-visible { outline: 2px solid #000; }
 .bdn-help-row { padding: 4px 8px; border-bottom: 1px solid #1d1d1d; color: #e8e8e8; }
 .bdn-help-row.planned { color: #8a8a8a; }
+
+/* BDSI dashboard section tabs (src/app/bdsi-group-tabs.ts) */
+.bdsi-gtabs { display: flex; gap: 2px; padding: 3px 8px; background: #000; border-bottom: 1px solid #3a2a00; overflow-x: auto; scrollbar-width: none; font-family: 'IBM Plex Mono', monospace; }
+.bdsi-gtabs::-webkit-scrollbar { display: none; }
+.bdsi-gtab { flex: 0 0 auto; background: #111; color: #c8a24a; border: 1px solid #3a2a00; padding: 3px 12px; font: 600 12px 'IBM Plex Mono', monospace; letter-spacing: .04em; cursor: pointer; min-height: 26px; }
+.bdsi-gtab:hover, .bdsi-gtab:focus-visible { color: #fff; border-color: #ffb000; outline: none; }
+.bdsi-gtab.on { background: #ffb000; color: #000; border-color: #ffb000; }
+.bdsi-gtab[hidden] { display: none; }
+.panel.bdsi-gtab-off { display: none !important; }

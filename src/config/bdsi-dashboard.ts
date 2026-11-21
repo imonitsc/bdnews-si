@@ -5,16 +5,16 @@
 
 import type { PanelConfig } from '@/types';
 
-export interface BdsiPanelGroup { label: string; keys: readonly string[] }
+export interface BdsiPanelGroup { id: string; label: string; tab: string; keys: readonly string[] }
 
 /** Default-on panels, in display order. */
 export const BDSI_PANEL_GROUPS: readonly BdsiPanelGroup[] = [
-  { label: 'Bangladesh', keys: ['bangladesh', 'bd-dse', 'bd-taka', 'bd-bazaar', 'insights'] },
-  { label: 'Security and risk', keys: ['ucdp-events', 'displacement', 'internet-disruptions', 'satellite-fires', 'cii', 'strategic-risk', 'threat-timeline', 'security-advisories', 'gdelt-intel', 'intel'] },
-  { label: 'World news', keys: ['live-news', 'politics', 'asia', 'middleeast', 'europe', 'us', 'africa', 'latam'] },
-  { label: 'Markets and economy', keys: ['markets', 'commodities', 'energy-complex', 'energy', 'economic', 'supply-chain', 'finance'] },
-  { label: 'Hazards and climate', keys: ['climate', 'disease-outbreaks', 'population-exposure'] },
-  { label: 'Analysis', keys: ['strategic-posture', 'cross-source-signals', 'thinktanks', 'world-clock', 'monitors'] },
+  { id: 'bd', tab: 'BANGLADESH', label: 'Bangladesh', keys: ['bangladesh', 'bd-dse', 'bd-taka', 'bd-bazaar', 'insights'] },
+  { id: 'security', tab: 'SECURITY', label: 'Security and risk', keys: ['ucdp-events', 'displacement', 'internet-disruptions', 'satellite-fires', 'cii', 'strategic-risk', 'threat-timeline', 'security-advisories', 'gdelt-intel', 'intel'] },
+  { id: 'world', tab: 'WORLD', label: 'World news', keys: ['live-news', 'politics', 'asia', 'middleeast', 'europe', 'us', 'africa', 'latam'] },
+  { id: 'markets', tab: 'MARKETS', label: 'Markets and economy', keys: ['markets', 'commodities', 'energy-complex', 'energy', 'economic', 'supply-chain', 'finance'] },
+  { id: 'hazards', tab: 'HAZARDS', label: 'Hazards and climate', keys: ['climate', 'disease-outbreaks', 'population-exposure'] },
+  { id: 'analysis', tab: 'ANALYSIS', label: 'Analysis', keys: ['strategic-posture', 'cross-source-signals', 'thinktanks', 'world-clock', 'monitors'] },
 ];
 
 /** Panels BDSI does not offer at all. */
@@ -70,4 +70,17 @@ export function applyBdsiLayoutToSaved(
     if (!(key in out) && defaults[key]) out[key] = { ...defaults[key], enabled: true };
   }
   return out;
+}
+
+/** Dashboard tab ids: 'all', each group id, and 'other' for panels outside the groups. */
+export type BdsiTab = 'all' | 'other' | string;
+
+/** Which tab a panel belongs to. Pure; exported for tests. */
+export function tabOfPanel(key: string): string {
+  return BDSI_PANEL_GROUPS.find((g) => g.keys.includes(key))?.id ?? 'other';
+}
+
+/** Whether a panel is shown under a tab. The map is always shown. Pure; exported for tests. */
+export function panelShownInTab(key: string, tab: BdsiTab): boolean {
+  return tab === 'all' || key === 'map' || tabOfPanel(key) === tab;
 }

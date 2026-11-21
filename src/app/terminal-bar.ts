@@ -4,6 +4,7 @@
 import type { AppContext } from '@/app/app-context';
 import type { MarketData } from '@/types';
 
+import { mountGroupTabs, revealPanel } from '@/app/bdsi-group-tabs';
 import { FKEY_COMMANDS, COMMANDS, parseCommand, helpLine, TERMINAL_ROUTES, type TerminalCommandDef } from '@/config/terminal-commands';
 
 const BAR_ID = 'bdnTerminalBar';
@@ -28,6 +29,7 @@ function setStatus(status: HTMLElement, text: string, state: 'err' | 'info' | ''
 }
 
 function jumpTo(target: string, status: HTMLElement): boolean {
+  if (target !== 'map') revealPanel(target);
   const node = findTarget(target);
   if (!node) {
     setStatus(status, 'PANEL NOT ON THIS SCREEN · add it from Settings → Panels', 'err');
@@ -255,7 +257,8 @@ export function mountTerminalBar(ctx: AppContext): void {
 
   bar.append(form, keys, ticker, clocks, user);
   header.after(bar);
-  bar.after(help);
+  const groupTabs = mountGroupTabs(bar);
+  groupTabs.after(help);
 
   // The Markets panel only loads quotes once it is on screen. Until it does,
   // the ticker fetches the default symbols itself.

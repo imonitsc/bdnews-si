@@ -233,3 +233,11 @@ button { font: inherit; }
 .tp-btn-ghost { background: none; color: var(--tp-muted); border: 1px solid #333; }
 .tp-src { font-size: 12px; padding-left: 20px; }
 .tp-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+
+/* WORLD */
+.tp-wnews { list-style: none; margin: 0; padding: 0; }
+.tp-wnews li { padding: 3px 0; border-bottom: 1px solid #141414; line-height: 1.35; }
+.tp-wnews a { color: #fff; text-decoration: none; }
+.tp-wnews a:hover { color: var(--tp-yellow); text-decoration: underline; }
+.tp-wnews li.tp-walert a { color: var(--tp-down); }
+.tp-wstale { color: var(--tp-amber); border: 1px solid var(--tp-amber); padding: 4px 6px; font-size: 12px; }

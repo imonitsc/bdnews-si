@@ -33,6 +33,7 @@ const SCREENS: Record<string, ScreenLoader> = {
   sea: () => import('./screens/sea').then((m) => m.seaScreen),
   rsrch: () => import('./screens/research').then((m) => m.researchScreen),
   chat: () => import('./screens/chat').then((m) => m.chatScreen),
+  world: () => import('./screens/world').then((m) => m.worldScreen),
 };
 
 const FKEYS: Array<{ k: string; label: string; route: string }> = [
@@ -40,6 +41,7 @@ const FKEYS: Array<{ k: string; label: string; route: string }> = [
   { k: 'F2', label: 'SCRN', route: 'scrn' },
   { k: 'F3', label: 'ECO', route: 'eco' },
   { k: 'F4', label: 'POWER', route: 'power' },
+  { k: 'F5', label: 'WORLD', route: 'world' },
   { k: 'F6', label: 'SEA', route: 'sea' },
   { k: 'F7', label: 'RSRCH', route: 'rsrch' },
   { k: 'F8', label: 'ASK AI', route: 'ask' },
@@ -51,6 +53,7 @@ const TABS: Array<{ label: string; route: string | null; href?: string }> = [
   { label: 'Macro', route: 'eco' },
   { label: 'Security', route: 'sea' },
   { label: 'Disaster', route: 'power' },
+  { label: 'World', route: 'world' },
   { label: 'Chat', route: 'chat' },
   { label: 'Map ↗', route: null, href: '/dashboard' },
 ];

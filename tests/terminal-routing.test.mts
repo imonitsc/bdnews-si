@@ -28,3 +28,20 @@ describe('BDSI terminal page routing', () => {
     assert.match(read('terminal.html'), /src="\/src\/terminal-main\.ts"/);
   });
 });
+
+describe('WORLD screen', async () => {
+  const { resolveTerminalInput } = await import('../src/config/terminal-commands.ts');
+  const { regionNews, REGIONS } = await import('../src/terminal/screens/world.ts');
+  it('WORLD and MKT open the world screen', () => {
+    for (const cmd of ['WORLD', 'wrld', 'MKT']) {
+      const r = resolveTerminalInput(cmd, new Set());
+      assert.equal(r.kind, 'go', cmd);
+      assert.deepEqual((r as { target: unknown }).target, { kind: 'screen', screen: 'world' });
+    }
+  });
+  it('picks region headlines, alerts first then newest', () => {
+    const n = (title: string, category: string, publishedAt: number, isAlert = false) => ({ title, link: title, source: 's', publishedAt, isAlert, category });
+    const out = regionNews([n('a', 'asia', 1), n('b', 'asia', 3), n('c', 'europe', 9), n('d', 'asia', 2, true)], REGIONS.find((r) => r.key === 'asia')!.cats);
+    assert.deepEqual(out.map((x) => x.title), ['d', 'b', 'a']);
+  });
+});

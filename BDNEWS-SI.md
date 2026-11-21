@@ -98,6 +98,7 @@ The bdnews.si home page is now the terminal (`/terminal`, sign-in required). The
 | F2 | SCRN | Screener over all DSE instruments, watchlist and price alerts (stored in the browser) |
 | F3 | ECO | Taka rates, Dhaka bazaar prices, DSEX history, economy news; list of macro series not connected yet |
 | F4 | POWER | Plants, LNG terminals and active storms on a Bay map; energy news; PGCB and Petrobangla not connected yet |
+| F5 | WORLD | World headlines by region, countries on watch (instability score and travel advisory), natural hazards worldwide, world markets (not connected yet) with finance headlines |
 | F6 | SEA | Ports, cable landings, refugee camps, UCDP conflict and GDELT unrest, UNHCR figures, border and port news; AIS not connected |
 | F7 | RSRCH | Sector research (RMG, BANK, PHARMA, POWER, TELECOM) from DSE data and news |
 | F8 | ASK | AI analyst (Claude) with numbered citations; says what the sources cannot confirm |
